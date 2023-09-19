@@ -7,7 +7,7 @@
 //  9/28/2022: Created file and got it to connect. (Samuel R, Thomas N, Daniel B)
 
 const mysql = require("mysql2"); // Needed mysql2 for the authentication handshake to work
-const config = require("./mysqlConfig.json"); // Configuration file for the mysql connection
+const config = require("./mysqlconfig.json"); // Configuration file for the mysql connection
 
 // Connection variable that holds the configuration details
 // var connThomasUbuntu = mysql.createConnection ({
@@ -83,7 +83,7 @@ db.connect(function (err) {
 	//console.log(`host: ${conn.host}\nuser: ${conn.user}\npassword: ${conn.password}\ndatabase: ${conn.database}\nport: ${conn.port}`);
 	if (err) {
 		console.log("Error establishing mysql connection");
-		//console.log(err);
+		console.log(err);
 	} else {
 		console.log("connection established");
 	}

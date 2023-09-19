@@ -10,7 +10,7 @@
     "static": "next build && next export"
   },
   "dependencies": {
-    "@capacitor/android": "^4.6.1",
+    "@capacitor/android": "^4.8.1",
     "@capacitor/core": "^4.6.1",
     "@capacitor/ios": "^4.6.1",
     "@emotion/react": "^11.10.5",
