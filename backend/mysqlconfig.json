@@ -62,7 +62,7 @@
             "port": "3306"
         }
     ],
-    "root": [
+    "du_mirror_user": [
         {
             "host": "127.0.0.1",
             "user": "du_mirror",
