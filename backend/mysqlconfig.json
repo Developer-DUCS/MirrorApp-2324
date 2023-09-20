@@ -65,8 +65,8 @@
     "root": [
         {
             "host": "127.0.0.1",
-            "user": "root",
-            "password": "password",
+            "user": "du_mirror",
+            "password": "Letmein!22",
             "database": "du_mirror",
             "port": "3306"
         }
