@@ -157,7 +157,7 @@ export async function getStaticPaths() {
 		host: "127.0.0.1",
 		user: "root",
 		password: "password",
-		database: "drurymirror",
+		database: "du_mirror",
 		port: "3306",
 	});
 

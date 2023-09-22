@@ -62,12 +62,12 @@
             "port": "3306"
         }
     ],
-    "root": [
+    "du_mirror_user": [
         {
             "host": "127.0.0.1",
-            "user": "root",
-            "password": "password",
-            "database": "drurymirror",
+            "user": "du_mirror",
+            "password": "Letmein!22",
+            "database": "du_mirror",
             "port": "3306"
         }
     ]
