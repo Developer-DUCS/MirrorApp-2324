@@ -61,7 +61,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/TN.jpg"
+									image="/images/CR.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
@@ -253,6 +253,28 @@ export default function about() {
 						</Grid>
 					</Grid>
 				</Box>
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
+				<br />
 				<Box sx={{ paddingLeft: "10%", marginTop: 4 }}>
 					<Typography sx={{ color: "black" }} variant="aboutHeader">
 						Development Team 2022-2023
