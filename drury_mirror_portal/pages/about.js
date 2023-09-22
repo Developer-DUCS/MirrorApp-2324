@@ -34,7 +34,228 @@ export default function about() {
 				</Box>
 				<Box sx={{ paddingLeft: "10%", marginTop: 4 }}>
 					<Typography sx={{ color: "black" }} variant="aboutHeader">
-						Development Team
+						Development Team 2023-2024
+					</Typography>
+				</Box>
+				<Box
+					sx={{
+						paddingLeft: "10%",
+						marginTop: 2,
+						marginBottom: 50,
+						width: "auto",
+						height: "30vh",
+					}}
+				>
+					<Grid
+						container
+						columnSpacing={2}
+						rowSpacing={2}
+						sx={{
+							paddingBottom: 3,
+							display: "flex",
+							backgroundColor: "#F3F3F3",
+						}}
+					>
+						<Grid item>
+							<Card sx={{ maxWidth: 210 }}>
+								<CardMedia
+									component="img"
+									height="250"
+									image="/images/TN.jpg"
+									alt="Paella dish"
+								/>
+								<CardContent>
+									<Typography variant="cardLabel">
+										Charlie Roder
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Major: Software Engineering and Mathematics
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Minor: N/A
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Position: Technical Lead
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item>
+							<Card sx={{ maxWidth: 210 }}>
+								<CardMedia
+									component="img"
+									height="250"
+									image="/images/SR.jpg"
+									alt="Paella dish"
+								/>
+								<CardContent>
+									<Typography variant="cardLabel">
+										Paul Pollard
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Major: Software Engineering
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Minor: Philosophy
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Position: Design Lead
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item>
+							<Card sx={{ maxWidth: 210 }}>
+								<CardMedia
+									component="img"
+									height="250"
+									image="/images/SR.jpg"
+									alt="Paella dish"
+								/>
+								<CardContent>
+									<Typography variant="cardLabel">
+										Cole Coombs
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Major: Software Engineering
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Minor: N/A
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Position: Server Handler
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item>
+							<Card sx={{ maxWidth: 210 }}>
+								<CardMedia
+									component="img"
+									height="250"
+									image="/images/SR.jpg"
+									alt="Paella dish"
+								/>
+								<CardContent>
+									<Typography variant="cardLabel">
+										Andrew Roberts
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Major: Software Engineering and Mathematics
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Minor: N/A
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Position: Terrible
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+						<Grid item>
+							<Card sx={{ maxWidth: 210 }}>
+								<CardMedia
+									component="img"
+									height="250"
+									image="/images/SR.jpg"
+									alt="Paella dish"
+								/>
+								<CardContent>
+									<Typography variant="cardLabel">
+									Sylvain Garin-Michaud
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Major: Software Engineering
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Minor: Cybersecurity
+									</Typography>
+									<br></br>
+									<br></br>
+									<Typography
+										sx={{ marginTop: 2 }}
+										variant="cardBody"
+									>
+										Position: Project Manager
+									</Typography>
+								</CardContent>
+							</Card>
+						</Grid>
+					</Grid>
+				</Box>
+				<Box sx={{ paddingLeft: "10%", marginTop: 4 }}>
+					<Typography sx={{ color: "black" }} variant="aboutHeader">
+						Development Team 2022-2023
 					</Typography>
 				</Box>
 				<Box
