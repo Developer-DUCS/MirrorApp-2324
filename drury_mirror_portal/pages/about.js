@@ -100,7 +100,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/SR.jpg"
+									image="/images/PP.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
