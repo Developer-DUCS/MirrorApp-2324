@@ -8,13 +8,24 @@
 
 const {MongoClient} = require('mongodb');
 
+const dbCredentials = {
+    username: "charlieroder",
+    password: "",
+    database: "dumirrorimages",
+}
 
 // example connecting to database
 //
 async function main() {
 
-    //password protected: replace <password> with mongo password
-    const uri = `mongodb+srv://charlieroder:<password>@dumirrorimages.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
+    if (dbCredentials.password == ""){
+        console.log("Error: password required");
+        return;
+    }
+
+    //password protected: update .env file with mongo credentials
+    const uri = `mongodb+srv://${dbCredentials.username}:${dbCredentials.password}@${dbCredentials.database}.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
+    console.log(uri)
 
     const client= new MongoClient(uri);
  
@@ -45,10 +56,11 @@ main().catch(console.error);
 // end of example
 
 
-export default async function executeQuery({ query, values }) {
+/* export default async function executeQuery({ query, values }) {
 	console.log(query);
     console.log(values);
 }
+ */
 
 // these functions could be moved to /api folder
 async function addImage(client, value) {
