@@ -12,7 +12,9 @@ const {MongoClient} = require('mongodb');
 // example connecting to database
 //
 async function main() {
-    const uri = `mongodb+srv://charlieroder:PSNsZwwExGlrsKfP@dumirrorimages.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
+
+    //password protected: replace <password> with mongo password
+    const uri = `mongodb+srv://charlieroder:<password>@dumirrorimages.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
 
     const client= new MongoClient(uri);
  
