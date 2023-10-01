@@ -10,7 +10,7 @@ const {MongoClient} = require('mongodb');
 
 const dbCredentials = {
     username: "charlieroder",
-    password: "",
+    password: "PSNsZwwExGlrsKfP",
     database: "dumirrorimages",
 }
 
@@ -61,22 +61,3 @@ main().catch(console.error);
     console.log(values);
 }
  */
-
-// these functions could be moved to /api folder
-async function addImage(client, value) {
-    try {
-        
-    }
-    catch {
-        
-    }
-}
-
-async function getImage(client, value) {
-    try {
-        
-    }
-    catch {
-        
-    }
-}

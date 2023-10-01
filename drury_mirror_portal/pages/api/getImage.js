@@ -1,9 +1,9 @@
-// addImage.js 
+// getImage.js 
 // Created: 9/30/2023
 // Purpose: 
-//      Create query to store image to the mongo database
+//      Create a query to fetch an image from the mongo database
 //
-//      Used in conjunction with the uploadFileHandler method on line 239 of articleWriting.js
+//      Will need new method in draftList.js to show thumbnail in draft.
 // 
 // Modification Log: 
 //
@@ -12,12 +12,12 @@ import executeQuery from "../../backend/mongodb";
 
 let result = executeQuery("sample query", "sample values");
 
-async function getImage(client, value) {
+async function addImage(client, value) {
     try {
         
     }
     catch (error) {
-		console.log("error in getImage");
+		console.log("error in addImage");
 		console.log(error);
 		return { error };
     }
