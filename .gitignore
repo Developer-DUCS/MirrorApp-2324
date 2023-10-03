@@ -36,7 +36,6 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.capacitor.config.json
 
 # vercel
 .vercel
