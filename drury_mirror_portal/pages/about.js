@@ -207,7 +207,7 @@ export default function about() {
 										sx={{ marginTop: 2 }}
 										variant="cardBody"
 									>
-										Position: Terrible
+										Position: Indefined
 									</Typography>
 								</CardContent>
 							</Card>
