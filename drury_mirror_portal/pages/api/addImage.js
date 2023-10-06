@@ -8,17 +8,31 @@
 // Modification Log: 
 //
 
-import executeQuery from "../../backend/mongodb";
+import { GridFSBucket } from 'mongodb';
+import { db } from '../../backend/mongodb';
 
-let result = executeQuery("sample query", "sample values");
+export default async (req, res) => {
+  try {
+    const collection = db.connection('images')
 
-async function getImage(client, value) {
-    try {
-        
-    }
-    catch (error) {
-		console.log("error in getImage");
-		console.log(error);
-		return { error };
-    }
+    
+  }
+  catch {
+
+  }
+
+  if (req.method === 'POST') {
+    const bucket = new GridFSBucket(db);
+
+    const uploadStream = bucket.openUploadStream(req.file.originalname)
+    req.pipe(uploadStream);
+
+    uploadStream.on('finish', () => {
+      console.log("file uploaded successfully");
+      res.status(200).json({ message: 'File uploaded'});
+    });
+  }
+  else {
+    res.status(405).json({message: 'Method not allowed'});
+  }
 }

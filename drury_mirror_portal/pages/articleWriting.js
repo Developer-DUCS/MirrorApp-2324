@@ -74,6 +74,7 @@ export default function articleWriting() {
 	const [getImageData, setImageData] = useState("");
 	const [getImageType, setImageType] = useState("");
 	const { status, data } = useSession();
+	const [selectedImage, setSelectedImage] = useState(null);
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -234,9 +235,45 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
+	// new upload file handler using mongo database
+	const uploadFile = async () => {
+
+		if (selectedImage) {
+			const formData = new FormData();
+			formData.append('file', selectedImage);
+			const image = formData.getAll('image')
+			
+			try {
+				const response = await fetch('/api/addImage', {
+					method: 'POST',
+					body: formData,
+				});
+
+				if (response.status === 200) {
+					console.log('image uploaded');
+
+				}
+				else {
+					const responseData = await response.json()
+					console.log(responseData.error);
+					//console.error('error uploading image');
+				}
+			}
+			catch (error) {
+				console.error('Error uploading image', error);
+			}
+		}
+	}
+
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		console.log(file);
+		setSelectedImage(file);
+	  };
+
 	// UploadFileHandler()
 	// - Converts the file uploaded into base 64
-	function uploadFileHandler() {
+	/* function uploadFileHandler() {
 		// Open a file explorer for a user that only accepts image files
 		const fileInput = document.createElement("input");
 		fileInput.type = "file";
@@ -256,7 +293,7 @@ export default function articleWriting() {
 			};
 			reader.readAsDataURL(file);
 		});
-	}
+	} */
 
 	if (status === "authenticated") {
 		return (
@@ -279,17 +316,26 @@ export default function articleWriting() {
 						<Header />
 					</div>
 					<form onSubmit={handleSubmit}>
-						<Button
-							sx={{ m: 2 }}
-							variant="contained"
-							color="error"
-							onClick={() => {
-								uploadFileHandler();
-							}}
-							startIcon={<DriveFolderUploadIcon />}
-						>
-							Upload Thumbnail
-						</Button>
+						<div>
+							<input
+								type="file"
+								accept="image/*"
+								onChange={handleImageChange}
+							/>
+							<Button
+								sx={{ m: 2 }}
+								variant="contained"
+								color="error"
+								onClick={() => {
+									console.log('clicked');
+									uploadFile();
+								}}
+								startIcon={<DriveFolderUploadIcon />}
+							>
+								Upload Thumbnail
+							</Button>
+						</div>
+						
 						<Box
 							sx={{
 								backgroundColor: "white",

@@ -5,8 +5,7 @@
 // 
 // Modification Log: 
 //
-
-const {MongoClient} = require('mongodb');
+const mongoose = require('mongoose');
 
 const dbCredentials = {
     username: "charlieroder",
@@ -14,50 +13,64 @@ const dbCredentials = {
     database: "dumirrorimages",
 }
 
-// example connecting to database
-//
-async function main() {
+const uri = `mongodb+srv://${dbCredentials.username}:${dbCredentials.password}@${dbCredentials.database}.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
 
-    if (dbCredentials.password == ""){
-        console.log("Error: password required");
-        return;
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+module.exports = db;
+
+/*
+// test
+const conn = mongoose.createConnection(uri);
+
+let gfs;
+
+conn.once('open', () => {
+    gfs = Grid(conn.db, mongoose.mongo);
+    gfs.collection('images');
+})
+
+const storage = new GridFsStorage({
+    url: uri,
+    file: (req, file) => {
+        return new Promise((resolve, reject) => {
+            crypto.randomBytes(16, (err, buf) => {
+                if (err) {
+                    return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname(file.originalname);
+                const fileInfo = {
+                    filename: filename,
+                    bucketName: 'images'
+                };
+                resolve(fileInfo);
+            });
+        });
     }
+});
+const upload = multer({ storage });
+//
 
-    //password protected: update .env file with mongo credentials
-    const uri = `mongodb+srv://${dbCredentials.username}:${dbCredentials.password}@${dbCredentials.database}.jv5lyuz.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp`;
-    console.log(uri)
-
-    const client= new MongoClient(uri);
- 
+//export default
+async function getClient() {
     try {
-        // Connect to the MongoDB cluster
         await client.connect();
- 
-        // Make the appropriate DB calls
-        // TO DO: must make a generalized function similar to executeQuery in mysqldb.js
-        await  listDatabases(client);
- 
-    } catch (e) {
-        console.error(e);
-    } finally {
+        console.log("connected");
+        return client;
+    } catch (error) {
+        console.log(error.stack);
+    }
+    finally{
         await client.close();
     }
+
+    console.log("done")
 }
 
-async function listDatabases(client){
-    databasesList = await client.db().admin().listDatabases();
- 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
-
-main().catch(console.error);
-//
-// end of example
-
-
-/* export default async function executeQuery({ query, values }) {
-	console.log(query);
-    console.log(values);
-}
- */
+module.exports = getClient;
+*/

@@ -8,17 +8,41 @@
 // Modification Log: 
 //
 
-import executeQuery from "../../backend/mongodb";
+import db from '../../backend/mongodb'
 
-let result = executeQuery("sample query", "sample values");
+export default async (req, res) => {
+  try {
+    const collection = db.collection('images');
 
-async function addImage(client, value) {
-    try {
-        
-    }
-    catch (error) {
-		console.log("error in addImage");
-		console.log(error);
-		return { error };
-    }
+    const documents = await collection.find({}).toArray();
+
+    res.status(200).json(documents);
+  } catch (error) {
+    console.error('Error retrieving documents', error);
+    res.status(500).json({ error: 'Error retrieving documents' });
+  }
 }
+
+//front end implementation
+// TO DO: add aid to req body and search based on that
+
+/* const fetchDocuments = async () => {
+  return await fetch('/api/getImage')
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      else {
+        throw new Error('Error fetching documents');
+      }
+    });
+} */
+
+/* onClick={() => {
+  console.log('clicked');
+  fetchDocuments()
+    .then((data) => {
+      const images = data;
+      console.log(images);
+    })
+}} */
