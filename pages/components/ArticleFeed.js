@@ -54,45 +54,21 @@ import DUIcon from "../../Lib/Images/DU-Small-Icon.png";
 function ArticleFeed(props) {
     const articleStyles = makeStyles((theme) => ({
         container: {
-            display: "flex",
-            flexDirection: "row",
-            height: "auto",
-            width: "auto",
-            marginBottom: 5,
-            borderRadius: 5,
             boxShadow: "0px 4px 5px rgba(0, 0, 0, 1)",
             backgroundColor: "white",
         },
-        column: {
-            width: "auto",
-            height: "auto",
-            display: "flex",
-        },
         featuredImage: {
-            width: 120,
-            height: 120,
-            borderRadius: 5,
-            margin: theme.spacing(1),
+            height: "100%",
+            width: "100%"
         },
         headline: {
             fontFamily: "AvantGarde",
             fontSize: 16,
-            width: 200,
-            margin: theme.spacing(1),
-            marginBottom: 0,
+            width: "100%",
         },
         author: {
             fontFamily: "AvantGarde",
             fontSize: 12,
-            width: 150,
-            margin: theme.spacing(1),
-            marginBottom: theme.spacing(2),
-        },
-        subtitle: {
-            fontFamily: "AvantGarde",
-            fontSize: 12,
-            margin: theme.spacing(1),
-            marginTop: 0,
             width: 200,
         },
     }));
@@ -250,8 +226,8 @@ function ArticleFeed(props) {
                 <Image
                     alt="thumbnail"
                     src={DUIcon.src}
-                    width="80"
-                    height="80"
+                    width = "150"
+                    height = "150"
                 />
             );
         }
@@ -271,19 +247,30 @@ function ArticleFeed(props) {
                 style={articleStyles.container}
                 sx={{ m: 2, marginBottom: 3 }}>
                 <Button
+                    sx={{
+                        padding: 0
+                    }}
                     href={`${asPath}/articles/[${props.article.aid}]`}
                     component="a"
                     LinkComponent={Link}
                     onClick={handleArticleClick}>
-                    <CardContent>
-                        <Box style={articleStyles.column}>
-                            <Box style={articleStyles.featuredImage}>
+                    <CardContent
+                        sx={{
+                            padding: 0,
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display:'flex',
+                                flexDirection:'row',
+                            }}>
+                            <Box>
                                 {thumbnail}
                             </Box>
-                            <Box style={articleStyles.column}>
+                            <Box>
                                 <Typography
                                     sx={{
-                                        fontSize: 24,
+                                        fontSize: 18,
                                         fontFamily: "AvantGrande",
                                         color: "black",
                                         textAlign: "left",
@@ -292,15 +279,12 @@ function ArticleFeed(props) {
                                 </Typography>
                                 <Typography
                                     sx={{
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         fontFamily: "AvantGrande",
                                         color: "black",
                                         textAlign: "left",
                                     }}>
                                     By {props.article.author}
-                                </Typography>
-                                <Typography style={articleStyles.subtitle}>
-                                    {props.subtitle}
                                 </Typography>
                             </Box>
                         </Box>
