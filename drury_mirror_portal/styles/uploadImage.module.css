@@ -1,0 +1,27 @@
+.imageContainer form{
+    width: 400px;
+    height: 300px;
+    border: 2px solid red;
+    background-color: lightgrey;
+    margin: auto;
+    border-radius: 5px;
+    padding: 5px;
+    align-items: left;
+}
+.uploadBox{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ .uploadButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%
+ }
+
+ .uploadBox img{
+    height: 100%;
+ }

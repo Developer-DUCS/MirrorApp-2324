@@ -3,10 +3,12 @@
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import styles from "../styles/article.module.css";
+import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
 import { Button, Box, Stack, Grid, Typography, Checkbox } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 // React, Next, system stuff
 import React, { useState, useEffect } from "react";
@@ -74,7 +76,8 @@ export default function articleWriting() {
 	const [getImageData, setImageData] = useState("");
 	const [getImageType, setImageType] = useState("");
 	const { status, data } = useSession();
-	const [selectedImage, setSelectedImage] = useState(null);
+
+	const [img, setImg] = useState("");
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -235,65 +238,22 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
-	// new upload file handler using mongo database
-	const uploadFile = async () => {
-
-		if (selectedImage) {
-			const formData = new FormData();
-			formData.append('file', selectedImage);
-			const image = formData.getAll('image')
-			
-			try {
-				const response = await fetch('/api/addImage', {
-					method: 'POST',
-					body: formData,
-				});
-
-				if (response.status === 200) {
-					console.log('image uploaded');
-
-				}
-				else {
-					const responseData = await response.json()
-					console.log(responseData.error);
-					//console.error('error uploading image');
-				}
-			}
-			catch (error) {
-				console.error('Error uploading image', error);
-			}
-		}
+	// Image Processing functions
+	const imagebase64 = (file) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file)
+		const data = new Promise((resolve,reject) => {
+			reader.onload = () => resolve(reader.result)
+			reader.onerror = (error) => reject(error)
+		})
+		return data;
 	}
 
-	const handleImageChange = (e) => {
+	const handleUploadImage = async (e) => {
 		const file = e.target.files[0];
-		console.log(file);
-		setSelectedImage(file);
-	  };
-
-	// UploadFileHandler()
-	// - Converts the file uploaded into base 64
-	/* function uploadFileHandler() {
-		// Open a file explorer for a user that only accepts image files
-		const fileInput = document.createElement("input");
-		fileInput.type = "file";
-		fileInput.accept = "image/*";
-		fileInput.click();
-
-		// When the user selects an image, send the image to the server using the uploadHandler API endpoint
-		fileInput.addEventListener("change", async (event) => {
-			// 1. Convert file into base64 object
-			const file = event.target.files[0];
-
-			var reader = new FileReader();
-
-			reader.onloadend = function () {
-				setImageData(reader.result);
-				setImageType(file.type);
-			};
-			reader.readAsDataURL(file);
-		});
-	} */
+		const image = await imagebase64(file);
+		setImg(image);
+		}
 
 	if (status === "authenticated") {
 		return (
@@ -316,24 +276,33 @@ export default function articleWriting() {
 						<Header />
 					</div>
 					<form onSubmit={handleSubmit}>
-						<div>
-							<input
-								type="file"
-								accept="image/*"
-								onChange={handleImageChange}
-							/>
-							<Button
-								sx={{ m: 2 }}
-								variant="contained"
-								color="error"
-								onClick={() => {
-									console.log('clicked');
-									uploadFile();
-								}}
-								startIcon={<DriveFolderUploadIcon />}
-							>
-								Upload Thumbnail
-							</Button>
+					<div className={uploadStyles.imageContainer}>
+							<form>
+								<label htmlFor="uploadImage">
+									<div className={uploadStyles.uploadBox}>
+										<input type="file" id="uploadImage" onChange={handleUploadImage}/>
+										{img ? 
+											<img src={img} />
+											: 
+											<FileUploadIcon fontSize="large"/>
+										}
+									</div>
+								</label>
+							</form>
+						</div>
+						<div className={uploadStyles.uploadButton}>
+						<Button
+							sx={{ m: 2 }}
+							variant="contained"
+							color="error"
+							disabled={img==""}
+							onClick={() => {
+								uploadFileHandler();
+							}}
+							startIcon={<DriveFolderUploadIcon />}
+						>
+							Upload Thumbnail
+						</Button>
 						</div>
 						
 						<Box
