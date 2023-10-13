@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { Button, Box, Stack, Grid, Typography, Checkbox } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import CheckIcon from '@mui/icons-material/Check';
 
 // React, Next, system stuff
 import React, { useState, useEffect } from "react";
@@ -78,6 +79,8 @@ export default function articleWriting() {
 	const { status, data } = useSession();
 
 	const [img, setImg] = useState("");
+	const [uploadedImg, setUploadedImg] = useState("");
+	const [imageUploaded, setImageUploaded] = useState(false);
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -249,11 +252,12 @@ export default function articleWriting() {
 		return data;
 	}
 
-	const handleUploadImage = async (e) => {
+	const setImage = async (e) => {
+		setUploadedImg(false);
 		const file = e.target.files[0];
 		const image = await imagebase64(file);
 		setImg(image);
-		}
+	}
 
 	if (status === "authenticated") {
 		return (
@@ -276,11 +280,11 @@ export default function articleWriting() {
 						<Header />
 					</div>
 					<form onSubmit={handleSubmit}>
-					<div className={uploadStyles.imageContainer}>
+						<div className={uploadStyles.imageContainer}>
 							<form>
 								<label htmlFor="uploadImage">
 									<div className={uploadStyles.uploadBox}>
-										<input type="file" id="uploadImage" onChange={handleUploadImage}/>
+										<input type="file" id="uploadImage" onChange={setImage}/>
 										{img ? 
 											<img src={img} />
 											: 
@@ -290,21 +294,35 @@ export default function articleWriting() {
 								</label>
 							</form>
 						</div>
-						<div className={uploadStyles.uploadButton}>
-						<Button
-							sx={{ m: 2 }}
-							variant="contained"
-							color="error"
-							disabled={img==""}
-							onClick={() => {
-								uploadFileHandler();
-							}}
-							startIcon={<DriveFolderUploadIcon />}
-						>
-							Upload Thumbnail
-						</Button>
-						</div>
-						
+						{uploadedImg ?
+							<div className={uploadStyles.uploadButton}>
+								<Button
+									sx={{ m: 2 }}
+									variant="contained"
+									color="success"
+									startIcon={<CheckIcon />}
+									>
+									Thumbnail Uploaded
+								</Button>
+							</div>
+						:
+							<div className={uploadStyles.uploadButton}>
+								<Button
+									sx={{ m: 2 }}
+									variant="contained"
+									color="error"
+									disabled={img==""}
+									onClick={() => {
+										setUploadedImg(img);
+										console.log(uploadedImg)
+										setImageUploaded(true);
+									}}
+									startIcon={<DriveFolderUploadIcon />}
+									>
+									Upload Thumbnail
+								</Button>
+							</div>
+						}
 						<Box
 							sx={{
 								backgroundColor: "white",
