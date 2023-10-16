@@ -6,7 +6,7 @@ import styles from "../styles/article.module.css";
 import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
-import { Button, Box, Stack, Grid, Typography, Checkbox, Alert } from "@mui/material";
+import { Button, Box, Stack, Grid, Typography, Checkbox, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CheckIcon from '@mui/icons-material/Check';
@@ -83,8 +83,8 @@ export default function articleWriting() {
 	const [imageUploaded, setImageUploaded] = useState(false);
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
-	const [didNotSelectFileError, setDidNotSelectFileError] = useState(false);
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
+	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -118,6 +118,7 @@ export default function articleWriting() {
 	}, [getArticle]);
 
 	const handleSubmit = async (event) => {
+		
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
 
@@ -277,6 +278,10 @@ export default function articleWriting() {
 		}
 	}
 
+	function handleDialogClose() {
+		setSaveWithoutImagePopup(false);
+	}
+
 	if (status === "authenticated") {
 		return (
 			<Box
@@ -313,7 +318,7 @@ export default function articleWriting() {
 					:
 						null
 					}
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} id="articleForm">
 						<div className={uploadStyles.imageContainer}>
 							<form>
 								<label htmlFor="uploadImage">
@@ -431,10 +436,52 @@ export default function articleWriting() {
 							}}
 							color="error"
 							variant="contained"
-							type="submit"
+							type={img == null ? "button" : "submit"}
+							onClick={() => {
+								if (img == null){
+									setSaveWithoutImagePopup(true);
+								}
+							}}
 						>
 							{buttonText}
 						</Button>
+						{saveWithoutImagePopup ? 
+							<Dialog
+								open={saveWithoutImagePopup}
+								onClose={handleDialogClose}
+								>
+								<DialogTitle>
+									{"Missing Thumbnail Image"}
+								</DialogTitle>
+								<DialogContent>
+									<DialogContentText>
+										There is no thumbnail image saved to this article. Would you like to add one or submit anyway? An image can be added later if needed.
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button
+										color="error"
+										variant="outlined"
+										onClick={handleDialogClose}
+									>
+										Close
+									</Button>
+									<Button
+										type="submit"
+										color="error"
+										variant="contained"
+										onClick={() => {
+											setSaveWithoutImagePopup(false);
+											document.getElementById("articleForm").submit();
+										}}
+									>
+										Submit Anyway
+									</Button>
+								</DialogActions>
+							</Dialog>
+						:
+							null
+						}
 					</form>
 				</Box>
 			</Box>
