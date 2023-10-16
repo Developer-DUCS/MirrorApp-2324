@@ -6,7 +6,7 @@ import styles from "../styles/article.module.css";
 import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
-import { Button, Box, Stack, Grid, Typography, Checkbox } from "@mui/material";
+import { Button, Box, Stack, Grid, Typography, Checkbox, Alert } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CheckIcon from '@mui/icons-material/Check';
@@ -78,9 +78,13 @@ export default function articleWriting() {
 	const [getImageType, setImageType] = useState("");
 	const { status, data } = useSession();
 
-	const [img, setImg] = useState("");
+	const [img, setImg] = useState(null);
 	const [uploadedImg, setUploadedImg] = useState("");
 	const [imageUploaded, setImageUploaded] = useState(false);
+
+	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
+	const [didNotSelectFileError, setDidNotSelectFileError] = useState(false);
+	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -244,19 +248,33 @@ export default function articleWriting() {
 	// Image Processing functions
 	const imagebase64 = (file) => {
 		const reader = new FileReader();
-		reader.readAsDataURL(file)
-		const data = new Promise((resolve,reject) => {
-			reader.onload = () => resolve(reader.result)
-			reader.onerror = (error) => reject(error)
-		})
-		return data;
+		reader.readAsDataURL(file);
+			const data = new Promise((resolve,reject) => {
+				reader.onload = () => resolve(reader.result)
+				reader.onerror = (error) => reject(error)
+			})
+			return data;
 	}
 
 	const setImage = async (e) => {
+		// reset alerts
+		setNoSelectedImgError(false);
 		setUploadedImg(false);
+		setInvalidFileTypeError(false);
+
 		const file = e.target.files[0];
-		const image = await imagebase64(file);
-		setImg(image);
+		if (file){
+			const fileName = file.name;
+			const fileExtension = fileName.split('.').pop().toLowerCase();
+
+			if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg'){
+				const image = await imagebase64(file);
+				setImg(image);
+			}
+			else{
+				setInvalidFileTypeError(true);
+			}
+		}
 	}
 
 	if (status === "authenticated") {
@@ -279,6 +297,22 @@ export default function articleWriting() {
 					<div>
 						<Header />
 					</div>
+					{noSelectedImgError ?
+						<div>
+							<Alert severity="error">Oops. You did not select an image.</Alert>
+							<br></br>
+						</div>
+					:
+						null
+					}
+					{invalidFileTypeError ?
+						<div>
+							<Alert severity="error">This is not a valid image file. Try .png, .jpg, or .jpeg files. </Alert>
+							<br></br>
+						</div>
+					:
+						null
+					}
 					<form onSubmit={handleSubmit}>
 						<div className={uploadStyles.imageContainer}>
 							<form>
@@ -287,7 +321,7 @@ export default function articleWriting() {
 										<input type="file" id="uploadImage" onChange={setImage}/>
 										{img ? 
 											<img src={img} />
-											: 
+											:
 											<FileUploadIcon fontSize="large"/>
 										}
 									</div>
@@ -300,6 +334,9 @@ export default function articleWriting() {
 									sx={{ m: 2 }}
 									variant="contained"
 									color="success"
+									onClick={() => {
+										console.log(uploadedImg);
+									}}
 									startIcon={<CheckIcon />}
 									>
 									Thumbnail Uploaded
@@ -309,19 +346,39 @@ export default function articleWriting() {
 							<div className={uploadStyles.uploadButton}>
 								<Button
 									sx={{ m: 2 }}
-									variant="contained"
+									variant={img == null ? "outlined" : "contained"}
 									color="error"
-									disabled={img==""}
 									onClick={() => {
-										setUploadedImg(img);
-										console.log(uploadedImg)
-										setImageUploaded(true);
+										if (img==""){
+											setNoSelectedImgError(true);
+										}
+										else {
+											setUploadedImg(img);
+											setImageUploaded(true);
+										}
 									}}
 									startIcon={<DriveFolderUploadIcon />}
 									>
 									Upload Thumbnail
 								</Button>
 							</div>
+						}
+						{img ?
+						<div className={uploadStyles.clearButton}>
+							<Button
+								sx={{ m: 2 }}
+								color="error"
+								variant="outlined"
+								onClick={() => {
+									document.getElementById('uploadImage').value = ''
+									setImg(null);
+								}}
+								>
+								Clear Selection
+							</Button>
+						</div>
+						:
+						null
 						}
 						<Box
 							sx={{

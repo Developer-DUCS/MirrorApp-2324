@@ -1,12 +1,16 @@
 .imageContainer form{
     width: 400px;
     height: 300px;
-    border: 2px solid red;
+    border: 4px solid lightgray;
     background-color: lightgrey;
     margin: auto;
     border-radius: 5px;
     padding: 5px;
     align-items: left;
+}
+
+.imageContainer form:hover{
+    border-color: red;
 }
 .uploadBox{
     width: 100%;
@@ -19,9 +23,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%
+    height: 100%;
  }
 
  .uploadBox img{
+    height: 100%;
+ }
+
+ .clearButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
  }
