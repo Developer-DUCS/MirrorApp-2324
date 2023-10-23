@@ -368,7 +368,7 @@ export default function articleWriting() {
 								</Button>
 							</div>
 						}
-						{img ?
+						{img && !uploadedImg ?
 						<div className={uploadStyles.clearButton}>
 							<Button
 								sx={{ m: 2 }}
@@ -455,7 +455,10 @@ export default function articleWriting() {
 								</DialogTitle>
 								<DialogContent>
 									<DialogContentText>
-										There is no thumbnail image saved to this article. Would you like to add one or submit anyway? An image can be added later if needed.
+										Would you like to save without a thumbnail or go back and add one? 
+									</DialogContentText>
+									<DialogContentText>
+										A thumbnail can be added later if the article is saved as a draft. 
 									</DialogContentText>
 								</DialogContent>
 								<DialogActions>
