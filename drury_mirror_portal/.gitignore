@@ -18,7 +18,7 @@
 
 # production
 /build
-/backend
+#/backend
 next.config.js
 # misc
 .DS_Store

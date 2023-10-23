@@ -3,10 +3,13 @@
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import styles from "../styles/article.module.css";
+import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
-import { Button, Box, Stack, Grid, Typography, Checkbox } from "@mui/material";
+import { Button, Box, Stack, Grid, Typography, Checkbox, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import CheckIcon from '@mui/icons-material/Check';
 
 // React, Next, system stuff
 import React, { useState, useEffect } from "react";
@@ -75,6 +78,13 @@ export default function articleWriting() {
 	const [getImageType, setImageType] = useState("");
 	const { status, data } = useSession();
 
+	const [img, setImg] = useState(null);
+	const [uploadedImg, setUploadedImg] = useState("");
+
+	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
+	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
+	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
+
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
 
@@ -107,6 +117,7 @@ export default function articleWriting() {
 	}, [getArticle]);
 
 	const handleSubmit = async (event) => {
+		
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
 
@@ -234,28 +245,40 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
-	// UploadFileHandler()
-	// - Converts the file uploaded into base 64
-	function uploadFileHandler() {
-		// Open a file explorer for a user that only accepts image files
-		const fileInput = document.createElement("input");
-		fileInput.type = "file";
-		fileInput.accept = "image/*";
-		fileInput.click();
+	// Image Processing functions
+	const imagebase64 = (file) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+			const data = new Promise((resolve,reject) => {
+				reader.onload = () => resolve(reader.result)
+				reader.onerror = (error) => reject(error)
+			})
+			return data;
+	}
 
-		// When the user selects an image, send the image to the server using the uploadHandler API endpoint
-		fileInput.addEventListener("change", async (event) => {
-			// 1. Convert file into base64 object
-			const file = event.target.files[0];
+	const setImage = async (e) => {
+		// reset alerts
+		setNoSelectedImgError(false);
+		setUploadedImg(false);
+		setInvalidFileTypeError(false);
 
-			var reader = new FileReader();
+		const file = e.target.files[0];
+		if (file){
+			const fileName = file.name;
+			const fileExtension = fileName.split('.').pop().toLowerCase();
 
-			reader.onloadend = function () {
-				setImageData(reader.result);
-				setImageType(file.type);
-			};
-			reader.readAsDataURL(file);
-		});
+			if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg'){
+				const image = await imagebase64(file);
+				setImg(image);
+			}
+			else{
+				setInvalidFileTypeError(true);
+			}
+		}
+	}
+
+	function handleDialogClose() {
+		setSaveWithoutImagePopup(false);
 	}
 
 	if (status === "authenticated") {
@@ -278,18 +301,86 @@ export default function articleWriting() {
 					<div>
 						<Header />
 					</div>
-					<form onSubmit={handleSubmit}>
-						<Button
-							sx={{ m: 2 }}
-							variant="contained"
-							color="error"
-							onClick={() => {
-								uploadFileHandler();
-							}}
-							startIcon={<DriveFolderUploadIcon />}
-						>
-							Upload Thumbnail
-						</Button>
+					{noSelectedImgError ?
+						<div>
+							<Alert severity="error">Oops. You did not select an image.</Alert>
+							<br></br>
+						</div>
+					:
+						null
+					}
+					{invalidFileTypeError ?
+						<div>
+							<Alert severity="error">This is not a valid image file. Try .png, .jpg, or .jpeg files. </Alert>
+							<br></br>
+						</div>
+					:
+						null
+					}
+					<form onSubmit={handleSubmit} id="articleForm">
+						<div className={uploadStyles.imageContainer}>
+							<form>
+								<label htmlFor="uploadImage">
+									<div className={uploadStyles.uploadBox}>
+										<input type="file" id="uploadImage" onChange={setImage}/>
+										{img ? 
+											<img src={img} />
+											:
+											<FileUploadIcon fontSize="large"/>
+										}
+									</div>
+								</label>
+							</form>
+						</div>
+						{uploadedImg ?
+							<div className={uploadStyles.uploadButton}>
+								<Button
+									sx={{ m: 2 }}
+									variant="contained"
+									color="success"
+									startIcon={<CheckIcon />}
+									>
+									Thumbnail Uploaded
+								</Button>
+							</div>
+						:
+							<div className={uploadStyles.uploadButton}>
+								<Button
+									sx={{ m: 2 }}
+									variant={img == null ? "outlined" : "contained"}
+									color="error"
+									onClick={() => {
+										if (img==""){
+											setNoSelectedImgError(true);
+										}
+										else {
+											setUploadedImg(img);
+										}
+									}}
+									startIcon={<DriveFolderUploadIcon />}
+									>
+									Upload Thumbnail
+								</Button>
+							</div>
+						}
+						{img ?
+						<div className={uploadStyles.clearButton}>
+							<Button
+								sx={{ m: 2 }}
+								color="error"
+								variant="outlined"
+								onClick={() => {
+									document.getElementById('uploadImage').value = ''
+									setImg(null);
+									setUploadedImg(null);
+								}}
+								>
+								Clear Selection
+							</Button>
+						</div>
+						:
+						null
+						}
 						<Box
 							sx={{
 								backgroundColor: "white",
@@ -341,10 +432,59 @@ export default function articleWriting() {
 							}}
 							color="error"
 							variant="contained"
-							type="submit"
+							type={/* Implementation when backend for image uploading is done
+							 img == null ? "button" :  
+							 	*/
+							 "submit"}
+							onClick={() => {
+								if (img == null){
+									setSaveWithoutImagePopup(true);
+								}
+							}}
 						>
 							{buttonText}
 						</Button>
+
+						{/* {saveWithoutImagePopup ? 
+							<Dialog
+								open={saveWithoutImagePopup}
+								onClose={handleDialogClose}
+								>
+								<DialogTitle>
+									{"Missing Thumbnail Image"}
+								</DialogTitle>
+								<DialogContent>
+									<DialogContentText>
+										Would you like to save without a thumbnail or go back and add one? 
+									</DialogContentText>
+									<DialogContentText>
+										A thumbnail can be added later if the article is saved as a draft. 
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button
+										color="error"
+										variant="outlined"
+										onClick={handleDialogClose}
+									>
+										Close
+									</Button>
+									<Button
+										type="submit"
+										color="error"
+										variant="contained"
+										onClick={() => {
+											setSaveWithoutImagePopup(false);
+											document.getElementById("articleForm").submit();
+										}}
+									>
+										Submit Anyway
+									</Button>
+								</DialogActions>
+							</Dialog>
+						:
+							null
+						} */}
 					</form>
 				</Box>
 			</Box>
