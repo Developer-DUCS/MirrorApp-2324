@@ -80,7 +80,6 @@ export default function articleWriting() {
 
 	const [img, setImg] = useState(null);
 	const [uploadedImg, setUploadedImg] = useState("");
-	const [imageUploaded, setImageUploaded] = useState(false);
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
@@ -339,9 +338,6 @@ export default function articleWriting() {
 									sx={{ m: 2 }}
 									variant="contained"
 									color="success"
-									onClick={() => {
-										console.log(uploadedImg);
-									}}
 									startIcon={<CheckIcon />}
 									>
 									Thumbnail Uploaded
@@ -359,7 +355,6 @@ export default function articleWriting() {
 										}
 										else {
 											setUploadedImg(img);
-											setImageUploaded(true);
 										}
 									}}
 									startIcon={<DriveFolderUploadIcon />}
@@ -368,7 +363,7 @@ export default function articleWriting() {
 								</Button>
 							</div>
 						}
-						{img && !uploadedImg ?
+						{img ?
 						<div className={uploadStyles.clearButton}>
 							<Button
 								sx={{ m: 2 }}
@@ -377,6 +372,7 @@ export default function articleWriting() {
 								onClick={() => {
 									document.getElementById('uploadImage').value = ''
 									setImg(null);
+									setUploadedImg(null);
 								}}
 								>
 								Clear Selection
