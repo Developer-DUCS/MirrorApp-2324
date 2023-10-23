@@ -432,7 +432,10 @@ export default function articleWriting() {
 							}}
 							color="error"
 							variant="contained"
-							type={img == null ? "button" : "submit"}
+							type={/* Implementation when backend for image uploading is done
+							 img == null ? "button" :  
+							 	*/
+							 "submit"}
 							onClick={() => {
 								if (img == null){
 									setSaveWithoutImagePopup(true);
@@ -441,7 +444,8 @@ export default function articleWriting() {
 						>
 							{buttonText}
 						</Button>
-						{saveWithoutImagePopup ? 
+
+						{/* {saveWithoutImagePopup ? 
 							<Dialog
 								open={saveWithoutImagePopup}
 								onClose={handleDialogClose}
@@ -480,7 +484,7 @@ export default function articleWriting() {
 							</Dialog>
 						:
 							null
-						}
+						} */}
 					</form>
 				</Box>
 			</Box>
