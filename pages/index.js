@@ -20,7 +20,6 @@ export default function Home() {
 	return (
 		<Box sx={{backgroundColor: "#F3F3F3"}}>
 			<ArticleFeed/>
-			<NavBar/>
 		</Box>
 	);
 }

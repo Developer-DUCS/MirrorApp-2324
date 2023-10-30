@@ -47,7 +47,7 @@ function NavBar(props) {
         <div style={{ position: "fixed", bottom: 1, width: "100%" }}>
             <AppBar
                 position="static"
-                sx={{ backgroundColor: "#BC2932", height: "65px", p: 1, width: "100%" }}>
+                sx={{ backgroundColor: "#e03d3d", height: "65px", p: 1, width: "100%" }}>
                 <Toolbar
                     sx={{
                         display: "flex",

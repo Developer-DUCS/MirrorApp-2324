@@ -248,7 +248,8 @@ function ArticleFeed(props) {
                 sx={{ m: 2, marginBottom: 3 }}>
                 <Button
                     sx={{
-                        padding: 0
+                        padding: 0,
+                        width: '100%'
                     }}
                     href={`${asPath}/articles/[${props.article.aid}]`}
                     component="a"
@@ -263,17 +264,27 @@ function ArticleFeed(props) {
                             sx={{
                                 display:'flex',
                                 flexDirection:'row',
+                                
                             }}>
+                            
                             <Box>
-                                {thumbnail}
-                            </Box>
-                            <Box>
+                                <Box
+                                sx={{
+                                    display:'flex',
+                                    flexDirection:'row',
+                                    justifyContent: 'center',
+                                    
+                                }}>
+                                    {thumbnail}
+                                </Box>
+                                
                                 <Typography
                                     sx={{
+                                        
                                         fontSize: 18,
                                         fontFamily: "AvantGrande",
                                         color: "black",
-                                        textAlign: "left",
+                                        textAlign: "center",
                                     }}>
                                     {newHeadline}
                                 </Typography>
@@ -282,11 +293,13 @@ function ArticleFeed(props) {
                                         fontSize: 12,
                                         fontFamily: "AvantGrande",
                                         color: "black",
-                                        textAlign: "left",
+                                        textAlign: "center",
                                     }}>
                                     By {props.article.author}
                                 </Typography>
                             </Box>
+
+                            
                         </Box>
                     </CardContent>
                 </Button>
@@ -307,7 +320,7 @@ function ArticleFeed(props) {
                     <AppBar
                         position="fixed"
                         sx={{
-                            backgroundColor: "#BC2932",
+                            backgroundColor: "#e03d3d",
                             height: { getHeight },
                         }}>
                         <Toolbar
@@ -395,7 +408,6 @@ function ArticleFeed(props) {
                     </IonPage>
                 </Box>
             </Box>
-            <NavBar />
         </Box>
     );
 }

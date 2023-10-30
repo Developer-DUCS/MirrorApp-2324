@@ -54,8 +54,8 @@ export default function NavBar() {
         <div style={{ position: "absolute", top: 0, width: "100%", marginBottom: 10 }}>
             <AppBar
                 position="fixed"
-                sx={{ backgroundColor: "#BC2932", height: { getHeight } }}>
-                <Toolbar sx={{ display: "flex", flexDirection: "column" }}>
+                sx={{ backgroundColor: "#e03d3d", height: { getHeight } }}>
+                <Toolbar sx={{ display: "flex", flexDirection: "column"}}>
                     <Grid container>
                         <Grid
                             xs={11}
@@ -69,6 +69,7 @@ export default function NavBar() {
                                         fontSize: "24px",
                                         justifyContent: "space-around",
                                         fontFamily: "TrajanPro-Regular",
+                                        
                                     }}>
                                     Drury Mirror
                                 </Button>
