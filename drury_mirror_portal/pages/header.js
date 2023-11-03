@@ -29,9 +29,9 @@ export default function Header() {
 		<Grid
 			container
 			sx={{
-				height: "8vh",
+				height: "10vh",
 				marginBottom: 2,
-				backgroundColor: "white",
+				backgroundColor: "#313131",
 				color: "black",
 				display: "flex",
 			}}
@@ -42,7 +42,7 @@ export default function Header() {
 					sx={{
 						fontSize: { lg: "18px", md: "16px", sm: "6px" },
 						fontFamily: "Trajan",
-						color: "black",
+						color: "White",
 					}}
 					onClick={() => {
 						handleLogo();

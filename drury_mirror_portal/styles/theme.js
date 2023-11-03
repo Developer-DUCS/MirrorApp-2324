@@ -13,7 +13,7 @@ export const theme = createTheme({
       default: "#F3F3F3"
     },
     primaryButton: {
-      main:"#4685F5",
+      main:"#E03D3D",
     },
   },
   typography:{
@@ -80,7 +80,7 @@ export const editorTheme = createTheme({
       default: "#303030"
     },
     primaryButton: {
-      main:"#4685F5",
+      main:"#E03D3D",
     },
   },
   typography:{
@@ -144,7 +144,7 @@ export const mainTheme = createTheme({
       main:"#000"
     },
     primaryButton: {
-      main:"#4685F5",
+      main:"#E03D3D",
     },
     background: {
       default: "#F3F3F3"
@@ -187,7 +187,7 @@ export const aboutTheme = createTheme({
       main:"#000"
     },
     primaryButton: {
-      main:"#4685F5",
+      main:"#E03D3D",
     },
     background: {
       default: "#F3F3F3"

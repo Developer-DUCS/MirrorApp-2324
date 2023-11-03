@@ -162,7 +162,7 @@ export function copyEditorPortal() {
 								padding: 5,
 								paddingLeft: 15,
 								boxShadow: 4,
-								backgroundColor: "#82858f",
+								backgroundColor: "#313131",
 							}}
 						>
 							<Typography
@@ -198,7 +198,7 @@ export function copyEditorPortal() {
 									marginBottom: 1,
 									marginRight: 5,
 									color: "white",
-									backgroundColor: "#4685F5",
+									backgroundColor: "#E03D3D",
 								}}
 							>
 								Edit Article
@@ -211,7 +211,7 @@ export function copyEditorPortal() {
 									marginBottom: 1,
 									marginRight: 5,
 									color: "white",
-									backgroundColor: "#4685F5",
+									backgroundColor: "#E03D3D",
 								}}
 							>
 								Ready to Publish
