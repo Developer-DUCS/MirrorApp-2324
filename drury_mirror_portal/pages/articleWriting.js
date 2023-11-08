@@ -255,7 +255,7 @@ export default function articleWriting() {
 		try {
 			const data = new FormData();
 			data.set('file', image);
-			data.set('articleId', 1);
+			data.set('articleId', 11);
 
 			const res = await fetch('/api/addImage', {
 				method: "POST",
@@ -302,8 +302,9 @@ export default function articleWriting() {
 			const fileExtension = fileName.split('.').pop().toLowerCase();
 
 			if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg'){
-				//const image = await imagebase64(file);
+				setImageType(fileExtension);
 				setImg(file);
+
 				const preview = await imagebase64(file);
 				setPreviewImg(preview);
 			}
