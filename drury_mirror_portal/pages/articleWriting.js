@@ -6,7 +6,7 @@ import styles from "../styles/article.module.css";
 import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
-import { Button, Box, Stack, Grid, Typography, Checkbox, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Button, Box, Stack, Grid, Typography, Checkbox, Alert, VisuallyHiddenInput, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CheckIcon from '@mui/icons-material/Check';
@@ -14,6 +14,8 @@ import CheckIcon from '@mui/icons-material/Check';
 // React, Next, system stuff
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
+import Math from 'mathjs';
+import axios from 'axios';
 
 // Components
 import Header from "./header";
@@ -74,11 +76,12 @@ export default function articleWriting() {
 	// Handles the contents of the article editor
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
-	const [getImageData, setImageData] = useState("");
-	const [getImageType, setImageType] = useState("");
+	const [getImageData, setImageData] = useState(null);
+	const [getImageType, setImageType] = useState(null);
 	const { status, data } = useSession();
 
 	const [img, setImg] = useState(null);
+	const [previewImg, setPreviewImg] = useState(null);
 	const [uploadedImg, setUploadedImg] = useState("");
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
@@ -245,6 +248,37 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
+	const handleUpload = async (image) => {
+
+		if (!img) return
+
+		try {
+			const data = new FormData();
+			data.set('file', image);
+			data.set('articleId', 1);
+
+			const res = await fetch('/api/addImage', {
+				method: "POST",
+				body: data,
+			});
+			
+			if (res.ok){
+				const result = await res.json()
+				setImageData(result.filePath);
+				return;
+			}
+			else {
+				console.log(await res);
+			}
+
+		} catch (err) {
+			console.log(`failed upload: ${err}`);
+			setImageData(null);
+			setImg(null);
+			setPreviewImg(null)
+		}
+	}
+
 	// Image Processing functions
 	const imagebase64 = (file) => {
 		const reader = new FileReader();
@@ -268,8 +302,10 @@ export default function articleWriting() {
 			const fileExtension = fileName.split('.').pop().toLowerCase();
 
 			if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg'){
-				const image = await imagebase64(file);
-				setImg(image);
+				//const image = await imagebase64(file);
+				setImg(file);
+				const preview = await imagebase64(file);
+				setPreviewImg(preview);
 			}
 			else{
 				setInvalidFileTypeError(true);
@@ -319,12 +355,12 @@ export default function articleWriting() {
 					}
 					<form onSubmit={handleSubmit} id="articleForm">
 						<div className={uploadStyles.imageContainer}>
-							<form>
+							<form id="imageForm">
 								<label htmlFor="uploadImage">
 									<div className={uploadStyles.uploadBox}>
-										<input type="file" id="uploadImage" onChange={setImage}/>
-										{img ? 
-											<img src={img} />
+										<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
+										{previewImg ? 
+											<img src={previewImg} />
 											:
 											<FileUploadIcon fontSize="large"/>
 										}
@@ -332,7 +368,7 @@ export default function articleWriting() {
 								</label>
 							</form>
 						</div>
-						{uploadedImg ?
+						{getImageData ?
 							<div className={uploadStyles.uploadButton}>
 								<Button
 									sx={{ m: 2 }}
@@ -350,12 +386,7 @@ export default function articleWriting() {
 									variant={img == null ? "outlined" : "contained"}
 									color="error"
 									onClick={() => {
-										if (img==""){
-											setNoSelectedImgError(true);
-										}
-										else {
-											setUploadedImg(img);
-										}
+										handleUpload(img);
 									}}
 									startIcon={<DriveFolderUploadIcon />}
 									>
@@ -373,6 +404,8 @@ export default function articleWriting() {
 									document.getElementById('uploadImage').value = ''
 									setImg(null);
 									setUploadedImg(null);
+									setImageData(null);
+									setImageType(null);
 								}}
 								>
 								Clear Selection
