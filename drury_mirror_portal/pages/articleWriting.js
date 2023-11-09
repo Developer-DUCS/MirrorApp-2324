@@ -82,10 +82,11 @@ export default function articleWriting() {
 
 	const [img, setImg] = useState(null);
 	const [previewImg, setPreviewImg] = useState(null);
-	const [uploadedImg, setUploadedImg] = useState("");
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
+	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
+	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 
 	// Used to set the text on the submit button
@@ -255,7 +256,7 @@ export default function articleWriting() {
 		try {
 			const data = new FormData();
 			data.set('file', image);
-			data.set('articleId', 11);
+			data.set('articleId', 54);
 
 			const res = await fetch('/api/addImage', {
 				method: "POST",
@@ -265,10 +266,12 @@ export default function articleWriting() {
 			if (res.ok){
 				const result = await res.json()
 				setImageData(result.filePath);
+				setUploadSuccessAlert(true);
 				return;
 			}
 			else {
-				console.log(await res);
+				console.log(`error ${res.json()}`);
+				setUploadFailedAlert(true);
 			}
 
 		} catch (err) {
@@ -293,7 +296,7 @@ export default function articleWriting() {
 	const setImage = async (e) => {
 		// reset alerts
 		setNoSelectedImgError(false);
-		setUploadedImg(false);
+		//setUploadedImg(false);
 		setInvalidFileTypeError(false);
 
 		const file = e.target.files[0];
@@ -338,6 +341,7 @@ export default function articleWriting() {
 					<div>
 						<Header />
 					</div>
+
 					{noSelectedImgError ?
 						<div>
 							<Alert severity="error">Oops. You did not select an image.</Alert>
@@ -354,6 +358,49 @@ export default function articleWriting() {
 					:
 						null
 					}
+
+					{uploadSuccessAlert ?
+						<div>
+							<Alert 
+							action={
+								<Button color="inherit" size="small"
+								onClick={() => {
+									setUploadSuccessAlert(false);
+								}}
+								>
+									Close
+								</Button>
+							}
+							>
+								Thumbnail image successfully uploaded
+							</Alert>
+							<br></br>
+						</div>
+					:
+						null
+					}
+
+					{uploadFailedAlert ?
+						<div>
+						<Alert 
+						severity="error"
+						action={
+							<Button color="inherit" size="small"
+							onClick={() => {
+								setUploadFailedAlert(false);
+							}}
+							>
+								Close
+							</Button>
+						}
+						>
+							Thumbnail image failed to uploaded
+						</Alert>
+						<br></br>
+					</div>
+				:
+					null
+					}
 					<form onSubmit={handleSubmit} id="articleForm">
 						<div className={uploadStyles.imageContainer}>
 							<form id="imageForm">
@@ -361,6 +408,7 @@ export default function articleWriting() {
 									<div className={uploadStyles.uploadBox}>
 										<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
 										{previewImg ? 
+											// TODO: create route for getting existing image and display if article already has an uploaded thumbnail
 											<img src={previewImg} />
 											:
 											<FileUploadIcon fontSize="large"/>
@@ -370,30 +418,21 @@ export default function articleWriting() {
 							</form>
 						</div>
 						{getImageData ?
-							<div className={uploadStyles.uploadButton}>
-								<Button
-									sx={{ m: 2 }}
-									variant="contained"
-									color="success"
-									startIcon={<CheckIcon />}
-									>
-									Thumbnail Uploaded
-								</Button>
-							</div>
+						null
 						:
-							<div className={uploadStyles.uploadButton}>
-								<Button
-									sx={{ m: 2 }}
-									variant={img == null ? "outlined" : "contained"}
-									color="error"
-									onClick={() => {
-										handleUpload(img);
-									}}
-									startIcon={<DriveFolderUploadIcon />}
-									>
-									Upload Thumbnail
-								</Button>
-							</div>
+						<div className={uploadStyles.uploadButton}>
+							<Button
+								sx={{ m: 2 }}
+								variant={img == null ? "outlined" : "contained"}
+								color="error"
+								onClick={() => {
+									handleUpload(img);
+								}}
+								startIcon={<DriveFolderUploadIcon />}
+								>
+								Upload Thumbnail
+							</Button>
+						</div>
 						}
 						{img ?
 						<div className={uploadStyles.clearButton}>
@@ -402,9 +441,13 @@ export default function articleWriting() {
 								color="error"
 								variant="outlined"
 								onClick={() => {
+									// delete image file if image has been uploaded
+									// TODO: create a route for deleting image from article_images folder
+
+									// clear all image data from frontend
 									document.getElementById('uploadImage').value = ''
 									setImg(null);
-									setUploadedImg(null);
+									setPreviewImg(null);
 									setImageData(null);
 									setImageType(null);
 								}}
