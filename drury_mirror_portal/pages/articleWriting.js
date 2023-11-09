@@ -14,8 +14,6 @@ import CheckIcon from '@mui/icons-material/Check';
 // React, Next, system stuff
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
-import Math from 'mathjs';
-import axios from 'axios';
 
 // Components
 import Header from "./header";
@@ -296,7 +294,6 @@ export default function articleWriting() {
 	const setImage = async (e) => {
 		// reset alerts
 		setNoSelectedImgError(false);
-		//setUploadedImg(false);
 		setInvalidFileTypeError(false);
 
 		const file = e.target.files[0];
