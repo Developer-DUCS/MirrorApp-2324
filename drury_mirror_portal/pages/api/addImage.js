@@ -41,7 +41,7 @@ export default async (req, res) => {
     const outputDirectory = './public/images/article_images/thumbnail';
 
     // find the correct folder based on the article id
-    const articleFolder = floor(parseInt(data.fields.articleId[0]) / 10);
+    const articleFolder = parseInt(data.fields.userId[0]);
 
     const filename = data.files.file[0].originalFilename;
     

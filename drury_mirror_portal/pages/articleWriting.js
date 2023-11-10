@@ -251,10 +251,35 @@ export default function articleWriting() {
 
 		if (!img) return
 
+		// first get user id by the session email value to know image destination
+		let session = await getSession();
+
+		// set email data
+		const emailData = {
+			email: session.user.email,
+		}
+		// specify route and data being sent to the route
+		const JSONdata = JSON.stringify(emailData);
+		const endpoint = 'api/getUserByEmail';
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSONdata,
+		};
+
+		// handle response and set userId to be passed into the image upload portion
+		const response = await fetch(endpoint, options);
+		const result = await response.json()
+
+		const userId = result.uid;
+		
+		// upload image call with image data and user id
 		try {
 			const data = new FormData();
 			data.set('file', image);
-			data.set('articleId', 54);
+			data.set('userId', userId);
 
 			const res = await fetch('/api/addImage', {
 				method: "POST",
@@ -262,7 +287,7 @@ export default function articleWriting() {
 			});
 			
 			if (res.ok){
-				const result = await res.json()
+				const result = await res.json();
 				setImageData(result.filePath);
 				setUploadSuccessAlert(true);
 				return;
