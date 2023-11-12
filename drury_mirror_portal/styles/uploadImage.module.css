@@ -1,4 +1,4 @@
-.imageContainer form{
+.imageContainer div{
     width: 400px;
     height: 300px;
     border: 4px solid lightgray;
@@ -9,7 +9,7 @@
     align-items: left;
 }
 
-.imageContainer form:hover{
+.imageContainer div:hover{
     border-color: red;
 }
 .uploadBox{

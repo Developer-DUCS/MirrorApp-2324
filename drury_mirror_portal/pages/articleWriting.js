@@ -119,6 +119,8 @@ export default function articleWriting() {
 	}, [getArticle]);
 
 	const handleSubmit = async (event) => {
+
+		console.log("submit started");
 		
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
@@ -420,24 +422,23 @@ export default function articleWriting() {
 						</Alert>
 						<br></br>
 					</div>
-				:
+					:
 					null
 					}
+					
 					<form onSubmit={handleSubmit} id="articleForm">
 						<div className={uploadStyles.imageContainer}>
-							<form id="imageForm">
-								<label htmlFor="uploadImage">
-									<div className={uploadStyles.uploadBox}>
-										<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
-										{previewImg ? 
-											// TODO: create route for getting existing image and display if article already has an uploaded thumbnail
-											<img src={previewImg} />
-											:
-											<FileUploadIcon fontSize="large"/>
-										}
-									</div>
-								</label>
-							</form>
+							<label htmlFor="uploadImage">
+								<div className={uploadStyles.uploadBox}>
+									<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
+									{previewImg ? 
+										// TODO: create route for getting existing image and display if article already has an uploaded thumbnail
+										<img src={previewImg} />
+										:
+										<FileUploadIcon fontSize="large"/>
+									}
+								</div>
+							</label>
 						</div>
 						{getImageData ?
 						null
@@ -472,6 +473,8 @@ export default function articleWriting() {
 									setPreviewImg(null);
 									setImageData(null);
 									setImageType(null);
+									setUploadFailedAlert(false);
+									setUploadSuccessAlert(false);
 								}}
 								>
 								Clear Selection
@@ -531,12 +534,13 @@ export default function articleWriting() {
 							}}
 							color="error"
 							variant="contained"
-							type={/* Implementation when backend for image uploading is done
-							 img == null ? "button" :  
-							 	*/
+							type={
+							 getImageData == null ? 
+							 "button" 
+							:
 							 "submit"}
 							onClick={() => {
-								if (img == null){
+								if (getImageData == null){
 									setSaveWithoutImagePopup(true);
 								}
 							}}
@@ -544,46 +548,47 @@ export default function articleWriting() {
 							{buttonText}
 						</Button>
 
-						{/* {saveWithoutImagePopup ? 
-							<Dialog
-								open={saveWithoutImagePopup}
-								onClose={handleDialogClose}
+						{saveWithoutImagePopup ? 
+						<Dialog
+							open={saveWithoutImagePopup}
+							onClose={handleDialogClose}
+							>
+							<DialogTitle>
+								{"Missing Thumbnail Image"}
+							</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+									Would you like to save without a thumbnail or go back and add one?
+								</DialogContentText>
+								<DialogContentText>
+									A thumbnail can be added later if the article is saved as a draft.
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<Button
+									color="error"
+									variant="outlined"
+									onClick={handleDialogClose}
 								>
-								<DialogTitle>
-									{"Missing Thumbnail Image"}
-								</DialogTitle>
-								<DialogContent>
-									<DialogContentText>
-										Would you like to save without a thumbnail or go back and add one? 
-									</DialogContentText>
-									<DialogContentText>
-										A thumbnail can be added later if the article is saved as a draft. 
-									</DialogContentText>
-								</DialogContent>
-								<DialogActions>
-									<Button
-										color="error"
-										variant="outlined"
-										onClick={handleDialogClose}
-									>
-										Close
-									</Button>
-									<Button
-										type="submit"
-										color="error"
-										variant="contained"
-										onClick={() => {
-											setSaveWithoutImagePopup(false);
-											document.getElementById("articleForm").submit();
-										}}
-									>
-										Submit Anyway
-									</Button>
-								</DialogActions>
-							</Dialog>
+									Close
+								</Button>
+								<Button
+									type="submit"
+									color="error"
+									variant="contained"
+									onClick={(e) => {
+										setSaveWithoutImagePopup(false);
+										console.log("submit clicked");
+										handleSubmit(e);
+									}}
+								>
+									Save
+								</Button>
+							</DialogActions>
+						</Dialog>
 						:
-							null
-						} */}
+						null
+						}
 					</form>
 				</Box>
 			</Box>
