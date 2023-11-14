@@ -139,7 +139,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/SR.jpg"
+									image="/images/CC.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
@@ -178,7 +178,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/SR.jpg"
+									image="/images/AR.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
@@ -207,7 +207,7 @@ export default function about() {
 										sx={{ marginTop: 2 }}
 										variant="cardBody"
 									>
-										Position: Terrible
+										Position: Indefined
 									</Typography>
 								</CardContent>
 							</Card>
@@ -217,7 +217,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/SR.jpg"
+									image="/images/SGM.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
