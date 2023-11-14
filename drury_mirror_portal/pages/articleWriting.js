@@ -494,47 +494,6 @@ export default function articleWriting() {
 							</Typography>
 						</Box>
 						</Modal>
-						
-						{/* {saveWithoutImagePopup ? 
-							<Dialog
-								open={saveWithoutImagePopup}
-								onClose={handleDialogClose}
-								>
-								<DialogTitle>
-									{"Missing Thumbnail Image"}
-								</DialogTitle>
-								<DialogContent>
-									<DialogContentText>
-										Would you like to save without a thumbnail or go back and add one? 
-									</DialogContentText>
-									<DialogContentText>
-										A thumbnail can be added later if the article is saved as a draft. 
-									</DialogContentText>
-								</DialogContent>
-								<DialogActions>
-									<Button
-										color="error"
-										variant="outlined"
-										onClick={handleDialogClose}
-									>
-										Close
-									</Button>
-									<Button
-										type="submit"
-										color="error"
-										variant="contained"
-										onClick={() => {
-											setSaveWithoutImagePopup(false);
-											document.getElementById("articleForm").submit();
-										}}
-									>
-										Submit Anyway
-									</Button>
-								</DialogActions>
-							</Dialog>
-						:
-							null
-						} */}
 					</form>
 				</Box>
 			</Box>
