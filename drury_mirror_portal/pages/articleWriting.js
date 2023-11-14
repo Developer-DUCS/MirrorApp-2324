@@ -457,48 +457,6 @@ export default function articleWriting() {
 							{buttonText}
 						</Button>
 
-						{saveWithoutImagePopup ? 
-						<Dialog
-							open={saveWithoutImagePopup}
-							onClose={handleDialogClose}
-							>
-							<DialogTitle>
-								{"Missing Thumbnail Image"}
-							</DialogTitle>
-							<DialogContent>
-								<DialogContentText>
-									Would you like to save without a thumbnail or go back and add one?
-								</DialogContentText>
-								<DialogContentText>
-									A thumbnail can be added later if the article is saved as a draft.
-								</DialogContentText>
-							</DialogContent>
-							<DialogActions>
-								<Button
-									color="error"
-									variant="outlined"
-									onClick={handleDialogClose}
-								>
-									Close
-								</Button>
-								<Button
-									type="submit"
-									color="error"
-									variant="contained"
-									onClick={(e) => {
-										setSaveWithoutImagePopup(false);
-										console.log("submit clicked");
-										handleSubmit(e);
-									}}
-								>
-									Save
-								</Button>
-							</DialogActions>
-						</Dialog>
-						:
-						null
-						}
-
 						<Button
 							sx={{
 								m: 2,
