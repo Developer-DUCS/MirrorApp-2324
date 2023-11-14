@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `du_mirror`.`articles` (
   `body` MEDIUMTEXT NOT NULL,
   `isDraft` INT NOT NULL,
   `imageType` VARCHAR(100) NULL,
-  `thumbnailImage` LONGBLOB NULL,
+  `thumbnailImage` VARCHAR(200) NULL,
   `createdDate` date NOT NULL,
   PRIMARY KEY (`aid`))
 ENGINE = InnoDB;
