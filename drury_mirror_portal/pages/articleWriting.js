@@ -240,9 +240,48 @@ export default function articleWriting() {
 						let response = await fetch(endpoint, options);
 						let article = await response.json();
 
+						let articleBody = article.body;
+						let articleImage = article.thumbnailImage;
+						let articleHeadline = article.headline;
+
+						console.log(article)
+
 						// Make sure the response was received before setting the articles
 						if (article) {
-							setArticle(article);
+							setArticle(articleBody);
+						}
+
+						// get image from server to be displayed if a thumbnail image exists for the article
+						if (article && articleImage) {
+
+							let endpoint = "api/getImage";
+
+							const imageData = {
+								filePath: articleImage,
+							};
+
+							let JSONdata = JSON.stringify(imageData);
+							let options = {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+								},
+								body: JSONdata
+							};
+
+							try {
+								let response = await fetch(endpoint, options);
+
+								if (response.ok){
+									const blob = await response.blob();
+									setPreviewImg(URL.createObjectURL(blob));
+								}
+								else {
+									console.error('Error fetching image');
+								}
+							} catch (error) {
+								console.error('Fetch error:', error);
+							}
 						}
 					}
 				} else {

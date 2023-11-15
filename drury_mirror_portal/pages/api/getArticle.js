@@ -19,7 +19,7 @@ export default async (req, res) => {
 	let email = req.body.email;
 	console.log("id", id);
 	console.log(email);
-	let getArticleQuery = "SELECT headline, body FROM articles WHERE aid = ?;";
+	let getArticleQuery = "SELECT headline, body, thumbnailImage FROM articles WHERE aid = ?;";
 
 	const result = await executeQuery({
 		query: getArticleQuery,
@@ -31,6 +31,6 @@ export default async (req, res) => {
 	} else if (result.length == 0) {
 		return res.status(400).json({ msg: "Articles not found" });
 	} else {
-		return res.status(200).json(result[0].body);
+		return res.status(200).json(result[0]);
 	}
 };

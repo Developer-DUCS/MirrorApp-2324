@@ -33,7 +33,7 @@ export default async (req, res) => {
     })
 
     // returns the image data as a string so that it can be saved
-    const contents = await fs.readFile(data?.files?.file[0].filepath, {
+    let contents = await fs.readFile(data?.files?.file[0].filepath, {
         encoding: 'utf8',
     })
 
