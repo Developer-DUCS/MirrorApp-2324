@@ -15,9 +15,8 @@ import { promises as fs } from 'fs'
 
 export default async (req, res) => {
     try {
-        console.log(req.body.filePath);
+        console.log("getting image... ", req.body.filePath);
         const data = await fs.readFile(req.body.filePath);
-        console.log(data);
         res.status(200).send(data);
     }
     catch (error) {

@@ -244,8 +244,6 @@ export default function articleWriting() {
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
 
-						console.log(article)
-
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(articleBody);
@@ -275,12 +273,15 @@ export default function articleWriting() {
 								if (response.ok){
 									const blob = await response.blob();
 									setPreviewImg(URL.createObjectURL(blob));
+									// set other UI conditions for uploaded image
+									setImg(URL.createObjectURL(blob));
+									setImageData(articleImage);
 								}
 								else {
 									console.error('Error fetching image');
 								}
 							} catch (error) {
-								console.error('Fetch error:', error);
+								console.error('Failed to fetch image or set image data:', error);
 							}
 						}
 					}
@@ -349,6 +350,37 @@ export default function articleWriting() {
 			setImageData(null);
 			setImg(null);
 			setPreviewImg(null)
+		}
+	}
+
+	const handleClearSelection = async (path) => {
+
+		// no image path exists
+		if (!path) return
+
+		const fileData = {
+			aid: parseInt(router.query.id),
+			filePath: path,
+		}
+
+		const JSONdata = JSON.stringify(fileData);
+		const endpoint = 'api/deleteImage';
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSONdata,
+		}
+
+		const response = await fetch(endpoint, options);
+		const result = response.status();
+
+		if (result.status == 200) {
+			console.log("image deleted and sql updated");
+		}
+		else if (result.status == 500) {
+			console.log("image deletion failed");
 		}
 	}
 
@@ -484,8 +516,7 @@ export default function articleWriting() {
 							<label htmlFor="uploadImage">
 								<div className={uploadStyles.uploadBox}>
 									<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
-									{previewImg ? 
-										// TODO: create route for getting existing image and display if article already has an uploaded thumbnail
+									{previewImg ?
 										<img src={previewImg} />
 										:
 										<FileUploadIcon fontSize="large"/>
@@ -519,6 +550,7 @@ export default function articleWriting() {
 								onClick={() => {
 									// delete image file if image has been uploaded
 									// TODO: create a route for deleting image from article_images folder
+									handleClearSelection(getImageData);
 
 									// clear all image data from frontend
 									document.getElementById('uploadImage').value = ''
