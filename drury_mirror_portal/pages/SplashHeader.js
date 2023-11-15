@@ -21,9 +21,9 @@ export default function SplashHeader() {
 		<Grid
 			container
 			sx={{
-				height: "9vh",
+				height: "10vh",
 				marginBottom: 2,
-				backgroundColor: "white",
+				backgroundColor: "#313131",
 				color: "black",
 				display: "flex",
 				justifyContent: "space-around",
@@ -32,7 +32,13 @@ export default function SplashHeader() {
 		>
 			<Grid item xs={1}>
 				<Button
-					sx={{ color: "white", marginRight: 2 }}
+					sx={{
+						color: "white",
+						marginRight: 2,
+						fontSize: { lg: "16px", md: "12px", sm: "6px" },
+						height: { lg: "40px", md: "30px", sm: "20px" },
+						width: { lg: "120px", md: "90px", sm: "60px" },
+					}}
 					variant="contained"
 					color="primaryButton"
 					onClick={handleAbout}
@@ -43,6 +49,7 @@ export default function SplashHeader() {
 			<Grid item xs={7}>
 				<Typography
 					variant="logoHeader"
+					color="white"
 					sx={{ display: "flex", justifyContent: "center" }}
 					onClick={handleHome}
 				>

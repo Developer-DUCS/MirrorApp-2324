@@ -30,9 +30,9 @@ export default function SplashHeader() {
 		<Grid
 			container
 			sx={{
-				height: "9vh",
+				height: "10vh",
 				marginBottom: 2,
-				backgroundColor: "white",
+				backgroundColor: "#313131",
 				color: "black",
 				display: "flex",
 				justifyContent: "space-around",
@@ -43,6 +43,7 @@ export default function SplashHeader() {
 			<Grid item xs={7}>
 				<Typography
 					variant="logoHeader"
+					color="white"
 					sx={{ display: "flex", justifyContent: "center" }}
 					onClick={handleHome}
 				>

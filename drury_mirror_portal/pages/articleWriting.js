@@ -6,7 +6,12 @@ import styles from "../styles/article.module.css";
 import uploadStyles from "../styles/uploadImage.module.css";
 
 import { useRouter } from "next/router";
-import { Button, Box, Stack, Grid, Typography, Checkbox, Alert, VisuallyHiddenInput, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+
+import { 
+		Button, Box, Stack, Grid, Typography, Checkbox, Alert, 
+		Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
+		Modal} from "@mui/material";
+
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CheckIcon from '@mui/icons-material/Check';
@@ -86,6 +91,7 @@ export default function articleWriting() {
 	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
 	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
+	const [open, setOpen] = useState(false);
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -345,6 +351,14 @@ export default function articleWriting() {
 		setSaveWithoutImagePopup(false);
 	}
 
+	function openPreview() {
+		setOpen(true)
+	}
+
+	function closePreview() {
+		setOpen(false)
+	}
+
 	if (status === "authenticated") {
 		return (
 			<Box
@@ -589,6 +603,44 @@ export default function articleWriting() {
 						:
 						null
 						}
+
+						<Button
+							sx={{
+								m: 2,
+							}}
+							color="error"
+							variant="contained"
+							onClick={openPreview}
+						>
+							Preview Article
+						</Button>
+
+						<Modal
+						open={open}
+						onClose={closePreview}
+						aria-labelledby="modal-modal-title"
+						aria-describedby="modal-modal-description"
+						>
+						<Box 
+							sx={{
+								position: 'absolute',
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+								width: 400,
+								bgcolor: 'background.paper',
+								border: '2px solid #000',
+								boxShadow: 24,
+								p: 4,
+							  }}>
+							<Typography id="modal-modal-title" variant="h6" component="h2">
+							Text in a modal
+							</Typography>
+							<Typography id="modal-modal-description" sx={{ mt: 2 }}>
+							Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+							</Typography>
+						</Box>
+						</Modal>
 					</form>
 				</Box>
 			</Box>

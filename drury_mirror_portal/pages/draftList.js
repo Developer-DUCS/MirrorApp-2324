@@ -141,7 +141,7 @@ export function draftList() {
 											padding: 5,
 											paddingLeft: 15,
 											boxShadow: 4,
-											backgroundColor: "#82858f",
+											backgroundColor: "#313131",
 										}}
 									>
 										<Typography
@@ -173,11 +173,11 @@ export function draftList() {
 											id={article.aid}
 											variant="contained"
 											onClick={writeDraftRoute}
+											color="primaryButton"
 											sx={{
 												marginBottom: 1,
 												marginRight: 5,
 												color: "white",
-												backgroundColor: "#4685F5",
 											}}
 										>
 											Keep Writing
