@@ -90,6 +90,7 @@ export default function articleWriting() {
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
 	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
 	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
+	const [deleteImageSuccess, setDeleteImageSuccess] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 	const [open, setOpen] = useState(false);
 
@@ -374,10 +375,10 @@ export default function articleWriting() {
 		}
 
 		const response = await fetch(endpoint, options);
-		const result = response.status();
 
-		if (result.status == 200) {
-			console.log("image deleted and sql updated");
+		if (response.ok) {
+			const msg = await response.json()
+			setDeleteImageSuccess(true);
 		}
 		else if (result.status == 500) {
 			console.log("image deletion failed");
@@ -490,7 +491,7 @@ export default function articleWriting() {
 					}
 
 					{uploadFailedAlert ?
-						<div>
+					<div>
 						<Alert 
 						severity="error"
 						action={
@@ -504,6 +505,27 @@ export default function articleWriting() {
 						}
 						>
 							Thumbnail image failed to uploaded
+						</Alert>
+						<br></br>
+					</div>
+					:
+					null
+					}
+
+					{deleteImageSuccess ?
+					<div>
+						<Alert 
+						action={
+							<Button color="inherit" size="small"
+							onClick={() => {
+								setDeleteImageSuccess(false);
+							}}
+							>
+								Close
+							</Button>
+						}
+						>
+							Thumbnail image successfully deleted
 						</Alert>
 						<br></br>
 					</div>

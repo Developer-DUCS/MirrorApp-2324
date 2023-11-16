@@ -18,23 +18,28 @@ const conn = require("../../backend/mysqldb");
 
 export default async (req, res) => {
     try {
-        console.log(`deleting image... ${req.body.filePath} from article: ${req.body.aid}`);
-        // update sql table to set thumbnail image and image type to null
-        let removeImageQuery = 'UPDATE articles SET imageType = NULL, thumbnailImage = NULL WHERE aid = ?;'
+        console.log(`deleting image: ${req.body.filePath}`);
 
-        const result = await executeQuery({
-            query: removeImageQuery,
-            values: [req.body.aid]
-        })
+        // update sql table to set thumbnail image and image type to nulL
+        if (req.body.aid) {
+            console.log(`from article: ${req.body.aid}`);
 
-        if (result.error) {
-            return res.status(500).json({ error: result.error })
-        } else {
-            res.status(200);
+            let removeImageQuery = 'UPDATE articles SET imageType = NULL, thumbnailImage = NULL WHERE aid = ?;'
+
+            const result = await executeQuery({
+                query: removeImageQuery,
+                values: [req.body.aid]
+            })
+
+            if (result.error) {
+                return res.status(500).json({ error: result.error })
+            }
         }
-
+        
         // delete image
         await fs.unlink(req.body.filePath);
+
+        return res.status(200).json({ msg: "complete"});
     }
     catch (error) {
         console.error(`Error deleting file: ${error}`);
