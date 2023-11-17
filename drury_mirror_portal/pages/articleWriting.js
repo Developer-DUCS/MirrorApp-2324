@@ -279,6 +279,7 @@ export default function articleWriting() {
 									setImageData(articleImage);
 								}
 								else {
+									// TO DO: error alert for image not found or image failed to load
 									console.error('Error fetching image');
 								}
 							} catch (error) {
