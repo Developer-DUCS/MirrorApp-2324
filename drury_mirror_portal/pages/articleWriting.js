@@ -614,7 +614,7 @@ export default function articleWriting() {
 						>
 							<Grid item>
 								<Typography
-									sx={{ color: "white", marginLeft: 2 }}
+									sx={{ color: "black", marginLeft: 2 }}
 								>
 									{/* Maybe explain better */}
 									Ready for Edits
@@ -626,7 +626,7 @@ export default function articleWriting() {
 									color="error"
 									onChange={switchReadyForEdits}
 									sx={{
-										color: "white",
+										color: "black",
 										marginTop: -1,
 										marginLeft: 1,
 										borderColor: "white",
