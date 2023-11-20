@@ -431,8 +431,6 @@ export function commentEditor() {
 						let response = await fetch(endpoint, options);
 						let article = await response.json();
 
-						console.log(article);
-
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article.body);
