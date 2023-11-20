@@ -4,11 +4,11 @@ import executeQuery from "../../backend/mysqldb";
 export default async (req, res) => {
 	try {
 		const body = req.body;
+		console.log(body);
 		let check = body.check;
 		let articleString = body.article;
 		let author = body.author;
-		// ! Change headline here
-		let testHeadline = "Test Headline";
+		let headline = body.headline;
 		let email = body.email;
 		let thumbnailImage = body.imageData;
 		let imageType = body.imageType;
@@ -22,14 +22,14 @@ export default async (req, res) => {
 		let saveQuery = "";
 
 		if (body.aid) {
-			let isDraft = "1";
+			let isDraft = check;
 			let aid = parseInt(body.aid);
 			saveQuery =
 				"UPDATE articles SET headline = ?, body = ?, isDraft = ? WHERE aid = ?";
 
 			const result = await executeQuery({
 				query: saveQuery,
-				values: [testHeadline, articleString, isDraft, aid],
+				values: [headline, articleString, isDraft, aid],
 			});
 			console.log("🚀 ~ file: saveArticle.js:52 ~ result:", result);
 			if (result.error) {
@@ -48,7 +48,7 @@ export default async (req, res) => {
 				values: [
 					email,
 					author,
-					testHeadline,
+					headline,
 					articleString,
 					check,
 					imageType,

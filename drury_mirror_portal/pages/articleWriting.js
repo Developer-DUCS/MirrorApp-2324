@@ -138,7 +138,7 @@ export default function articleWriting() {
 			const data = {
 				email: session.user.email,
 				author: author,
-				article: getArticle,
+				article: value,
 				headline: getHeadline,
 				check: document.getElementById("checkbox").checked,
 				aid: router.query.id,
@@ -174,7 +174,7 @@ export default function articleWriting() {
 			const data = {
 				email: session.user.email,
 				author: author,
-				article: getArticle,
+				article: value,
 				headline: getHeadline,
 				check: document.getElementById("checkbox").checked,
 				imageData: getImageData,
