@@ -125,6 +125,7 @@ export function commentEditor() {
 
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
+	const [getHeadline, setHeadline] = useState([]);
 	const [isError, setIsError] = useState(null);
 	const { status, data } = useSession();
 
@@ -430,9 +431,12 @@ export function commentEditor() {
 						let response = await fetch(endpoint, options);
 						let article = await response.json();
 
+						console.log(article);
+
 						// Make sure the response was received before setting the articles
 						if (article) {
-							setArticle(article);
+							setArticle(article.body);
+							setHeadline(article.headline)
 						}
 					}
 				} else {
@@ -468,8 +472,9 @@ export function commentEditor() {
 					<Grid item sx={{ width: "60%", marginLeft: 2 }}>
 						<Button
 							size="small"
+							color="error"
+							variant="contained"
 							sx={{
-								backgroundColor: "white",
 								p: 1,
 								marginBottom: 1,
 							}}
@@ -480,10 +485,40 @@ export function commentEditor() {
 						<Box id="quillEditor">
 							<Box
 								sx={{
-									backgroundColor: "white",
 									marginTop: 1,
+									backgroundColor: "white",
 								}}
 							>
+								<Box
+									sx={{
+										display: "flex",
+										flexDirection: "column",
+										width: "30%",
+									}}
+								>
+									<TextField
+										sx={{
+											input: {
+												color: "black",
+											},
+											label: {
+												color: "black",
+											},
+											backgroundColor: "white",
+											m: 2,
+											borderRadius: 1,
+											width: "100%",
+										}}
+										id="headline"
+										name="headline"
+										label="Headline"
+										variant="outlined"
+										value={getHeadline}
+										onChange={(e) => {
+											setHeadline(e.target.value);
+										}}
+									/>
+								</Box>
 								<QuillNoSSRWrapper
 									id="article"
 									modules={articleModules}
