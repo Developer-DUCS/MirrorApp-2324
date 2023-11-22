@@ -25,11 +25,11 @@ export default async (req, res) => {
 			let isDraft = check;
 			let aid = parseInt(body.aid);
 			saveQuery =
-				"UPDATE articles SET headline = ?, body = ?, isDraft = ? WHERE aid = ?";
+				"UPDATE articles SET headline = ?, body = ?, isDraft = ?, imageType = ?, thumbnailImage = ? WHERE aid = ?";
 
 			const result = await executeQuery({
 				query: saveQuery,
-				values: [headline, articleString, isDraft, aid],
+				values: [headline, articleString, isDraft, imageType, thumbnailImage, aid],
 			});
 			console.log("🚀 ~ file: saveArticle.js:52 ~ result:", result);
 			if (result.error) {
