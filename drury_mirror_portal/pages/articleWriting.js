@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { 
 		Button, Box, Stack, Grid, Typography, Checkbox, Alert, 
 		Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
-		Modal} from "@mui/material";
+		Modal, TextField} from "@mui/material";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -79,6 +79,7 @@ export default function articleWriting() {
 	// Handles the contents of the article editor
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
+	const [getHeadline, setHeadline] = useState([]);
 	const [getImageData, setImageData] = useState(null);
 	const [getImageType, setImageType] = useState(null);
 	const { status, data } = useSession();
@@ -126,8 +127,6 @@ export default function articleWriting() {
 	}, [getArticle]);
 
 	const handleSubmit = async (event) => {
-
-		console.log("submit started");
 		
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
@@ -140,6 +139,7 @@ export default function articleWriting() {
 				email: session.user.email,
 				author: author,
 				article: value,
+				headline: getHeadline,
 				check: document.getElementById("checkbox").checked,
 				aid: router.query.id,
 				imageType: getImageType,
@@ -175,6 +175,7 @@ export default function articleWriting() {
 				email: session.user.email,
 				author: author,
 				article: value,
+				headline: getHeadline,
 				check: document.getElementById("checkbox").checked,
 				imageData: getImageData,
 				imageType: getImageType,
@@ -245,9 +246,14 @@ export default function articleWriting() {
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
 
-						// Make sure the response was received before setting the articles
+						// Make sure the response was received before setting the article information
 						if (article) {
-							setArticle(articleBody);
+							if (articleBody) {
+								setArticle(articleBody);
+							}
+							if (articleHeadline) {
+								setHeadline(articleHeadline);
+							}
 						}
 
 						// get image from server to be displayed if a thumbnail image exists for the article
@@ -593,6 +599,37 @@ export default function articleWriting() {
 						}
 						<Box
 							sx={{
+								display: "flex",
+								flexDirection: "column",
+								width: "30%",
+							}}
+						>
+							<TextField
+								sx={{
+									input: {
+										color: "black",
+									},
+									label: {
+										color: "black",
+									},
+									backgroundColor: "white",
+									m: 2,
+									borderRadius: 1,
+								}} 
+								id="headline"
+								name="headline"
+								label="Headline"
+								variant="outlined"
+								value={getHeadline}
+								onChange={(e) => {
+									setHeadline(e.target.value);
+								}}
+							/>
+						</Box>
+
+
+						<Box
+							sx={{
 								backgroundColor: "white",
 								margin: 2,
 							}}
@@ -614,7 +651,7 @@ export default function articleWriting() {
 						>
 							<Grid item>
 								<Typography
-									sx={{ color: "white", marginLeft: 2 }}
+									sx={{ color: "black", marginLeft: 2 }}
 								>
 									{/* Maybe explain better */}
 									Ready for Edits
@@ -626,7 +663,7 @@ export default function articleWriting() {
 									color="error"
 									onChange={switchReadyForEdits}
 									sx={{
-										color: "white",
+										color: "black",
 										marginTop: -1,
 										marginLeft: 1,
 										borderColor: "white",
