@@ -208,7 +208,6 @@ export default function articleWriting() {
 		}
 
 		// reload page upon submit
-		//router.reload();
 		router.push('/Dashboard');
 	};
 
