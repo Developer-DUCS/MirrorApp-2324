@@ -93,6 +93,9 @@ export default function articleWriting() {
 	const [deleteImageSuccess, setDeleteImageSuccess] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 	const [open, setOpen] = useState(false);
+	const [previewTextTitle, setPreviewTextTitle] = useState("");
+	const [previewTextBody, setPreviewTextBody] = useState("");
+	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -425,7 +428,15 @@ export default function articleWriting() {
 	}
 
 	function openPreview() {
-		setOpen(true)
+
+		const parse = require("html-react-parser");
+
+		let body = parse(JSON.stringify(value));
+
+		setPreviewTextTitle("Title");
+		setpreviewTextAuthor("Author");
+		setPreviewTextBody(body);
+		setOpen(true);
 	}
 
 	function closePreview() {
@@ -715,25 +726,56 @@ export default function articleWriting() {
 						aria-labelledby="modal-modal-title"
 						aria-describedby="modal-modal-description"
 						>
-						<Box 
-							sx={{
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)',
-								width: 400,
-								bgcolor: 'background.paper',
-								border: '2px solid #000',
-								boxShadow: 24,
-								p: 4,
-							  }}>
-							<Typography id="modal-modal-title" variant="h6" component="h2">
-							Text in a modal
-							</Typography>
-							<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-							Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-							</Typography>
-						</Box>
+							<Box 
+								sx={{
+									position: 'absolute',
+									top: '50%',
+									left: '50%',
+									transform: 'translate(-50%, -50%)',
+									height: 550,
+									width: 275,
+									bgcolor: 'background.paper',
+									boxShadow: 24,
+									borderRadius: 5,
+									backgroundColor: 'Black',
+									p:1
+								}}>
+								<Box
+									sx={{
+										borderRadius: 2.5,
+										p:1,
+										backgroundColor:'White'
+								}}>
+									<Box
+										sx={{
+											height: 160,
+											width: 240,
+											borderRadius: 1,
+											backgroundColor: "black"
+									}}>
+
+									</Box>
+									<Box>
+										<Typography id="modal-modal-title" variant="h6" component="h2">
+											{previewTextTitle}
+										</Typography>
+										<Typography>
+											{previewTextAuthor}
+										</Typography>
+										<Typography
+											sx={{
+												height: 300,
+												display: "-webkit-box",
+												overflow: "hidden",
+												webkitBoxOrient: "vertical",
+												WebkitLineClamp: 4
+											}}
+										>
+											{previewTextBody}
+										</Typography>
+									</Box>
+								</Box>
+							</Box>
 						</Modal>
 					</form>
 				</Box>
