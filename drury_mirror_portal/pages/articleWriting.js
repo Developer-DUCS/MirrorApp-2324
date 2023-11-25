@@ -443,7 +443,7 @@ export default function articleWriting() {
 
 		let body = parse(JSON.stringify(value));
 
-		setpreviewTextAuthor("By: " + "Author");
+		setpreviewTextAuthor("By: " + data.user.fname + " " + data.user.lname);
 		setPreviewTextBody(body);
 		setOpen(true)
 	}
