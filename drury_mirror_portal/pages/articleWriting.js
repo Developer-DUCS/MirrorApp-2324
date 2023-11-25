@@ -129,12 +129,6 @@ export default function articleWriting() {
 	}, [getArticle]);
 
 	const handleSubmit = async (event) => {
-
-
-		console.log("submit started");
-		
-		
-		console.log("submit started");
 		
 		// Stop the form from submitting and refreshing the page.
 		event.preventDefault();
