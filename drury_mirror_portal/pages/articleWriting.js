@@ -443,7 +443,7 @@ export default function articleWriting() {
 
 		let body = parse(JSON.stringify(value));
 
-		setpreviewTextAuthor("Author");
+		setpreviewTextAuthor("By: " + "Author");
 		setPreviewTextBody(body);
 		setOpen(true)
 	}
@@ -773,7 +773,7 @@ export default function articleWriting() {
 									left: '50%',
 									transform: 'translate(-50%, -50%)',
 									height: 550,
-									width: 275,
+									width: 290,
 									bgcolor: 'background.paper',
 									boxShadow: 24,
 									borderRadius: 5,
@@ -792,8 +792,11 @@ export default function articleWriting() {
 											height: 160,
 											width: 240,
 											borderRadius: 1,
-											backgroundColor: "black"
+											backgroundColor: "black",
+											alignContent: "center"
+
 									}}>
+										<img src={previewImg} />
 									</Box>
 									<Box>
 										<Typography 
