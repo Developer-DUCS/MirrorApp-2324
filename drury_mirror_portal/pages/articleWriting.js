@@ -778,7 +778,8 @@ export default function articleWriting() {
 									boxShadow: 24,
 									borderRadius: 5,
 									backgroundColor: 'Black',
-									p:1
+									p:1,
+									overflow: "scroll",
 							}}>
 								<Box
 									sx={{
@@ -807,12 +808,6 @@ export default function articleWriting() {
 										</Typography>
 										<Typography 
 											id="modal-modal-description"
-											sx={{
-												height: 267,
-												display: "-webkit-box",
-												overflow: "hidden",
-												WebkitLineClamp: 2,
-											}}
 										>
 											{previewTextBody}
 										</Typography>
