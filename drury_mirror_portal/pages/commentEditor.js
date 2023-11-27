@@ -18,6 +18,7 @@ import "react-quill/dist/quill.snow.css";
 import styles from "../styles/quill.module.css";
 import styles2 from "../styles/article.module.css";
 import { styled } from "@mui/material/styles";
+import editStyles from "../styles/editArticle.module.css"
 
 // Styling (Material UI) imports
 import {
@@ -28,6 +29,7 @@ import {
 	Typography,
 	Stack,
 	Grid,
+	Checkbox,
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 
@@ -126,6 +128,8 @@ export function commentEditor() {
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
 	const [getHeadline, setHeadline] = useState([]);
+	const [getPreviewImage, setPreviewImage] = useState([]);
+	const [isImageApproved, setImageApproved] = useState([]);
 	const [isError, setIsError] = useState(null);
 	const { status, data } = useSession();
 
@@ -134,6 +138,17 @@ export function commentEditor() {
 		event.preventDefault();
 		router.push(`${process.env.NEXT_PUBLIC_API_PATH}/`);
 	};
+
+	const switchImageApproved = () => {
+		let checkValue = document.getElementById("checkbox").checked;
+		console.log(checkValue)
+		if (!checkValue) {
+			setImageApproved(false);
+		}
+		else if (checkValue) {
+			setImageApproved(true);
+		}
+	}
 
 	// loads the article into the editor
 	useEffect(() => {
@@ -434,7 +449,40 @@ export function commentEditor() {
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article.body);
-							setHeadline(article.headline)
+							setHeadline(article.headline);
+							setPreviewImage(article.thumbnailImage);
+							if (article.thumbnailImage) {
+								let endpoint = "api/getImage";
+
+								const imageData = {
+									filePath: article.thumbnailImage,
+								};
+
+								let JSONdata = JSON.stringify(imageData);
+								let options = {
+									method: "POST",
+									headers: {
+										"Content-Type": "application/json",
+									},
+									body: JSONdata
+								};
+
+								try {
+									let response = await fetch(endpoint, options);
+
+									if (response.ok){
+										const blob = await response.blob();
+										setPreviewImage(URL.createObjectURL(blob));
+										console.log("image found");
+									}
+									else {
+										// TO DO: error alert for image not found or image failed to load
+										console.error('Error fetching image');
+									}
+								} catch (error) {
+									console.error('Failed to fetch image or set image data:', error);
+								}
+							}
 						}
 					}
 				} else {
@@ -480,6 +528,13 @@ export function commentEditor() {
 						>
 							Add Comment
 						</Button>
+						<br></br>
+						<br></br>
+						<Box className={editStyles.previewContainer}>
+							<div className={editStyles.previewBox}>
+								<img src={getPreviewImage} />
+							</div>
+						</Box>
 						<Box id="quillEditor">
 							<Box
 								sx={{
@@ -487,6 +542,7 @@ export function commentEditor() {
 									backgroundColor: "white",
 								}}
 							>
+								
 								<Box
 									sx={{
 										display: "flex",
@@ -574,6 +630,29 @@ export function commentEditor() {
 								</Typography>
 								<div id="currentComments">{allComments}</div>
 							</Box>
+							<Grid container
+							>
+								<Grid item>
+									<Checkbox
+										id="checkbox"
+										color="error"
+										onChange={switchImageApproved}
+										sx={{
+											color: "black",
+											marginTop: -1,
+											marginLeft: 1,
+											borderColor: "white",
+										}}
+									/>
+								</Grid>
+								<Grid item>
+									<Typography
+										sx={{ color: "black", marginLeft: 2 }}
+									>
+										Approve Thumbnail Image
+									</Typography>
+								</Grid>
+							</Grid>
 							<Button
 								color="error"
 								variant="contained"
