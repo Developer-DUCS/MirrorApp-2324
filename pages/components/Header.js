@@ -13,6 +13,19 @@
 import React, { useEffect, useState, usePrevious } from "react";
 import Link from "next/link";
 
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import Cloud from '@mui/icons-material/Cloud';
+
+
+
 // Styling
 import {
     AppBar,
@@ -50,6 +63,9 @@ export default function NavBar() {
         }
     }
 
+    
+
+
     return (
         <div style={{ position: "absolute", top: 0, width: "100%", marginBottom: 10 }}>
             <AppBar
@@ -68,8 +84,7 @@ export default function NavBar() {
                                         color: "white",
                                         fontSize: "24px",
                                         justifyContent: "space-around",
-                                        fontFamily: "TrajanPro-Regular",
-                                        
+                                        fontFamily: "TrajanPro-Regular",                                        
                                     }}>
                                     Drury Mirror
                                 </Button>
@@ -120,4 +135,12 @@ export default function NavBar() {
             </AppBar>
         </div>
     );
+
+    
+
+
+    
+
+    
+    
 }

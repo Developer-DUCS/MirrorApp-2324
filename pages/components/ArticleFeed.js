@@ -19,12 +19,39 @@ import { Buffer } from "buffer";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
 
+
+import Menu from '@mui/material/Menu';
+import Fade from '@mui/material/Fade';
+
+
+
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import Cloud from '@mui/icons-material/Cloud';
+
+
 // Redux component
 // - helps connect to the navbar for article feed data
 import { connect } from "react-redux";
 
 // Components
 import NavBar from "./NavBar";
+import ButtonGroup from '@mui/material/ButtonGroup';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Popper from '@mui/material/Popper';
+import Grow from '@mui/material/Grow';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+
+
+import dropdownMenu from "./dropdown";
 
 import { Virtuoso } from "react-virtuoso";
 import { IonContent, IonPage } from "@ionic/react";
@@ -50,6 +77,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@mui/icons-material/Search";
 
 import DUIcon from "../../Lib/Images/DU-Small-Icon.png";
+
+
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 function ArticleFeed(props) {
     const articleStyles = makeStyles((theme) => ({
@@ -87,6 +119,36 @@ function ArticleFeed(props) {
 
     // To adjust card margin (search header expanded)
     const [getPaddingTop, setPaddingTop] = useState("50px");
+
+
+    const [age, setAge] = React.useState('');
+
+
+    // For dropdown menu values
+    const options = ['Test1','Test2','Test3']; //may have to move
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const handleClick = () => {
+         console.info(`You clicked ${options[selectedIndex]}`);
+    };
+
+    const handleMenuItemClick = (event, index) => {
+        setSelectedIndex(index);
+        setOpen(false);
+    };
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+        return;
+        }
+
+        setOpen(false);
+    };
 
     // On search click, set display property to block or none respectively
     function onSearchButtonClick() {
@@ -242,6 +304,7 @@ function ArticleFeed(props) {
 
         const { asPath } = useRouter();
 
+            
         return (
             <Card
                 style={articleStyles.container}
@@ -302,12 +365,14 @@ function ArticleFeed(props) {
                             
                         </Box>
                     </CardContent>
+                    
                 </Button>
             </Card>
         );
     };
 
     return (
+        
         <Box sx={{ backgroundColor: "#F3F3F3" }}>
             <Box>
                 <Box
@@ -323,6 +388,7 @@ function ArticleFeed(props) {
                             backgroundColor: "#e03d3d",
                             height: { getHeight },
                         }}>
+                        
                         <Toolbar
                             sx={{ display: "flex", flexDirection: "column" }}>
                             <Grid container>
@@ -339,11 +405,16 @@ function ArticleFeed(props) {
                                                 fontSize: "24px",
                                                 justifyContent: "space-around",
                                                 fontFamily: "TrajanPro-Regular",
+                                                paddingTop: "35px",
                                             }}>
                                             Drury Mirror
                                         </Button>
                                     </NextLink>
-                                </Grid>
+
+                                    
+
+                                </Grid>                              
+
                                 <Grid
                                     xs={1}
                                     item
@@ -356,11 +427,12 @@ function ArticleFeed(props) {
                                         onClick={() => {
                                             onSearchButtonClick();
                                         }}
-                                        sx={{ color: "white", display: "flex" }}
+                                        sx={{ color: "white", display: "flex", paddingTop: "35px" }}
                                         aria-label="menu">
                                         <SearchIcon />
                                     </IconButton>
-                                </Grid>
+                                    
+                                </Grid>                                                               
                             </Grid>
                             <TextField
                                 value={getSearchTerm}
@@ -386,6 +458,9 @@ function ArticleFeed(props) {
                             />
                         </Toolbar>
                     </AppBar>
+
+                    
+
                 </Box>
                 <Box>
                     <IonPage>
@@ -408,6 +483,72 @@ function ArticleFeed(props) {
                     </IonPage>
                 </Box>
             </Box>
+            
+            <Box style={{
+                top: 200
+            }}>
+            <React.Fragment>
+                <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
+                    <Button
+                    size="small"
+                    aria-controls={open ? 'split-button-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-label="select merge strategy"
+                    aria-haspopup="menu"
+                    onClick={handleToggle}
+                    variant="text"
+                            sx={{
+                                backgroundColor: "#a82920",
+                                color: "white",
+                                paddingLeft: "10px",
+                                paddingRight: "10px",
+                                zIndex: "50000",
+                                left: "275px",
+                                top: "40px"
+                            }}
+                    >
+                    <ArrowDropDownIcon />
+                    </Button>
+                </ButtonGroup >
+                <Popper
+                    sx={{
+                    zIndex: 10000,
+                    }}
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                >
+                    {({ TransitionProps, placement }) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                        transformOrigin:
+                            placement === 'bottom' ? 'center top' : 'center bottom',
+                        }}
+                    >
+                        <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList id="split-button-menu">
+                            {options.map((option, index) => (
+                                <MenuItem
+                                key={option}
+                                selected={index === selectedIndex}
+                                onClick={(event) => handleMenuItemClick(event, index)}
+                                >
+                                {option}
+                                </MenuItem>
+                            ))}
+                            </MenuList>
+                        </ClickAwayListener>
+                        </Paper>
+                    </Grow>
+                    )}
+                </Popper>
+            </React.Fragment>
+            </Box>
+
         </Box>
     );
 }
