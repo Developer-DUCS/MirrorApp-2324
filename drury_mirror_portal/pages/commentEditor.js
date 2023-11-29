@@ -30,6 +30,7 @@ import {
 	Stack,
 	Grid,
 	Checkbox,
+	Alert,
 } from "@mui/material";
 import { withStyles } from "@mui/styles";
 
@@ -129,7 +130,9 @@ export function commentEditor() {
 	const [getArticle, setArticle] = useState([]);
 	const [getHeadline, setHeadline] = useState([]);
 	const [getPreviewImage, setPreviewImage] = useState([]);
-	const [isImageApproved, setImageApproved] = useState([]);
+	const [isImageApproved, setImageApproved] = useState(false);
+
+	const [defaultImageUsed, setDefualtImageUsed] = useState(false);
 	const [isError, setIsError] = useState(null);
 	const { status, data } = useSession();
 
@@ -450,7 +453,7 @@ export function commentEditor() {
 						if (article) {
 							setArticle(article.body);
 							setHeadline(article.headline);
-							setPreviewImage(article.thumbnailImage);
+
 							if (article.thumbnailImage) {
 								let endpoint = "api/getImage";
 
@@ -473,7 +476,39 @@ export function commentEditor() {
 									if (response.ok){
 										const blob = await response.blob();
 										setPreviewImage(URL.createObjectURL(blob));
-										console.log("image found");
+									}
+									else {
+										// TO DO: error alert for image not found or image failed to load
+										console.error('Error fetching image');
+									}
+								} catch (error) {
+									console.error('Failed to fetch image or set image data:', error);
+								}
+							}
+							else {
+								// retrieve default article image
+								let endpoint = "api/getImage";
+
+								const imageData = {
+									filePath: "./public/images/article_images/DU-Mirror-Default-Logo.png",
+								};
+
+								let JSONdata = JSON.stringify(imageData);
+								let options = {
+									method: "POST",
+									headers: {
+										"Content-Type": "application/json",
+									},
+									body: JSONdata
+								};
+
+								try {
+									let response = await fetch(endpoint, options);
+
+									if (response.ok){
+										const blob = await response.blob();
+										setPreviewImage(URL.createObjectURL(blob));
+										setDefualtImageUsed(true);
 									}
 									else {
 										// TO DO: error alert for image not found or image failed to load
@@ -535,6 +570,19 @@ export function commentEditor() {
 								<img src={getPreviewImage} />
 							</div>
 						</Box>
+						{defaultImageUsed &&  !isImageApproved ?
+						<Box 
+							sx={{
+								width: '50%'
+							}}>
+							<br></br>
+							<Alert severity="warning">
+								Default thumbnail image being used. Leave a comment if author needs to upload an image to replace this or approve otherwise. 
+							</Alert>
+						</Box>
+						:
+						null
+						}
 						<Box id="quillEditor">
 							<Box
 								sx={{
@@ -596,7 +644,7 @@ export function commentEditor() {
 						<form onSubmit={submit}>
 							<Typography
 								variant="h4"
-								color="white"
+								color="#313131"
 								sx={{ m: 1 }}
 							>
 								Overall Comments
@@ -623,13 +671,14 @@ export function commentEditor() {
 									sx={{
 										margin: 1,
 										marginTop: 2,
-										color: "white",
+										color: "#313131",
 									}}
 								>
 									Comments
 								</Typography>
 								<div id="currentComments">{allComments}</div>
 							</Box>
+							<br></br>
 							<Grid container
 							>
 								<Grid item>
@@ -653,6 +702,7 @@ export function commentEditor() {
 									</Typography>
 								</Grid>
 							</Grid>
+							<br></br>
 							<Button
 								color="error"
 								variant="contained"
