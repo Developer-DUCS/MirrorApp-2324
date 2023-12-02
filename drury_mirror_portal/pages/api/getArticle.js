@@ -19,7 +19,7 @@ export default async (req, res) => {
 	let email = req.body.email;
 	console.log("id", id);
 	console.log(email);
-	let getArticleQuery = "SELECT headline, body, thumbnailImage FROM articles WHERE aid = ?;";
+	let getArticleQuery = "SELECT headline, body, thumbnailImage, front_page, sports, lifestyle, campus_news, news, weekend, editorial FROM articles JOIN categories ON categories.aid WHERE articles.aid = ?;";
 
 	const result = await executeQuery({
 		query: getArticleQuery,
@@ -31,6 +31,21 @@ export default async (req, res) => {
 	} else if (result.length == 0) {
 		return res.status(400).json({ msg: "Articles not found" });
 	} else {
-		return res.status(200).json(result[0]);
+		// convert categories to an array and reformat the article object
+		let article = {
+			body: result[0].body,
+			headline: result[0].headline,
+			thumbnailImage: result[0].thumbnailImage,
+			categories: {
+				front_page: result[0].front_page, 
+				sports: result[0].sports, 
+				lifestyle: result[0].lifestyle, 
+				campus_news: result[0].campus_news, 
+				news: result[0].news, 
+				weekend: result[0].weekend, 
+				editorial: result[0].editorial
+			},
+		}
+		return res.status(200).json(article);
 	}
 };

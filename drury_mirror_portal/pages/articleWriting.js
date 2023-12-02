@@ -160,6 +160,7 @@ export default function articleWriting() {
 				aid: router.query.id,
 				imageType: getImageType,
 				imageData: getImageData,
+				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
 
 			// Send the data to the server in JSON format.
@@ -195,6 +196,7 @@ export default function articleWriting() {
 				check: document.getElementById("checkbox").checked,
 				imageData: getImageData,
 				imageType: getImageType,
+				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
 
 			// Send the data to the server in JSON format.
@@ -245,6 +247,8 @@ export default function articleWriting() {
 							email: session.user.email,
 							id: id,
 						};
+
+						console.log(data);
 						let JSONdata = JSON.stringify(data);
 						let options = {
 							method: "POST",
@@ -261,6 +265,15 @@ export default function articleWriting() {
 						let articleBody = article.body;
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
+
+						// set the previously saved categories 
+						setFrontPage(article.categories.front_page);
+						setSports(article.categories.sports);
+						setLifestyle(article.categories.lifestyle);
+						setCampusNews(article.categories.campus_news);
+						setNews(article.categories.news);
+						setWeekend(article.categories.weekend);
+						setEditorial(article.categories.editorial);
 
 						// Make sure the response was received before setting the article information
 						if (article) {

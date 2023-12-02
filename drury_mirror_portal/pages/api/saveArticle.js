@@ -12,7 +12,7 @@ export default async (req, res) => {
 		let email = body.email;
 		let thumbnailImage = body.imageData;
 		let imageType = body.imageType;
-		let categories = [0, 1, 0, 0, 0, 0, 0];
+		let categories = body.categories;
 
 		if (check) {
 			check = "1";
