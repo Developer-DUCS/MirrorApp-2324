@@ -124,8 +124,9 @@ function ArticleFeed(props) {
     const [age, setAge] = React.useState('');
 
 
+
     // For dropdown menu values
-    const options = ['Test1','Test2','Test3']; //may have to move
+    const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial']; //may have to move
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -149,6 +150,8 @@ function ArticleFeed(props) {
 
         setOpen(false);
     };
+
+
 
     // On search click, set display property to block or none respectively
     function onSearchButtonClick() {
@@ -382,15 +385,20 @@ function ArticleFeed(props) {
                         width: "100%",
                         marginBottom: 10,
                     }}>
+                        
                     <AppBar
                         position="fixed"
                         sx={{
                             backgroundColor: "#e03d3d",
                             height: { getHeight },
                         }}>
+                            
                         
                         <Toolbar
                             sx={{ display: "flex", flexDirection: "column" }}>
+
+                            
+
                             <Grid container>
                                 <Grid
                                     xs={11}
@@ -406,12 +414,67 @@ function ArticleFeed(props) {
                                                 justifyContent: "space-around",
                                                 fontFamily: "TrajanPro-Regular",
                                                 paddingTop: "35px",
+                                                paddingRight: "25px"
                                             }}>
                                             Drury Mirror
                                         </Button>
                                     </NextLink>
 
-                                    
+                                    <React.Fragment >
+                                        <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
+                                            <Button
+                                            size="small"
+                                            aria-controls={open ? 'split-button-menu' : undefined}
+                                            aria-expanded={open ? 'true' : undefined}
+                                            aria-label="select merge strategy"
+                                            aria-haspopup="menu"
+                                            onClick={handleToggle}
+                                            variant="text"
+                                                    sx={{
+                                                        backgroundColor: "#e03d3d",
+                                                        color: "white",
+                                                        paddingLeft: "10px",
+                                                        paddingRight: "10px",
+                                                        zIndex: "50000"
+                                                    }}
+                                            >
+                                            <ArrowDropDownIcon />
+                                            </Button>
+                                        </ButtonGroup >
+                                        <Popper
+                                            open={open}
+                                            anchorEl={anchorRef.current}
+                                            role={undefined}
+                                            transition
+                                            disablePortal
+                                        >
+                                            {({ TransitionProps, placement }) => (
+                                            <Grow
+                                                {...TransitionProps}
+                                                style={{
+                                                transformOrigin:
+                                                    placement === 'bottom' ? 'center top' : 'center bottom',
+                                                }}
+                                            >
+                                                <Paper>
+                                                <ClickAwayListener onClickAway={handleClose}>
+                                                    <MenuList id="split-button-menu">
+                                                    {options.map((option, index) => (
+                                                        <MenuItem
+                                                        key={option}
+                                                        selected={index === selectedIndex}
+                                                        onClick={(event) => handleMenuItemClick(event, index)}
+                                                        >
+                                                        {option}
+                                                        </MenuItem>
+                                                    ))}
+                                                    </MenuList>
+                                                </ClickAwayListener>
+                                                </Paper>
+                                            </Grow>
+                                            )}
+                                        </Popper>
+                                    </React.Fragment>
 
                                 </Grid>                              
 
@@ -432,7 +495,7 @@ function ArticleFeed(props) {
                                         <SearchIcon />
                                     </IconButton>
                                     
-                                </Grid>                                                               
+                                </Grid>                                                                                               
                             </Grid>
                             <TextField
                                 value={getSearchTerm}
@@ -458,9 +521,6 @@ function ArticleFeed(props) {
                             />
                         </Toolbar>
                     </AppBar>
-
-                    
-
                 </Box>
                 <Box>
                     <IonPage>
@@ -483,72 +543,6 @@ function ArticleFeed(props) {
                     </IonPage>
                 </Box>
             </Box>
-            
-            <Box style={{
-                top: 200
-            }}>
-            <React.Fragment>
-                <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                    <Button
-                    size="small"
-                    aria-controls={open ? 'split-button-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-label="select merge strategy"
-                    aria-haspopup="menu"
-                    onClick={handleToggle}
-                    variant="text"
-                            sx={{
-                                backgroundColor: "#a82920",
-                                color: "white",
-                                paddingLeft: "10px",
-                                paddingRight: "10px",
-                                zIndex: "50000",
-                                left: "275px",
-                                top: "40px"
-                            }}
-                    >
-                    <ArrowDropDownIcon />
-                    </Button>
-                </ButtonGroup >
-                <Popper
-                    sx={{
-                    zIndex: 10000,
-                    }}
-                    open={open}
-                    anchorEl={anchorRef.current}
-                    role={undefined}
-                    transition
-                    disablePortal
-                >
-                    {({ TransitionProps, placement }) => (
-                    <Grow
-                        {...TransitionProps}
-                        style={{
-                        transformOrigin:
-                            placement === 'bottom' ? 'center top' : 'center bottom',
-                        }}
-                    >
-                        <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                            <MenuList id="split-button-menu">
-                            {options.map((option, index) => (
-                                <MenuItem
-                                key={option}
-                                selected={index === selectedIndex}
-                                onClick={(event) => handleMenuItemClick(event, index)}
-                                >
-                                {option}
-                                </MenuItem>
-                            ))}
-                            </MenuList>
-                        </ClickAwayListener>
-                        </Paper>
-                    </Grow>
-                    )}
-                </Popper>
-            </React.Fragment>
-            </Box>
-
         </Box>
     );
 }

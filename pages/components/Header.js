@@ -84,7 +84,8 @@ export default function NavBar() {
                                         color: "white",
                                         fontSize: "24px",
                                         justifyContent: "space-around",
-                                        fontFamily: "TrajanPro-Regular",                                        
+                                        fontFamily: "TrajanPro-Regular",   
+                                        paddingTop: "35px",                                     
                                     }}>
                                     Drury Mirror
                                 </Button>
