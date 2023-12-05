@@ -773,23 +773,17 @@ export default function articleWriting() {
 									borderRadius: 5,
 									backgroundColor: 'Black',
 									p:1,
-									overflow: "scroll",
 							}}>
 								<Box
 									sx={{
 										borderRadius: 2.5,
 										p:1,
-										backgroundColor:'White'
+										backgroundColor:'White',
+										height: 530,
+										width: 270,
+										overflow: "scroll",
 								}}>
-									<Box
-										sx={{
-											height: 160,
-											width: 240,
-											borderRadius: 1,
-											backgroundColor: "black",
-											alignContent: "center"
-
-									}}>
+									<Box>
 										<img src={previewImg} />
 									</Box>
 									<Box>
@@ -805,6 +799,10 @@ export default function articleWriting() {
 										</Typography>
 										<Typography 
 											id="modal-modal-description"
+											sx={{
+												overflow: "hidden",
+												textOverflow: "ellipsis",
+											}}
 										>
 											{previewTextBody}
 										</Typography>
