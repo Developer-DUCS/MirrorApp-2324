@@ -6,11 +6,12 @@
 //                  By: Thomas Nield, Daniel Brinck, Samuel Rudqvist  Oct. 27 2022
 //
 //Modificaiton Log:
+//					
+//					Added thumbnail image preview and the currently selected category to be viewed and approved by editor 
+//
 //                  !!!!ADD COMMENT BUG: CANT HANDLE A SINGLE HIGHLIGHTED SPACE IN THE TEXT!!!!
 //                  !!!!ADD COMMENT BUG: CAN'T COMMENT OVER AN EXIST COMMENT!!!!
 //                  TODO:: FIX NAMING CONVENTIONS
-//
-//
 
 // Editor imports
 //import styles from '../styles/quillTestStyle.css'
@@ -129,10 +130,16 @@ export function commentEditor() {
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
 	const [getHeadline, setHeadline] = useState([]);
-	const [getPreviewImage, setPreviewImage] = useState([]);
-	const [isImageApproved, setImageApproved] = useState(false);
 
+	const [getCategories, setCategories] = useState(null);
+	const [categoryText, setCategoryText] = useState('Categories Selected: ');
+
+	const [getPreviewImage, setPreviewImage] = useState([]);
 	const [defaultImageUsed, setDefualtImageUsed] = useState(false);
+
+	const [isImageApproved, setImageApproved] = useState(false);
+	const [isCategoryApproved, setCategoryApproved] = useState(false);
+
 	const [isError, setIsError] = useState(null);
 	const { status, data } = useSession();
 
@@ -143,13 +150,24 @@ export function commentEditor() {
 	};
 
 	const switchImageApproved = () => {
-		let checkValue = document.getElementById("checkbox").checked;
-		console.log(checkValue)
+		let checkValue = document.getElementById("imageCheckbox").checked;
+
 		if (!checkValue) {
 			setImageApproved(false);
 		}
 		else if (checkValue) {
 			setImageApproved(true);
+		}
+	}
+
+	const switchCategoryApproved = () => {
+		let checkValue = document.getElementById("categoryCheckbox").checked;
+
+		if (!checkValue) {
+			setCategoryApproved(false);
+		}
+		else if (checkValue) {
+			setCategoryApproved(true);
 		}
 	}
 
@@ -449,11 +467,28 @@ export function commentEditor() {
 						let response = await fetch(endpoint, options);
 						let article = await response.json();
 
+						console.log(article);
+
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article.body);
 							setHeadline(article.headline);
 
+							if (article.categories) {
+								let categories = Object.keys(article.categories).filter(category => article.categories[category] === 1);
+								setCategories(categories);
+
+								if(categories.length == 1){
+									setCategoryText(`Selected Category: ${categories[0]}`);
+								}
+								else if(categories.length > 1){
+									setCategoryText(`Selected Categories: ${categories.join(', ')}`)
+								}
+								else {
+									setCategories(null);
+								}
+							}
+							
 							if (article.thumbnailImage) {
 								let endpoint = "api/getImage";
 
@@ -490,7 +525,7 @@ export function commentEditor() {
 								let endpoint = "api/getImage";
 
 								const imageData = {
-									filePath: "./public/images/article_images/DU-Mirror-Default-Logo.png",
+									filePath: "./public/images/article_images/DU-Small-Icon.png",
 								};
 
 								let JSONdata = JSON.stringify(imageData);
@@ -571,18 +606,47 @@ export function commentEditor() {
 							</div>
 						</Box>
 						{defaultImageUsed &&  !isImageApproved ?
-						<Box 
-							sx={{
-								width: '50%'
-							}}>
-							<br></br>
-							<Alert severity="warning">
-								Default thumbnail image being used. Leave a comment if author needs to upload an image to replace this or approve otherwise. 
-							</Alert>
-						</Box>
-						:
-						null
+							<Box 
+								sx={{
+									width: '50%'
+								}}>
+								<br></br>
+								<Alert severity="warning">
+									Default thumbnail image being used. Leave a comment if author needs to upload an image to replace this or approve otherwise. 
+								</Alert>
+							</Box>
+							:
+							null
 						}
+
+						{getCategories ?
+							<div>
+								<br></br>
+								<Typography>
+									{categoryText}
+								</Typography>
+							</div>
+							
+							:
+							null
+						}
+
+						{!getCategories && !isCategoryApproved ?
+							<Box
+								sx={{
+									width: '50%'
+								}}
+							>
+								<br></br>
+								<Alert severity="warning">
+									There is not a category selection for this article. Leave a comment if this needs to be changed or approve otherwise.
+								</Alert>
+							</Box>
+							
+							:
+							null
+						}
+
 						<Box id="quillEditor">
 							<Box
 								sx={{
@@ -683,7 +747,7 @@ export function commentEditor() {
 							>
 								<Grid item>
 									<Checkbox
-										id="checkbox"
+										id="imageCheckbox"
 										color="error"
 										onChange={switchImageApproved}
 										sx={{
@@ -699,6 +763,30 @@ export function commentEditor() {
 										sx={{ color: "black", marginLeft: 2 }}
 									>
 										Approve Thumbnail Image
+									</Typography>
+							</Grid>
+							<br></br>
+							<Grid container
+							>
+								</Grid>
+								<Grid item>
+									<Checkbox
+										id="categoryCheckbox"
+										color="error"
+										onChange={switchCategoryApproved}
+										sx={{
+											color: "black",
+											marginTop: -1,
+											marginLeft: 1,
+											borderColor: "white",
+										}}
+									/>
+								</Grid>
+								<Grid item>
+									<Typography
+										sx={{ color: "black", marginLeft: 2 }}
+									>
+										Approve Article Category Selection
 									</Typography>
 								</Grid>
 							</Grid>
