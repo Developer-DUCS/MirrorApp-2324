@@ -127,6 +127,9 @@ function ArticleFeed(props) {
 
     // For dropdown menu values
     const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial']; //may have to move
+
+
+
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -465,6 +468,7 @@ function ArticleFeed(props) {
                                                         key={option}
                                                         selected={index === selectedIndex}
                                                         onClick={(event) => handleMenuItemClick(event, index)}
+                                                        onClick={(event) => handleMenuItemClick(console.log(options[index]))}
                                                         >
                                                         {option}
                                                         </MenuItem>
