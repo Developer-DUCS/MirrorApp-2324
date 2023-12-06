@@ -402,6 +402,7 @@ function ArticleFeed(props) {
                             <Grid container>
                                 <Grid
                                     xs={11}
+                                    sx={{ display: "flex", alignItems: "end" }}
                                     item>
                                     <NextLink
                                         href="/"
@@ -421,7 +422,7 @@ function ArticleFeed(props) {
                                     </NextLink>
 
                                     <React.Fragment >
-                                        <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
+                                        <ButtonGroup variant="contained" ref={anchorRef} sx={{ marginBottom: "12px" }} aria-label="split button">
                                             <Button
                                             size="small"
                                             aria-controls={open ? 'split-button-menu' : undefined}
@@ -435,7 +436,7 @@ function ArticleFeed(props) {
                                                         color: "white",
                                                         paddingLeft: "10px",
                                                         paddingRight: "10px",
-                                                        zIndex: "50000"
+                                                        zIndex: "50000",
                                                     }}
                                             >
                                             <ArrowDropDownIcon />
