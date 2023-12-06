@@ -248,7 +248,6 @@ export default function articleWriting() {
 							id: id,
 						};
 
-						console.log(data);
 						let JSONdata = JSON.stringify(data);
 						let options = {
 							method: "POST",
@@ -267,13 +266,13 @@ export default function articleWriting() {
 						let articleHeadline = article.headline;
 
 						// set the previously saved categories 
-						setFrontPage(article.categories.front_page);
-						setSports(article.categories.sports);
-						setLifestyle(article.categories.lifestyle);
-						setCampusNews(article.categories.campus_news);
-						setNews(article.categories.news);
-						setWeekend(article.categories.weekend);
-						setEditorial(article.categories.editorial);
+						setFrontPage(article.categories["Front Page"]);
+						setSports(article.categories["Sports"]);
+						setLifestyle(article.categories["Lifestyle"]);
+						setCampusNews(article.categories["Campus News"]);
+						setNews(article.categories["News"]);
+						setWeekend(article.categories["Weekend"]);
+						setEditorial(article.categories["Editorial"]);
 
 						// Make sure the response was received before setting the article information
 						if (article) {
@@ -690,37 +689,37 @@ export default function articleWriting() {
 								//margin left same as the save as draft below
 								marginLeft: 1,
 							}}>
-					{[
-						//handling category buttons states and dynamic rendering 
-						{ label: "Front Page", state: frontPage, setState: setFrontPage },
-						{ label: "Sports", state: sports, setState: setSports },
-						{ label: "Lifestyle", state: lifestyle, setState: setLifestyle },
-						{ label: "Campus News", state: campusNews, setState: setCampusNews },
-						{ label: "News", state: news, setState: setNews },
-						{ label: "Weekend", state: weekend, setState: setWeekend },
-						{ label: "Editorial", state: editorial, setState: setEditorial },
-					].map((category, index) => (
-						<Button
-						key={index}
-						sx={{
-							//categories button styles when toggled 
-							backgroundColor: category.state === 1 ? "darkgrey" : "white",
-							color: category.state === 1 ? "white" : "black",
-							border: "1px solid darkgrey",
-							borderRadius: 1,
-							minWidth: 50,
-							margin: 1,
-							"&:hover": {
-							backgroundColor: category.state === 1 ? "darkgrey" : "lightgrey",
-							},
-						}}
-						//pass state and setSate props to category object
-						onClick={() => toggleCategory(category.state, category.setState)}
-						>
-						{category.label}
-				</Button>
-			))}
-			</Box>
+							{[
+								//handling category buttons states and dynamic rendering 
+								{ label: "Front Page", state: frontPage, setState: setFrontPage },
+								{ label: "Sports", state: sports, setState: setSports },
+								{ label: "Lifestyle", state: lifestyle, setState: setLifestyle },
+								{ label: "Campus News", state: campusNews, setState: setCampusNews },
+								{ label: "News", state: news, setState: setNews },
+								{ label: "Weekend", state: weekend, setState: setWeekend },
+								{ label: "Editorial", state: editorial, setState: setEditorial },
+							].map((category, index) => (
+								<Button
+									key={index}
+									sx={{
+										//categories button styles when toggled 
+										backgroundColor: category.state === 1 ? "darkgrey" : "white",
+										color: category.state === 1 ? "white" : "black",
+										border: "1px solid darkgrey",
+										borderRadius: 1,
+										minWidth: 50,
+										margin: 1,
+										"&:hover": {
+										backgroundColor: category.state === 1 ? "darkgrey" : "lightgrey",
+										},
+									}}
+									//pass state and setSate props to category object
+									onClick={() => toggleCategory(category.state, category.setState)}
+									>
+									{category.label}
+								</Button>
+							))}
+						</Box>
 						<br></br>
 						<Grid
 							container

@@ -19,33 +19,43 @@ export default async (req, res) => {
 	let email = req.body.email;
 	console.log("id", id);
 	console.log(email);
-	let getArticleQuery = "SELECT headline, body, thumbnailImage, front_page, sports, lifestyle, campus_news, news, weekend, editorial FROM articles JOIN categories ON categories.aid WHERE articles.aid = ?;";
+	let getArticleQuery = "SELECT headline, body, thumbnailImage FROM articles WHERE articles.aid = ?;";
 
-	const result = await executeQuery({
+	const articleResult = await executeQuery({
 		query: getArticleQuery,
 		values: [id],
 	});
 
-	if (result.error) {
+	let getCategoryQuery = "SELECT front_page AS 'Front Page', sports AS 'Sports', lifestyle AS 'Lifestyle', campus_news AS 'Campus News', news AS 'News', weekend AS 'Weekend', editorial AS 'Editorial' FROM categories WHERE aid = ?"
+
+	const categoryResult = await executeQuery({
+		query: getCategoryQuery,
+		values: [id],
+	})
+
+	if (articleResult.error || categoryResult.error) {
 		return res.status(500).json({ error: err });
-	} else if (result.length == 0) {
+	} else if (articleResult.length == 0) {
 		return res.status(400).json({ msg: "Articles not found" });
 	} else {
-		// convert categories to an array and reformat the article object
-		let article = {
-			body: result[0].body,
-			headline: result[0].headline,
-			thumbnailImage: result[0].thumbnailImage,
-			categories: {
-				front_page: result[0].front_page, 
-				sports: result[0].sports, 
-				lifestyle: result[0].lifestyle, 
-				campus_news: result[0].campus_news, 
-				news: result[0].news, 
-				weekend: result[0].weekend, 
-				editorial: result[0].editorial
-			},
+		// if there is categories associated with the article return both, otherwise return just the article information
+		if (categoryResult.length == 1){
+			let article = {
+				body: articleResult[0].body,
+				headline: articleResult[0].headline,
+				thumbnailImage: articleResult[0].thumbnailImage,
+				categories: categoryResult[0]
+			}
+			return res.status(200).json(article);
 		}
-		return res.status(200).json(article);
+		else{
+			let article = {
+				body: articleResult[0].body,
+				headline: articleResult[0].headline,
+				thumbnailImage: articleResult[0].thumbnailImage,
+				categories: null,
+			}
+			return res.status(200).json(article);
+		}
 	}
 };
