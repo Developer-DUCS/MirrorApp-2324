@@ -152,7 +152,7 @@ export async function getStaticPaths() {
 	const conn = mysql.createConnection({
 		host: "127.0.0.1",
 		user: "root",
-		password: "Soccer23@!",
+		password: "password",
 		database: "du_mirror",
 		port: "3306",
 	});

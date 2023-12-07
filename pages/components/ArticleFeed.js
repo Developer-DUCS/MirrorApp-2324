@@ -49,12 +49,12 @@ import Popper from '@mui/material/Popper';
 import Grow from '@mui/material/Grow';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
-
-
 import dropdownMenu from "./dropdown";
 
 import { Virtuoso } from "react-virtuoso";
 import { IonContent, IonPage } from "@ionic/react";
+
+import CategoryDropdown from "./CategoryDropdown";
 
 // Styling
 import {
@@ -77,7 +77,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@mui/icons-material/Search";
 
 import DUIcon from "../../Lib/Images/DU-Small-Icon.png";
-
 
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -120,10 +119,7 @@ function ArticleFeed(props) {
     // To adjust card margin (search header expanded)
     const [getPaddingTop, setPaddingTop] = useState("50px");
 
-
     const [age, setAge] = React.useState('');
-
-
 
     // For dropdown menu values
     const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial']; //may have to move
@@ -136,6 +132,11 @@ function ArticleFeed(props) {
     const handleClick = () => {
          console.info(`You clicked ${options[selectedIndex]}`);
     };
+
+    function handleFilterSelected(filter) {
+        props.dispatch({ path: "SET_CURRENT_PAGE", payload: filter});
+        console.log(`Changed to: ${props.currentPage}`);
+    }
 
     const handleMenuItemClick = (event, index) => {
         setSelectedIndex(index);
@@ -424,7 +425,9 @@ function ArticleFeed(props) {
                                         </Button>
                                     </NextLink>
 
-                                    <React.Fragment >
+                                    <CategoryDropdown />
+
+                                    {/* <React.Fragment >
                                         <ButtonGroup variant="contained" ref={anchorRef} sx={{ marginBottom: "12px" }} aria-label="split button">
                                             <Button
                                             size="small"
@@ -467,8 +470,12 @@ function ArticleFeed(props) {
                                                         <MenuItem
                                                         key={option}
                                                         selected={index === selectedIndex}
-                                                        onClick={(event) => handleMenuItemClick(event, index)}
-                                                        onClick={(event) => handleMenuItemClick(console.log(index))}
+                                                        onClick={(event) => {
+                                                            handleMenuItemClick(event, index)
+                                                            console.log(props);
+                                                            console.log(option);
+                                                            handleFilterSelected(option);
+                                                        }}
                                                         >
                                                         {option}
                                                         </MenuItem>
@@ -479,7 +486,7 @@ function ArticleFeed(props) {
                                             </Grow>
                                             )}
                                         </Popper>
-                                    </React.Fragment>
+                                    </React.Fragment> */}
 
                                 </Grid>                              
 
