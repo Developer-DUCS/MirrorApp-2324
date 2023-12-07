@@ -121,41 +121,6 @@ function ArticleFeed(props) {
 
     const [age, setAge] = React.useState('');
 
-    // For dropdown menu values
-    const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial']; //may have to move
-    const [filter, setFilter] = React.useState(null);
-
-
-    const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
-    const handleClick = () => {
-         console.info(`You clicked ${options[selectedIndex]}`);
-    };
-
-    function handleFilterSelected(filter) {
-        props.dispatch({ path: "SET_CURRENT_PAGE", payload: filter});
-        console.log(`Changed to: ${props.currentPage}`);
-    }
-
-    const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index);
-        setOpen(false);
-    };
-
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleClose = (event) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
-        return;
-        }
-
-        setOpen(false);
-    };
-
-
 
     // On search click, set display property to block or none respectively
     function onSearchButtonClick() {
@@ -218,6 +183,11 @@ function ArticleFeed(props) {
         handleSearch(event.target.value);
     };
 
+    const handleFilterClear = () => {
+        props.dispatch({ type: "SET_CURRENT_PAGE", payload: "All" });
+        console.log('Filter Cleared');
+    }
+
     // useEffects
     // - On page load, return the list of articles according to what's being filtered
     // - Updates every time the user chooses a different tag
@@ -241,14 +211,20 @@ function ArticleFeed(props) {
 
             const response = await fetch("/api/GetArticleByTag", options);
 
-            const data = await response.json();
+            if (response.status === 201){
+                setArticles(null);
+            }
+            else if (response.status === 200) {
+                const data = await response.json()
 
-            if (data) {
                 console.log(
                     "🚀 ~ file: ArticleFeed.js:88 ~ handleSearch ~ data",
                     data
                 );
                 setArticles(data);
+            }
+            else {
+                console.log("error filtering articles by category");
             }
         }
 
@@ -427,67 +403,6 @@ function ArticleFeed(props) {
 
                                     <CategoryDropdown />
 
-                                    {/* <React.Fragment >
-                                        <ButtonGroup variant="contained" ref={anchorRef} sx={{ marginBottom: "12px" }} aria-label="split button">
-                                            <Button
-                                            size="small"
-                                            aria-controls={open ? 'split-button-menu' : undefined}
-                                            aria-expanded={open ? 'true' : undefined}
-                                            aria-label="select merge strategy"
-                                            aria-haspopup="menu"
-                                            onClick={handleToggle}
-                                            variant="text"
-                                                    sx={{
-                                                        backgroundColor: "#e03d3d",
-                                                        color: "white",
-                                                        paddingLeft: "10px",
-                                                        paddingRight: "10px",
-                                                        zIndex: "50000",
-                                                    }}
-                                            >
-                                            <ArrowDropDownIcon />
-                                            </Button>
-                                        </ButtonGroup >
-                                        <Popper
-                                            open={open}
-                                            anchorEl={anchorRef.current}
-                                            role={undefined}
-                                            transition
-                                            disablePortal
-                                        >
-                                            {({ TransitionProps, placement }) => (
-                                            <Grow
-                                                {...TransitionProps}
-                                                style={{
-                                                transformOrigin:
-                                                    placement === 'bottom' ? 'center top' : 'center bottom',
-                                                }}
-                                            >
-                                                <Paper>
-                                                <ClickAwayListener onClickAway={handleClose}>
-                                                    <MenuList id="split-button-menu">
-                                                    {options.map((option, index) => (
-                                                        <MenuItem
-                                                        key={option}
-                                                        selected={index === selectedIndex}
-                                                        onClick={(event) => {
-                                                            handleMenuItemClick(event, index)
-                                                            console.log(props);
-                                                            console.log(option);
-                                                            handleFilterSelected(option);
-                                                        }}
-                                                        >
-                                                        {option}
-                                                        </MenuItem>
-                                                    ))}
-                                                    </MenuList>
-                                                </ClickAwayListener>
-                                                </Paper>
-                                            </Grow>
-                                            )}
-                                        </Popper>
-                                    </React.Fragment> */}
-
                                 </Grid>                              
 
                                 <Grid
@@ -536,6 +451,7 @@ function ArticleFeed(props) {
                 </Box>
                 <Box>
                     <IonPage>
+                        {getArticles ?
                         <IonContent>
                             <Box sx={{ paddingTop: getPaddingTop }}></Box>
                             <Virtuoso
@@ -551,7 +467,17 @@ function ArticleFeed(props) {
                                 }}
                             />
                             <Box sx={{ marginBottom: 9 }}></Box>
+                        </IonContent>                        
+                        :
+                        <IonContent>
+                            <Box sx={{ paddingTop: "200px" }}></Box>
+                            <Button
+                                onClick={handleFilterClear}
+                            >Clear Filter
+                            </Button>
+                            <Box sx={{ marginBottom: 9 }}></Box>
                         </IonContent>
+                        }
                     </IonPage>
                 </Box>
             </Box>

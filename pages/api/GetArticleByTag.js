@@ -75,7 +75,8 @@ export default async (req, res) => {
             }
 
             if (rows.length == 0){
-                console.log(`No articles with the ${filterByTag} category`)
+                console.log(`No articles with the ${filterByTag} category`);
+                return res.status(201).json( {message: "no articles found", filter: filterByTag })
             }
             else {
                 return res.status(200).json(rows);
