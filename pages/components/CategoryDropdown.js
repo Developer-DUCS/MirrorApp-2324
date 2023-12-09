@@ -17,7 +17,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 function CategoryDropdown(props) {
 
-    const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial'];
+    const options = ['Front Page','Sports','Lifestyle', 'Campus News', 'Weekend', 'Editorial', 'All'];
     
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);

@@ -470,10 +470,31 @@ function ArticleFeed(props) {
                         </IonContent>                        
                         :
                         <IonContent>
-                            <Box sx={{ paddingTop: "200px" }}></Box>
-                            <Button
+                            <Box 
+                            sx={{ paddingTop: "200px",
+                            color: "black",
+                            fontSize: "16px",
+                            justifyContent: "space-around",
+                            textAlign: "center",
+                            fontFamily: "TrajanPro-Regular",
+                            fontSize: "24px"
+                         }}>
+                            no results found for
+                            <br></br>
+                            {props.currentPage}
+                            </Box>
+                            <Button sx={{
+                                backgroundColor:"#e03d3d",
+                                color: "white",
+                                fontSize: "16px",
+                                justifyContent: "space-around",
+                                fontFamily: "TrajanPro-Regular",
+                                marginLeft: "115px",
+                                marginTop: "125px"
+                            }}
                                 onClick={handleFilterClear}
-                            >Clear Filter
+                            >
+                                Clear Filter
                             </Button>
                             <Box sx={{ marginBottom: 9 }}></Box>
                         </IonContent>

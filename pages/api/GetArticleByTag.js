@@ -73,6 +73,7 @@ export default async (req, res) => {
                 console.error("ERROR:\n" + error);
                 return;
             }
+            console.log(rows)
 
             if (rows.length == 0){
                 console.log(`No articles with the ${filterByTag} category`);
