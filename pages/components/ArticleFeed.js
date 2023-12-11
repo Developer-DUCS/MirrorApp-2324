@@ -19,15 +19,42 @@ import { Buffer } from "buffer";
 import { debounce } from "lodash";
 import { useRouter } from "next/router";
 
+
+import Menu from '@mui/material/Menu';
+import Fade from '@mui/material/Fade';
+
+
+
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import Cloud from '@mui/icons-material/Cloud';
+
+
 // Redux component
 // - helps connect to the navbar for article feed data
 import { connect } from "react-redux";
 
 // Components
 import NavBar from "./NavBar";
+import ButtonGroup from '@mui/material/ButtonGroup';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Popper from '@mui/material/Popper';
+import Grow from '@mui/material/Grow';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+
+import dropdownMenu from "./dropdown";
 
 import { Virtuoso } from "react-virtuoso";
 import { IonContent, IonPage } from "@ionic/react";
+
+import CategoryDropdown from "./CategoryDropdown";
 
 // Styling
 import {
@@ -51,48 +78,28 @@ import SearchIcon from "@mui/icons-material/Search";
 
 import DUIcon from "../../Lib/Images/DU-Small-Icon.png";
 
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 function ArticleFeed(props) {
     const articleStyles = makeStyles((theme) => ({
         container: {
-            display: "flex",
-            flexDirection: "row",
-            height: "auto",
-            width: "auto",
-            marginBottom: 5,
-            borderRadius: 5,
             boxShadow: "0px 4px 5px rgba(0, 0, 0, 1)",
             backgroundColor: "white",
         },
-        column: {
-            width: "auto",
-            height: "auto",
-            display: "flex",
-        },
         featuredImage: {
-            width: 120,
-            height: 120,
-            borderRadius: 5,
-            margin: theme.spacing(1),
+            height: "100%",
+            width: "100%"
         },
         headline: {
             fontFamily: "AvantGarde",
             fontSize: 16,
-            width: 200,
-            margin: theme.spacing(1),
-            marginBottom: 0,
+            width: "100%",
         },
         author: {
             fontFamily: "AvantGarde",
             fontSize: 12,
-            width: 150,
-            margin: theme.spacing(1),
-            marginBottom: theme.spacing(2),
-        },
-        subtitle: {
-            fontFamily: "AvantGarde",
-            fontSize: 12,
-            margin: theme.spacing(1),
-            marginTop: 0,
             width: 200,
         },
     }));
@@ -111,6 +118,9 @@ function ArticleFeed(props) {
 
     // To adjust card margin (search header expanded)
     const [getPaddingTop, setPaddingTop] = useState("50px");
+
+    const [age, setAge] = React.useState('');
+
 
     // On search click, set display property to block or none respectively
     function onSearchButtonClick() {
@@ -173,6 +183,11 @@ function ArticleFeed(props) {
         handleSearch(event.target.value);
     };
 
+    const handleFilterClear = () => {
+        props.dispatch({ type: "SET_CURRENT_PAGE", payload: "All" });
+        console.log('Filter Cleared');
+    }
+
     // useEffects
     // - On page load, return the list of articles according to what's being filtered
     // - Updates every time the user chooses a different tag
@@ -196,14 +211,20 @@ function ArticleFeed(props) {
 
             const response = await fetch("/api/GetArticleByTag", options);
 
-            const data = await response.json();
+            if (response.status === 201){
+                setArticles(null);
+            }
+            else if (response.status === 200) {
+                const data = await response.json()
 
-            if (data) {
                 console.log(
                     "🚀 ~ file: ArticleFeed.js:88 ~ handleSearch ~ data",
                     data
                 );
                 setArticles(data);
+            }
+            else {
+                console.log("error filtering articles by category");
             }
         }
 
@@ -250,8 +271,8 @@ function ArticleFeed(props) {
                 <Image
                     alt="thumbnail"
                     src={DUIcon.src}
-                    width="80"
-                    height="80"
+                    width = "150"
+                    height = "150"
                 />
             );
         }
@@ -266,51 +287,75 @@ function ArticleFeed(props) {
 
         const { asPath } = useRouter();
 
+            
         return (
             <Card
                 style={articleStyles.container}
                 sx={{ m: 2, marginBottom: 3 }}>
                 <Button
+                    sx={{
+                        padding: 0,
+                        width: '100%'
+                    }}
                     href={`${asPath}/articles/[${props.article.aid}]`}
                     component="a"
                     LinkComponent={Link}
                     onClick={handleArticleClick}>
-                    <CardContent>
-                        <Box style={articleStyles.column}>
-                            <Box style={articleStyles.featuredImage}>
-                                {thumbnail}
-                            </Box>
-                            <Box style={articleStyles.column}>
+                    <CardContent
+                        sx={{
+                            padding: 0,
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                display:'flex',
+                                flexDirection:'row',
+                                
+                            }}>
+                            
+                            <Box>
+                                <Box
+                                sx={{
+                                    display:'flex',
+                                    flexDirection:'row',
+                                    justifyContent: 'center',
+                                    
+                                }}>
+                                    {thumbnail}
+                                </Box>
+                                
                                 <Typography
                                     sx={{
-                                        fontSize: 24,
+                                        
+                                        fontSize: 18,
                                         fontFamily: "AvantGrande",
                                         color: "black",
-                                        textAlign: "left",
+                                        textAlign: "center",
                                     }}>
                                     {newHeadline}
                                 </Typography>
                                 <Typography
                                     sx={{
-                                        fontSize: 16,
+                                        fontSize: 12,
                                         fontFamily: "AvantGrande",
                                         color: "black",
-                                        textAlign: "left",
+                                        textAlign: "center",
                                     }}>
                                     By {props.article.author}
                                 </Typography>
-                                <Typography style={articleStyles.subtitle}>
-                                    {props.subtitle}
-                                </Typography>
                             </Box>
+
+                            
                         </Box>
                     </CardContent>
+                    
                 </Button>
             </Card>
         );
     };
 
     return (
+        
         <Box sx={{ backgroundColor: "#F3F3F3" }}>
             <Box>
                 <Box
@@ -320,17 +365,24 @@ function ArticleFeed(props) {
                         width: "100%",
                         marginBottom: 10,
                     }}>
+                        
                     <AppBar
                         position="fixed"
                         sx={{
-                            backgroundColor: "#BC2932",
+                            backgroundColor: "#e03d3d",
                             height: { getHeight },
                         }}>
+                            
+                        
                         <Toolbar
                             sx={{ display: "flex", flexDirection: "column" }}>
+
+                            
+
                             <Grid container>
                                 <Grid
                                     xs={11}
+                                    sx={{ display: "flex", alignItems: "end" }}
                                     item>
                                     <NextLink
                                         href="/"
@@ -342,11 +394,17 @@ function ArticleFeed(props) {
                                                 fontSize: "24px",
                                                 justifyContent: "space-around",
                                                 fontFamily: "TrajanPro-Regular",
+                                                paddingTop: "35px",
+                                                paddingRight: "25px"
                                             }}>
                                             Drury Mirror
                                         </Button>
                                     </NextLink>
-                                </Grid>
+
+                                    <CategoryDropdown />
+
+                                </Grid>                              
+
                                 <Grid
                                     xs={1}
                                     item
@@ -359,11 +417,12 @@ function ArticleFeed(props) {
                                         onClick={() => {
                                             onSearchButtonClick();
                                         }}
-                                        sx={{ color: "white", display: "flex" }}
+                                        sx={{ color: "white", display: "flex", paddingTop: "35px" }}
                                         aria-label="menu">
                                         <SearchIcon />
                                     </IconButton>
-                                </Grid>
+                                    
+                                </Grid>                                                                                               
                             </Grid>
                             <TextField
                                 value={getSearchTerm}
@@ -392,6 +451,7 @@ function ArticleFeed(props) {
                 </Box>
                 <Box>
                     <IonPage>
+                        {getArticles ?
                         <IonContent>
                             <Box sx={{ paddingTop: getPaddingTop }}></Box>
                             <Virtuoso
@@ -407,11 +467,41 @@ function ArticleFeed(props) {
                                 }}
                             />
                             <Box sx={{ marginBottom: 9 }}></Box>
+                        </IonContent>                        
+                        :
+                        <IonContent>
+                            <Box 
+                            sx={{ paddingTop: "200px",
+                            color: "black",
+                            fontSize: "16px",
+                            justifyContent: "space-around",
+                            textAlign: "center",
+                            fontFamily: "TrajanPro-Regular",
+                            fontSize: "24px"
+                         }}>
+                            no results found for
+                            <br></br>
+                            {props.currentPage}
+                            </Box>
+                            <Button sx={{
+                                backgroundColor:"#e03d3d",
+                                color: "white",
+                                fontSize: "16px",
+                                justifyContent: "space-around",
+                                fontFamily: "TrajanPro-Regular",
+                                marginLeft: "115px",
+                                marginTop: "125px"
+                            }}
+                                onClick={handleFilterClear}
+                            >
+                                Clear Filter
+                            </Button>
+                            <Box sx={{ marginBottom: 9 }}></Box>
                         </IonContent>
+                        }
                     </IonPage>
                 </Box>
             </Box>
-            <NavBar />
         </Box>
     );
 }

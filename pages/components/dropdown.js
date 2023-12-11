@@ -22,7 +22,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import PublicIcon from "@mui/icons-material/Public";
 import RoomIcon from "@mui/icons-material/Room";
 
-function NavBar(props) {
+function dropdownMenu(props) {
     function handleRecent() {
         props.dispatch({ type: "SET_CURRENT_PAGE", payload: "Recent" });
         console.log("Changed to Recent: " + props.currentPage);
@@ -136,4 +136,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps)(dropdownMenu);

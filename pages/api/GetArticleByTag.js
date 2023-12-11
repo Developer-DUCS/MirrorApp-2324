@@ -11,6 +11,8 @@ const conn = require("../../backend/mysqldb");
 
 export default async (req, res) => {
 
+    console.log(req.body.filter);
+
     // Define the text to match
     const filterByTag = req.body.filterBy;
     console.log("Filtering by Tag: " + filterByTag);
@@ -43,46 +45,43 @@ export default async (req, res) => {
         // Return if no filter
         if (filterByTag === "All" || filterByTag === "Recent") {
             console.log("Called recent articles.");
-            console.log(articles);
+            //console.log(articles);
             return res.status(200).json(articles);
         }
     });
 
     // 2. Fetch all tag rows if filter
 
-    if (filterByTag === "Local" || filterByTag === "National" || filterByTag === "International") {
+    if (filterByTag === "Front Page" || filterByTag === "Sports" || filterByTag === "Lifestyle" || filterByTag === "Campus News" || filterByTag === "Weekend" || filterByTag === "Editorial") {
+
+        // Change tag name to match SQL naming conventions
+        let filterName;
+
+        if (filterByTag === "Front Page") { filterName = 'front_page'; }
+        else if (filterByTag === "Sports") { filterName = 'sports'; }
+        else if (filterByTag === "Lifestyle") { filterName = 'lifestyle'; }
+        else if (filterByTag === "Campus News") { filterName = 'campus_news'; }
+        else if (filterByTag === "Weekend") { filterName = 'weekend'; }
+        else if (filterByTag === "Editorial") { filterName = 'editorial'; }
         
         // Update the query
-        query = `SELECT * FROM tags WHERE ${filterByTag} LIKE 1`;
+        query = `SELECT * FROM articles JOIN categories ON categories.aid = articles.aid WHERE categories.?? LIKE 1`;
+        let value = [filterName];
 
-        conn.query(query, (error, rows, fields) => {
+        conn.query(query, value, (error, rows, fields) => {
             if (error) {
                 console.error("ERROR:\n" + error);
                 return;
             }
+            console.log(rows)
 
-            let articlesToReturn = []
-
-            rows.forEach((row) => {
-
-                // 3. Filter article feed
-                // - A dictionary is used to map tag IDs to article IDs
-                // - This eliminates another for-loop, optimizing load times
-                for  (let articleIndex = 0; articleIndex < articles.length; articleIndex++ ) {
-
-                    const article = articles[articleIndex];
-        
-                    // Filter by tag, check if null, push accordingly
-                    if (article.aid === row.tid) {
-                        articlesToReturn.push(article);
-                        console.log("Pushed Article: " + articles.headline);
-                    }
-                }
-
-            });
-
-            console.log(articlesToReturn)
-            return res.status(200).json(articlesToReturn);
+            if (rows.length == 0){
+                console.log(`No articles with the ${filterByTag} category`);
+                return res.status(201).json( {message: "no articles found", filter: filterByTag })
+            }
+            else {
+                return res.status(200).json(rows);
+            }
         });
 
     }

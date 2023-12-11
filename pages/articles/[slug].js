@@ -19,7 +19,6 @@ import { debounce, forEach } from "lodash";
 
 // Components
 import Header from "../components/Header";
-import NavBar from "../components/NavBar";
 
 import { Virtuoso } from "react-virtuoso";
 import {
@@ -84,14 +83,13 @@ export default function Article({ resData }) {
 							{sanitizedHtml}
 						</Typography>
 					</Box>
-					<NavBar />
 				</Box>
 			);
 		} else {
 			return (
 				<Box sx={{ backgroundColor: "#F3F3F3" }}>
 					<Header />
-					<Box sx={{ p: 2, marginTop: 8 }}>
+					<Box sx={{ p: 2, marginTop: 12 }}>
 						<Image
 							alt="thumbnail"
 							src={DUIcon.src}
@@ -131,7 +129,6 @@ export default function Article({ resData }) {
 							{ReactHtmlParser(resData.body)}
 						</Typography>
 					</Box>
-					<NavBar />
 				</Box>
 			);
 		}
@@ -142,7 +139,6 @@ export default function Article({ resData }) {
 				<Typography sx={{ color: "black", m: 1, marginTop: 10 }}>
 					Loading...
 				</Typography>
-				<NavBar />
 			</Box>
 		);
 	}

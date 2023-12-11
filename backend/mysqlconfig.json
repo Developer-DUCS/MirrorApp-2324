@@ -70,5 +70,23 @@
             "database": "du_mirror",
             "port": "3306"
         }
+    ],
+    "charlie": [
+        {
+            "host": "127.0.0.1",
+            "user": "root",
+            "password": "password",
+            "database": "du_mirror",
+            "port": "3306"
+        }
+    ],
+    "andrew": [
+        {
+            "host": "127.0.0.1",
+            "user": "root",
+            "password": "Soccer23@!",
+            "database": "du_mirror",
+            "port": "3306"
+        }
     ]
 }

@@ -19,7 +19,7 @@ const config = require("./mysqlconfig.json"); // Configuration file for the mysq
 // });
 
 // Change the myUser variable to your username
-const myUser = "du_mirror_user";
+const myUser = "andrew";
 let db = "";
 if (myUser == "sam") {
 	db = mysql.createConnection({
@@ -77,7 +77,25 @@ if (myUser == "sam") {
 		database: config.du_mirror_user[0].database,
 		port: config.du_mirror_user[0].port,
 	});
+} else if (myUser == "charlie") {
+	db = mysql.createConnection({
+		host: config.charlie[0].host,
+		user: config.charlie[0].user,
+		password: config.charlie[0].password,
+		database: config.charlie[0].database,
+		port: config.charlie[0].port,
+	});
+} else if (myUser == "andrew") {
+	db = mysql.createConnection({
+		host: config.andrew[0].host,
+		user: config.andrew[0].user,
+		password: config.andrew[0].password,
+		database: config.andrew[0].database,
+		port: config.andrew[0].port,
+	});
 }
+
+
 
 db.connect(function (err) {
 	//console.log(`host: ${conn.host}\nuser: ${conn.user}\npassword: ${conn.password}\ndatabase: ${conn.database}\nport: ${conn.port}`);
