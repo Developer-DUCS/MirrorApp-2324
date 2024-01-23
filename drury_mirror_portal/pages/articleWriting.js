@@ -389,7 +389,7 @@ export default function articleWriting() {
 		}
 	}
 
-	const handleClearSelection = async (path) => {
+	const handleRemoveImage = async (path) => {
 
 		// no image path exists
 		if (!path) return
@@ -605,17 +605,16 @@ export default function articleWriting() {
 						</div>
 						}
 						{img ?
-						<div className={uploadStyles.clearButton}>
+						<div className={uploadStyles.removeImageButton}>
 							<Button
 								sx={{ m: 2 }}
 								color="error"
 								variant="outlined"
 								onClick={() => {
 									// delete image file if image has been uploaded
-									// TODO: create a route for deleting image from article_images folder
-									handleClearSelection(getImageData);
+									handleRemoveImage(getImageData);
 
-									// clear all image data from frontend
+									// remove all image data from frontend
 									document.getElementById('uploadImage').value = ''
 									setImg(null);
 									setPreviewImg(null);
@@ -625,7 +624,7 @@ export default function articleWriting() {
 									setUploadSuccessAlert(false);
 								}}
 								>
-								Clear Selection
+								Remove Image
 							</Button>
 						</div>
 						:
