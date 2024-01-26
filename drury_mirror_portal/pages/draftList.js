@@ -10,7 +10,7 @@
 import styles from "../styles/article.module.css";
 import { useRouter } from "next/router";
 import { useSession, signOut, getSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Modal } from "react";
 
 import { Button, Typography, Card, Box, Stack } from "@mui/material";
 
@@ -20,6 +20,7 @@ export function draftList() {
 	const router = useRouter();
 	const { status, data } = useSession();
 	const [getArticles, setArticles] = useState([]);
+	const [getDeleteModal, setDeleteModal] = useState(false);
 
 	const parse = require("html-react-parser");
 
@@ -90,6 +91,22 @@ export function draftList() {
 		if (article) {
 			articles.push(article);
 		}
+	}
+
+	// Delete article
+	function deleteArticle() {
+		//Server Delete Call
+		
+	}
+
+	// Check if you really want to delete article
+	function openDeleteModal(){
+		setDeleteModal(true)
+	}
+
+	// Closes delete modal
+	function closeDeleteModal(){
+		setDeleteModal(false)
 	}
 
 	filterArticles();
@@ -182,6 +199,34 @@ export function draftList() {
 										>
 											Keep Writing
 										</Button>
+										<Button
+											id={article.aid}
+											variant="contained"
+											onClick={openDeleteModal}
+											color="primaryButton"
+											sx={{
+												marginBottom: 1,
+												color:"white",
+											}}
+										>
+											Delete
+										</Button>
+										{/*<Modal
+											open={getDeleteModal}
+											onClose={closeDeleteModal}
+											aria-labelledby="modal-modal-title"
+											aria-describedby="modal-modal-description"
+										>
+											<Box>
+												<Typography>Are you sure you want to delete this?</Typography>
+												<Button
+													OnClick={deleteArticle}
+												>Yes</Button>
+												<Button
+													OnClick={closeDeleteModal}
+												>No</Button>
+											</Box>
+										</Modal>*/}
 									</Card>
 								))}
 							</ul>
