@@ -10,9 +10,9 @@
 import styles from "../styles/article.module.css";
 import { useRouter } from "next/router";
 import { useSession, signOut, getSession } from "next-auth/react";
-import { useState, useEffect, Modal } from "react";
+import { useState, useEffect } from "react";
 
-import { Button, Typography, Card, Box, Stack } from "@mui/material";
+import { Button, Typography, Card, Box, Stack, Modal } from "@mui/material";
 
 import Header from "./header";
 
@@ -21,6 +21,7 @@ export function draftList() {
 	const { status, data } = useSession();
 	const [getArticles, setArticles] = useState([]);
 	const [getDeleteModal, setDeleteModal] = useState(false);
+	const [articleRemoved, setArticleRemoved] = useState(false);
 
 	const parse = require("html-react-parser");
 
@@ -73,9 +74,10 @@ export function draftList() {
 				}
 			}
 		};
+		setArticleRemoved(false);
 
 		getArticlesRoute();
-	}, []);
+	}, [articleRemoved]);
 
 	// Populate the articles array to display the articles on the page
 	let articles = [];
@@ -94,9 +96,35 @@ export function draftList() {
 	}
 
 	// Delete article
-	function deleteArticle() {
+	async function deleteArticle(article) {
 		//Server Delete Call
-		
+		let endpoint = "api/removeDraft";
+
+		let data = {
+			articleId: article.aid
+		}
+
+		let JSONdata = JSON.stringify(data);
+
+		let options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSONdata,
+		}
+
+		let response = await fetch(endpoint, options);
+
+		if (response.status === 201){
+			console.log("draft deleted");
+		}
+		else if (response.status === 500){
+			console.log(`Error removing draft: ${response.error}`);
+		}
+		else {
+			console.log(response.error)
+		}
 	}
 
 	// Check if you really want to delete article
@@ -202,7 +230,11 @@ export function draftList() {
 										<Button
 											id={article.aid}
 											variant="contained"
-											onClick={openDeleteModal}
+											onClick={() => {
+												openDeleteModal();
+												//deleteArticle(article);
+												//setArticleRemoved(true);
+											}}
 											color="primaryButton"
 											sx={{
 												marginBottom: 1,
@@ -211,22 +243,49 @@ export function draftList() {
 										>
 											Delete
 										</Button>
-										{/*<Modal
+										<Modal
+											sx={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
 											open={getDeleteModal}
 											onClose={closeDeleteModal}
-											aria-labelledby="modal-modal-title"
-											aria-describedby="modal-modal-description"
 										>
-											<Box>
-												<Typography>Are you sure you want to delete this?</Typography>
+											<Box
+												sx={{
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													transform: 'translate(-50%, -50%)',
+													height: 100,
+													width: 250,
+													bgcolor: 'background.paper',
+													boxShadow: 24,
+													borderRadius: 5,
+													backgroundColor: 'White',
+													p:1,
+												}}
+											>
+												<Typography>Are you sure you want to delete this draft?</Typography>
 												<Button
-													OnClick={deleteArticle}
+												sx={{
+													mr: 1
+												}}
+													onClick={() => {
+														deleteArticle(article);
+														setArticleRemoved(true);
+													}}
+													variant="contained"
+													color="error"
 												>Yes</Button>
 												<Button
-													OnClick={closeDeleteModal}
+													onClick={closeDeleteModal}
+													variant="outlined"
+													color="error"
 												>No</Button>
 											</Box>
-										</Modal>*/}
+										</Modal>
 									</Card>
 								))}
 							</ul>

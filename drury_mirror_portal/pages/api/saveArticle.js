@@ -56,8 +56,8 @@ export default async (req, res) => {
 		} else {
 			// inserting the article information
 			let articleQuery =
-				`INSERT INTO articles(email, author, headline, body, isDraft, imageType, thumbnailImage, createdDate) 
-				VALUES(?,?,?,?,?,?,?, NOW());`;
+				`INSERT INTO articles(email, author, headline, body, isDraft, imageType, thumbnailImage, createdDate, isRemoved) 
+				VALUES(?,?,?,?,?,?,?, NOW(), 0);`;
 
 			// inserting the category information associated with the article
 			let categoryQuery = 
