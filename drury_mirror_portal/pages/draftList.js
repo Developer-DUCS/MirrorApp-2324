@@ -96,7 +96,7 @@ export function draftList() {
 	}
 
 	// Delete article
-	async function deleteArticle(article) {
+	async function removeArticle(article) {
 		//Server Delete Call
 		let endpoint = "api/removeDraft";
 
@@ -273,7 +273,7 @@ export function draftList() {
 													mr: 1
 												}}
 													onClick={() => {
-														deleteArticle(article);
+														removeArticle(article);
 														setArticleRemoved(true);
 													}}
 													variant="contained"
