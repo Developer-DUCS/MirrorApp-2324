@@ -62,6 +62,7 @@ export default function about() {
 								<Image
 								    src="/images/CR.jpg" // Correct attribute to specify the image source
 									alt="Description of the image"
+									width={210}
 									height={250} // You can adjust the height as needed
 								/>
 								<CardContent>
