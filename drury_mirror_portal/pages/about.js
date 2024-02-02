@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 import SplashHeader from "./AboutUsSplashHeader";
+import Image from 'next/image';
 
 export default function about() {
 	return (
@@ -61,7 +62,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/CR.jpg"
+									src="/images/CR.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
