@@ -204,7 +204,7 @@ export function CommentViewer() {
 	// loads the article into the editor
 	useEffect(() => {
 		if (getArticle != []) {
-			let myArticle = getArticle;
+			let myArticle = getArticle.body;
 
 			// Make sure the editor is loaded before putting the article in it
 			const editor = document.querySelector(".ql-editor");

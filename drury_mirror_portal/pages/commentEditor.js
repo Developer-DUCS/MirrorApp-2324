@@ -379,6 +379,8 @@ export function commentEditor() {
 				i = i + 1;
 			}
 		} else {
+			// if there is just one comment add it to the array
+			commentsArray.push([x.value, "input1"]);
 		}
 
 		event.preventDefault();
