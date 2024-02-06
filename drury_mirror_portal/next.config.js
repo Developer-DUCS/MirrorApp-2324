@@ -2,7 +2,7 @@
 const nextConfig = {
 	reactStrictMode: false,
 	swcMinify: true,
-	//basePath: "/mirror",
+	basePath: "/mirror",
 	assetPrefix: "https://mcs.drury.edu/mirror/",
 	images: {
 		loader: "akamai",
