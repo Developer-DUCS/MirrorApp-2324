@@ -60,7 +60,7 @@ export default function about() {
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
 								<Image
-								    src="/images/CR.jpg" // Correct attribute to specify the image source
+								    src="../public/images/CR.jpg"
 									alt="Description of the image"
 									width={210}
 									height={250} // You can adjust the height as needed
