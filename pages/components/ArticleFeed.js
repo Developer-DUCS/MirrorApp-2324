@@ -483,25 +483,28 @@ function ArticleFeed(props) {
                             <br></br>
                             {props.currentPage}
                             </Box>
-                            <Button sx={{
-                                backgroundColor:"#e03d3d",
-                                color: "white",
-                                fontSize: "16px",
-                                justifyContent: "space-around",
-                                fontFamily: "TrajanPro-Regular",
-                                marginLeft: "115px",
-                                marginTop: "125px"
-                            }}
-                                onClick={handleFilterClear}
-                            >
-                                Clear Filter
-                            </Button>
                             <Box sx={{ marginBottom: 9 }}></Box>
                         </IonContent>
                         }
                     </IonPage>
                 </Box>
             </Box>
+
+            <Button sx={{
+                backgroundColor:"#e03d3d",
+                color: "white",
+                fontSize: "16px",
+                justifyContent: "space-around",
+                fontFamily: "TrajanPro-Regular",
+                marginLeft: "115px",
+                marginTop: "790px",
+                position: "fixed"
+            }}
+                onClick={handleFilterClear}
+            >
+                Clear Filter
+            </Button>
+
         </Box>
     );
 }
