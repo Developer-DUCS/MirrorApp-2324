@@ -60,7 +60,7 @@ export default function about() {
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
 								<Image
-								    src="../public/images/CR.jpg"
+								    src="/_next/image/CR.jpg"
 									alt="Description of the image"
 									width={210}
 									height={250} // You can adjust the height as needed
@@ -101,7 +101,7 @@ export default function about() {
 								<CardMedia
 									component="img"
 									height="250"
-									image="/images/PP.jpg"
+									image="/_next/image/images/PP.jpg"
 									alt="Paella dish"
 								/>
 								<CardContent>
