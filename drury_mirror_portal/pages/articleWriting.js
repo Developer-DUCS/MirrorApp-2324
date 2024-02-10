@@ -885,14 +885,21 @@ export default function articleWriting() {
 				spacing={2}
 				justifyContent="center"
 				alignItems="center"
+				sx={{
+					height: "100vh"
+				}}
 			>
-				<Typography variant="h2" color="black">
+				<Typography variant="h1" color="black" sx={{fontFamily:"Garamond-Regular", fontWeight: "bold", fontSize: "6rem"}}>
 					Please sign in
 				</Typography>
 				<Button
 					variant="contained"
 					color="error"
 					onClick={redirectToSignIn}
+					sx={{
+						height: "10vh",
+						width: "20vh"
+					}}
 				>
 					Sign In
 				</Button>

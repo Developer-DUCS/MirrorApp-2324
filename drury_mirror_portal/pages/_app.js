@@ -10,9 +10,13 @@ import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Footer from "./Footer";
+import { useState } from "react";
 
 export default function MyApp({ Component, pageProps }) {
 	const router = useRouter();
+
+	let basePathValue = null
+	const mode = process.env.MY_ENVIROMENT;
 
 	let curTheme = theme;
 
@@ -40,6 +44,10 @@ export default function MyApp({ Component, pageProps }) {
 		curTheme = editorTheme;
 	}
 
+	if (mode == "production") {
+		basePathValue = "/mirror/api/auth";
+	}
+
 	return (
 		<React.Fragment>
 			<Head>
@@ -53,7 +61,7 @@ export default function MyApp({ Component, pageProps }) {
 				<CssBaseline />
 				<SessionProvider
 					session={pageProps.session}
-					// basePath={"/mirror/api/auth"}
+					basePath={basePathValue}
 				>
 					<NextUIProvider>
 						<Component {...pageProps} />

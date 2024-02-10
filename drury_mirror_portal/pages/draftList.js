@@ -258,8 +258,8 @@ export function draftList() {
 													top: '50%',
 													left: '50%',
 													transform: 'translate(-50%, -50%)',
-													height: 100,
-													width: 250,
+													height: "50vh",
+													width: "80vh",
 													bgcolor: 'background.paper',
 													boxShadow: 24,
 													borderRadius: 5,
@@ -267,23 +267,43 @@ export function draftList() {
 													p:1,
 												}}
 											>
-												<Typography>Are you sure you want to delete this draft?</Typography>
-												<Button
-												sx={{
-													mr: 1
-												}}
-													onClick={() => {
-														removeArticle(article);
-														setArticleRemoved(true);
+												<Box
+													sx={{
+														position: "absolute",
+														top: "30%",
+														left: "6%"
 													}}
-													variant="contained"
-													color="error"
-												>Yes</Button>
-												<Button
-													onClick={closeDeleteModal}
-													variant="outlined"
-													color="error"
-												>No</Button>
+												>
+													<Typography
+														sx={{
+															fontSize: 24
+														}}
+													>Are you sure you want to delete this draft?</Typography>
+													<Button
+													sx={{
+														mr: 1,
+														position: "absolute",
+														top: "200%",
+														left: "25%"
+													}}
+														onClick={() => {
+															removeArticle(article);
+															setArticleRemoved(true);
+														}}
+														variant="contained"
+														color="error"
+													>Yes</Button>
+													<Button
+														onClick={closeDeleteModal}
+														variant="outlined"
+														color="error"
+														sx={{	
+															position: "absolute",
+															top: "200%",
+															left: "55%"
+														}}
+													>No</Button>
+												</Box>
 											</Box>
 										</Modal>
 									</Card>
@@ -315,14 +335,21 @@ export function draftList() {
 				spacing={2}
 				justifyContent="center"
 				alignItems="center"
+				sx={{
+					height: "100vh"
+				}}
 			>
-				<Typography variant="h2" color="black">
+				<Typography variant="h1" color="black">
 					Please sign in
 				</Typography>
 				<Button
 					variant="contained"
 					color="error"
 					onClick={redirectToSignIn}
+					sx={{
+						height: "10vh",
+						width: "20vh"
+					}}
 				>
 					Sign In
 				</Button>

@@ -9,8 +9,16 @@ export default function LoginPage() {
 	const router = useRouter();
 	const [isError, setIsError] = useState(null);
 
+	
+	let basePathValue = null
+	const mode = process.env.MY_ENVIROMENT;
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+
+		if (mode == "production") {
+			basePathValue = "/mirror";
+		}
 
 		const res = await signIn("credentials", {
 			redirect: false,
@@ -18,7 +26,7 @@ export default function LoginPage() {
 			password: event.target.password.value,
 			callbackUrl: `/${process.env.NEXT_PUBLIC_API_PATH}/Dashboard`,
 
-			//basePath: "/mirror",
+			basePath: basePathValue,
 		});
 
 		try {
