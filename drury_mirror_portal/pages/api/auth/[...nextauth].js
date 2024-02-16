@@ -4,6 +4,13 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+let basePathValue = null
+const mode = process.env.MY_ENVIROMENT;
+
+if (mode == "production") {
+	basePathValue = "/mirror";
+}
+
 export default NextAuth({
 	providers: [
 		CredentialsProvider({
@@ -52,7 +59,7 @@ export default NextAuth({
 					(session.user.lname = token.lname),
 					(session.user.role = token.role);
 			}
-			// session.basePath = "/mirror";
+			session.basePath = basePathValue;
 			return session;
 		},
 		jwt: async ({ user, token }) => {
