@@ -218,74 +218,78 @@ export function CommentViewer() {
 
 	// loads the comments
 	useEffect(() => {
-		if (getComments != null) {
+		console.log(getComments != undefined);
+		if (getComments != undefined && getComments != null) {
+
 			let comments = getComments;
 
 			// Set the value for the overall comments
 			setOverallComments(comments.overallComments);
 
-			comments = comments.comments.split(",");
+			if (comments.comments != ""){
 
-			let commentsArray = [];
-			let inputArray = [];
-			for (let i = 0; i < comments.length; i++) {
-				if (i % 2 == 0) {
-					commentsArray.push(comments[i]);
-				} else {
-					inputArray.push(comments[i]);
+				comments = comments.comments.split(",");
+
+				let commentsArray = [];
+				let inputArray = [];
+				for (let i = 0; i < comments.length; i++) {
+					if (i % 2 == 0) {
+						commentsArray.push(comments[i]);
+					} else {
+						inputArray.push(comments[i]);
+					}
+				}
+				for (let y = 0; y < commentsArray.length; y++) {
+					let tempid = inputArray[y];
+					let idnum = tempid.split("t");
+
+					const styledCard = () => {
+						return (
+							<Card
+								id={`card${idnum[1]}`}
+								onMouseEnter={mouseover}
+								onMouseLeave={mouseleave}
+								style={{
+									margin: 15,
+									marginTop: 30,
+									padding: 5,
+									paddingLeft: 15,
+									boxShadow: 4,
+									backgroundColor: "#82858f",
+								}}
+							>
+								<Typography
+									variant="body1"
+									color="white"
+									sx={{ m: 1 }}
+								>
+									{commentsArray[y]}
+								</Typography>{" "}
+								<Button
+									id={`button${idnum[1]}`}
+									onClick={(event) => {
+										resolve(event);
+									}}
+									variant="contained"
+									color="secondary"
+									sx={{ margin: 2, marginLeft: 0 }}
+								>
+									Resolve
+								</Button>
+							</Card>
+						);
+					};
+
+					// A card containing the comments and their
+					// resolve buttons
+					var card = React.createElement(styledCard);
+
+					// ----------------------RENDER OBJECTS-------------------------- //
+					allComments.push(card);
+
+					const rootID = document.getElementById("currentComments");
 				}
 			}
-			for (let y = 0; y < commentsArray.length; y++) {
-				let tempid = inputArray[y];
-				let idnum = tempid.split("t");
-
-				const styledCard = () => {
-					return (
-						<Card
-							id={`card${idnum[1]}`}
-							onMouseEnter={mouseover}
-							onMouseLeave={mouseleave}
-							style={{
-								margin: 15,
-								marginTop: 30,
-								padding: 5,
-								paddingLeft: 15,
-								boxShadow: 4,
-								backgroundColor: "#82858f",
-							}}
-						>
-							<Typography
-								variant="body1"
-								color="white"
-								sx={{ m: 1 }}
-							>
-								{commentsArray[y]}
-							</Typography>{" "}
-							<Button
-								id={`button${idnum[1]}`}
-								onClick={(event) => {
-									resolve(event);
-								}}
-								variant="contained"
-								color="secondary"
-								sx={{ margin: 2, marginLeft: 0 }}
-							>
-								Resolve
-							</Button>
-						</Card>
-					);
-				};
-
-				// A card containing the comments and their
-				// resolve buttons
-				var card = React.createElement(styledCard);
-
-				// ----------------------RENDER OBJECTS-------------------------- //
-				allComments.push(card);
-
-				const rootID = document.getElementById("currentComments");
-			}
-		} else {
 		}
 	}, [getComments]);
 
