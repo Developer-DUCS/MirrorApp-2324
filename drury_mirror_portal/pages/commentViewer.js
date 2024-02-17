@@ -218,7 +218,6 @@ export function CommentViewer() {
 
 	// loads the comments
 	useEffect(() => {
-		console.log(getComments != undefined);
 		if (getComments != undefined && getComments != null) {
 
 			let comments = getComments;
