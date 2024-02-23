@@ -5,8 +5,18 @@
 //
 //
 
+import { Button, Alert } from "@mui/material";
 
-export default function ImageUpload () {
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+
+import uploadStyles from "../styles/uploadImage.module.css";
+
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
+
+export default function ImageUpload ({ articleImage }) {
 
     const [getImageData, setImageData] = useState(null);
 	const [getImageType, setImageType] = useState(null);
@@ -19,6 +29,57 @@ export default function ImageUpload () {
 	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
 	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
 	const [deleteImageSuccess, setDeleteImageSuccess] = useState(false);
+
+    const router = useRouter();
+
+    useEffect(() => {
+		// Make sure the router is ready before
+		// getting the query parameters
+		if (router.isReady) {
+			// Get the articles for the current user from the database
+			const getArticleRoute = async () => {
+
+                // get image from server to be displayed if a thumbnail image exists for the article
+                if (articleImage) {
+
+                    let endpoint = "api/getImage";
+
+                    const imageData = {
+                        filePath: articleImage,
+                    };
+
+                    let JSONdata = JSON.stringify(imageData);
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSONdata
+                    };
+
+                    try {
+                        let response = await fetch(endpoint, options);
+
+                        if (response.ok){
+                            const blob = await response.blob();
+                            setPreviewImg(URL.createObjectURL(blob));
+                            // set other UI conditions for uploaded image
+                            setImg(URL.createObjectURL(blob));
+                            setImageData(articleImage);
+                        }
+                        else {
+                            // TO DO: error alert for image not found or image failed to load
+                            console.error('Error fetching image');
+                        }
+                    } catch (error) {
+                        console.error('Failed to fetch image or set image data:', error);
+                    }
+                }
+			}
+            getArticleRoute();
+		};
+		// depend on router.isReady
+	}, [router.isReady]);
 
     const handleUpload = async (image) => {
 

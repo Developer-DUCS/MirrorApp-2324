@@ -22,6 +22,7 @@ import { useSession, getSession } from "next-auth/react";
 
 // Components
 import Header from "./header";
+import ImageUpload from "./ImageUpload";
 
 // we import react-quill dynamically, to avoid including it in server-side
 // and we will render a loading state while the dynamic component is being loaded.
@@ -86,6 +87,8 @@ export default function articleWriting() {
 
 	const [img, setImg] = useState(null);
 	const [previewImg, setPreviewImg] = useState(null);
+
+	const [articleImage, setArticleImage] = useState(null);
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
@@ -263,6 +266,7 @@ export default function articleWriting() {
 
 						let articleBody = article.body;
 						let articleImage = article.thumbnailImage;
+						setArticleImage(articleImage);
 						let articleHeadline = article.headline;
 
 						// set the previously saved categories 
@@ -284,6 +288,7 @@ export default function articleWriting() {
 							}
 						}
 
+						/*
 						// get image from server to be displayed if a thumbnail image exists for the article
 						if (article && articleImage) {
 
@@ -320,6 +325,7 @@ export default function articleWriting() {
 								console.error('Failed to fetch image or set image data:', error);
 							}
 						}
+						*/
 					}
 				} else {
 				}
@@ -331,6 +337,7 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
+	/*
 	const handleUpload = async (image) => {
 
 		if (!img) return
@@ -453,6 +460,7 @@ export default function articleWriting() {
 			}
 		}
 	}
+	*/
 
 	function handleDialogClose() {
 		setSaveWithoutImagePopup(false);
@@ -493,7 +501,13 @@ export default function articleWriting() {
 						<Header />
 					</div>
 
-					{noSelectedImgError ?
+					<div>
+						<ImageUpload 
+							articleImage = { articleImage }
+						/>
+					</div>
+					
+					{/* {noSelectedImgError ?
 						<div>
 							<Alert severity="error">Oops. You did not select an image.</Alert>
 							<br></br>
@@ -573,9 +587,13 @@ export default function articleWriting() {
 					:
 					null
 					}
+					*/}
 					
 					<form onSubmit={handleSubmit} id="articleForm">
-						<div className={uploadStyles.imageContainer}>
+
+						
+
+						{/* <div className={uploadStyles.imageContainer}>
 							<label htmlFor="uploadImage">
 								<div className={uploadStyles.uploadBox}>
 									<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
@@ -629,7 +647,7 @@ export default function articleWriting() {
 						</div>
 						:
 						null
-						}
+						}  */}
 						<Box
 							sx={{
 								display: "flex",
