@@ -89,6 +89,7 @@ export default function articleWriting() {
 	const [previewImg, setPreviewImg] = useState(null);
 
 	const [articleImage, setArticleImage] = useState(null);
+	const [imagePath, setImagePath] = useState(null);
 
 	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
 	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
@@ -145,6 +146,11 @@ export default function articleWriting() {
 		}
 	}, [getArticle]);
 
+	const data_from_upload = (data) => {
+		console.log(data);
+		setImagePath(data);
+	}
+
 	const handleSubmit = async (event) => {
 		
 		// Stop the form from submitting and refreshing the page.
@@ -162,7 +168,7 @@ export default function articleWriting() {
 				check: document.getElementById("checkbox").checked,
 				aid: router.query.id,
 				imageType: getImageType,
-				imageData: getImageData,
+				imageData: imagePath,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
 
@@ -504,6 +510,7 @@ export default function articleWriting() {
 					<div>
 						<ImageUpload 
 							articleImage = { articleImage }
+							setter = {data_from_upload}
 						/>
 					</div>
 					

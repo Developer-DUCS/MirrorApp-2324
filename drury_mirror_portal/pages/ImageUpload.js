@@ -14,9 +14,10 @@ import uploadStyles from "../styles/uploadImage.module.css";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSession, getSession } from "next-auth/react";
 
 
-export default function ImageUpload ({ articleImage }) {
+export default function ImageUpload ({ setter, articleImage }) {
 
     const [getImageData, setImageData] = useState(null);
 	const [getImageType, setImageType] = useState(null);
@@ -124,6 +125,7 @@ export default function ImageUpload ({ articleImage }) {
 				const result = await res.json();
 				setImageData(result.filePath);
 				setUploadSuccessAlert(true);
+                setter(result.filePath);
 				return;
 			}
 			else {
