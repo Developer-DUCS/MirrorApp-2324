@@ -17,7 +17,9 @@ import { useRouter } from "next/router";
 import { useSession, getSession } from "next-auth/react";
 
 
-export default function ImageUpload ({ setter, articleImage }) {
+export default function ImageUpload (props) {
+
+    //console.log(props);
 
     const [getImageData, setImageData] = useState(null);
 	const [getImageType, setImageType] = useState(null);
@@ -36,17 +38,17 @@ export default function ImageUpload ({ setter, articleImage }) {
     useEffect(() => {
 		// Make sure the router is ready before
 		// getting the query parameters
-		if (router.isReady) {
+		if (router.isReady && props.articleImage) {
 			// Get the articles for the current user from the database
 			const getArticleRoute = async () => {
 
                 // get image from server to be displayed if a thumbnail image exists for the article
-                if (articleImage) {
+                if (props.articleImage) {
 
                     let endpoint = "api/getImage";
 
                     const imageData = {
-                        filePath: articleImage,
+                        filePath: props.articleImage,
                     };
 
                     let JSONdata = JSON.stringify(imageData);
@@ -80,7 +82,7 @@ export default function ImageUpload ({ setter, articleImage }) {
             getArticleRoute();
 		};
 		// depend on router.isReady
-	}, [router.isReady]);
+	}, [router.isReady, props.articleImage]);
 
     const handleUpload = async (image) => {
 
@@ -125,7 +127,7 @@ export default function ImageUpload ({ setter, articleImage }) {
 				const result = await res.json();
 				setImageData(result.filePath);
 				setUploadSuccessAlert(true);
-                setter(result.filePath);
+                props.setter({imageData: result.filePath, imageType: getImageType});
 				return;
 			}
 			else {
@@ -166,6 +168,7 @@ export default function ImageUpload ({ setter, articleImage }) {
 		if (response.ok) {
 			const msg = await response.json()
 			setDeleteImageSuccess(true);
+            props.setter({ imageData: null, imageType: null})
 		}
 		else if (result.status == 500) {
 			console.log("image deletion failed");
@@ -189,6 +192,9 @@ export default function ImageUpload ({ setter, articleImage }) {
 		setInvalidFileTypeError(false);
 
 		const file = e.target.files[0];
+
+        console.log(file);
+
 		if (file){
 			const fileName = file.name;
 			const fileExtension = fileName.split('.').pop().toLowerCase();
@@ -326,7 +332,7 @@ export default function ImageUpload ({ setter, articleImage }) {
                 variant="outlined"
                 onClick={() => {
                     // delete image file if image has been uploaded
-                    handleRemoveImage(getImageData);
+                    handleRemoveImage(props.articleImage);
 
                     // remove all image data from frontend
                     document.getElementById('uploadImage').value = ''

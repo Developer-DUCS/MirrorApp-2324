@@ -148,8 +148,13 @@ export default function articleWriting() {
 
 	const data_from_upload = (data) => {
 		console.log(data);
-		setImagePath(data);
+		return {imageData: data.imageData, imageType: data.imageType};
 	}
+
+	useEffect(() => {
+		setImageData(data_from_upload.imageData);
+		setImageType(data_from_upload.imageType);
+	}, [data_from_upload]);
 
 	const handleSubmit = async (event) => {
 		
@@ -168,9 +173,11 @@ export default function articleWriting() {
 				check: document.getElementById("checkbox").checked,
 				aid: router.query.id,
 				imageType: getImageType,
-				imageData: imagePath,
+				imageData: getImageData,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
+
+			console.log(data);
 
 			// Send the data to the server in JSON format.
 			const JSONdata = JSON.stringify(data);
@@ -197,6 +204,7 @@ export default function articleWriting() {
 			// If server returns the name submitted, that means the form works.
 			const result = await response.json();
 		} else {
+
 			const data = {
 				email: session.user.email,
 				author: author,
@@ -207,6 +215,8 @@ export default function articleWriting() {
 				imageType: getImageType,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
+
+			console.log(data);
 
 			// Send the data to the server in JSON format.
 			const JSONdata = JSON.stringify(data);
@@ -272,7 +282,6 @@ export default function articleWriting() {
 
 						let articleBody = article.body;
 						let articleImage = article.thumbnailImage;
-						setArticleImage(articleImage);
 						let articleHeadline = article.headline;
 
 						// set the previously saved categories 
@@ -291,6 +300,9 @@ export default function articleWriting() {
 							}
 							if (articleHeadline) {
 								setHeadline(articleHeadline);
+							}
+							if (articleImage) {
+								setImageData(articleImage);
 							}
 						}
 
@@ -342,6 +354,10 @@ export default function articleWriting() {
 		}
 		// depend on router.isReady
 	}, [router.isReady]);
+
+	useEffect(() => {
+		setArticleImage(getImageData);
+	}, [getImageData])
 
 	/*
 	const handleUpload = async (image) => {
