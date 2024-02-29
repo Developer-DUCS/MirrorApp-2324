@@ -85,17 +85,8 @@ export default function articleWriting() {
 	const [getImageType, setImageType] = useState(null);
 	const { status, data } = useSession();
 
-	const [img, setImg] = useState(null);
-	const [previewImg, setPreviewImg] = useState(null);
-
 	const [articleImage, setArticleImage] = useState(null);
-	const [imagePath, setImagePath] = useState(null);
 
-	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
-	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
-	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
-	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
-	const [deleteImageSuccess, setDeleteImageSuccess] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
@@ -149,14 +140,7 @@ export default function articleWriting() {
 	const data_from_upload = (data) => {
 		setImageData(data.imageData);
 		setImageType(data.imageType);
-		//return {imageData: data.imageData, imageType: data.imageType};
 	}
-
-	/* useEffect(() => {
-		console.log("data from upload received")
-		setImageData(data_from_upload.imageData);
-		setImageType(data_from_upload.imageType);
-	}, [data_from_upload]); */
 
 	const handleSubmit = async (event) => {
 		
@@ -591,9 +575,6 @@ export default function articleWriting() {
 										width: 270,
 										overflow: "scroll",
 								}}>
-									<Box>
-										<img src={previewImg} />
-									</Box>
 									<Box>
 										<Typography 
 											id="modal-modal-title"

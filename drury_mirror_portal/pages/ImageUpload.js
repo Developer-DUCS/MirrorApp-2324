@@ -191,8 +191,6 @@ export default function ImageUpload (props) {
 
 		const file = e.target.files[0];
 
-        console.log(file);
-
 		if (file){
 			const fileName = file.name;
 			const fileExtension = fileName.split('.').pop().toLowerCase();
