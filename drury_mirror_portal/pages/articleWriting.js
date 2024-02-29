@@ -150,10 +150,6 @@ export default function articleWriting() {
 		let session = await getSession();
 		let author = session.user.fname + " " + session.user.lname;
 
-		let image = data_from_upload.imageData;
-
-		console.log(data_from_upload);
-
 		if (router.query.id) {
 			const data = {
 				email: session.user.email,
@@ -166,8 +162,6 @@ export default function articleWriting() {
 				imageData: getImageData,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
-
-			console.log(data);
 
 			// Send the data to the server in JSON format.
 			const JSONdata = JSON.stringify(data);
@@ -205,8 +199,6 @@ export default function articleWriting() {
 				imageType: getImageType,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
-
-			console.log(data);
 
 			// Send the data to the server in JSON format.
 			const JSONdata = JSON.stringify(data);
