@@ -19,8 +19,6 @@ import { useSession, getSession } from "next-auth/react";
 
 export default function ImageUpload (props) {
 
-    //console.log(props);
-
     const [getImageData, setImageData] = useState(null);
 	const [getImageType, setImageType] = useState(null);
 
@@ -307,7 +305,7 @@ export default function ImageUpload (props) {
                 </div>
             </label>
         </div>
-        {getImageData ?
+        {props.articleImage || getImageData ?
         null
         :
         <div className={uploadStyles.uploadButton}>
