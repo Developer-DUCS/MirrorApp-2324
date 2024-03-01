@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useSession, signOut, getSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
-import { Button, Typography, Card, Box, Stack } from "@mui/material";
+import { Button, Typography, Card, Box, Stack, Modal } from "@mui/material";
 
 import Header from "./header";
 
@@ -20,6 +20,8 @@ export function draftList() {
 	const router = useRouter();
 	const { status, data } = useSession();
 	const [getArticles, setArticles] = useState([]);
+	const [getDeleteModal, setDeleteModal] = useState(false);
+	const [articleRemoved, setArticleRemoved] = useState(false);
 
 	const parse = require("html-react-parser");
 
@@ -72,9 +74,10 @@ export function draftList() {
 				}
 			}
 		};
+		setArticleRemoved(false);
 
 		getArticlesRoute();
-	}, []);
+	}, [articleRemoved]);
 
 	// Populate the articles array to display the articles on the page
 	let articles = [];
@@ -90,6 +93,48 @@ export function draftList() {
 		if (article) {
 			articles.push(article);
 		}
+	}
+
+	// Delete article
+	async function removeArticle(article) {
+		//Server Delete Call
+		let endpoint = "api/removeDraft";
+
+		let data = {
+			articleId: article.aid
+		}
+
+		let JSONdata = JSON.stringify(data);
+
+		let options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSONdata,
+		}
+
+		let response = await fetch(endpoint, options);
+
+		if (response.status === 201){
+			console.log("draft deleted");
+		}
+		else if (response.status === 500){
+			console.log(`Error removing draft: ${response.error}`);
+		}
+		else {
+			console.log(response.error)
+		}
+	}
+
+	// Check if you really want to delete article
+	function openDeleteModal(){
+		setDeleteModal(true)
+	}
+
+	// Closes delete modal
+	function closeDeleteModal(){
+		setDeleteModal(false)
 	}
 
 	filterArticles();
@@ -182,6 +227,85 @@ export function draftList() {
 										>
 											Keep Writing
 										</Button>
+										<Button
+											id={article.aid}
+											variant="contained"
+											onClick={() => {
+												openDeleteModal();
+												//deleteArticle(article);
+												//setArticleRemoved(true);
+											}}
+											color="primaryButton"
+											sx={{
+												marginBottom: 1,
+												color:"white",
+											}}
+										>
+											Delete
+										</Button>
+										<Modal
+											sx={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'center',
+											}}
+											open={getDeleteModal}
+											onClose={closeDeleteModal}
+										>
+											<Box
+												sx={{
+													position: 'absolute',
+													top: '50%',
+													left: '50%',
+													transform: 'translate(-50%, -50%)',
+													height: "50vh",
+													width: "80vh",
+													bgcolor: 'background.paper',
+													boxShadow: 24,
+													borderRadius: 5,
+													backgroundColor: 'White',
+													p:1,
+												}}
+											>
+												<Box
+													sx={{
+														position: "absolute",
+														top: "30%",
+														left: "6%"
+													}}
+												>
+													<Typography
+														sx={{
+															fontSize: 24
+														}}
+													>Are you sure you want to delete this draft?</Typography>
+													<Button
+													sx={{
+														mr: 1,
+														position: "absolute",
+														top: "200%",
+														left: "25%"
+													}}
+														onClick={() => {
+															removeArticle(article);
+															setArticleRemoved(true);
+														}}
+														variant="contained"
+														color="error"
+													>Yes</Button>
+													<Button
+														onClick={closeDeleteModal}
+														variant="outlined"
+														color="error"
+														sx={{	
+															position: "absolute",
+															top: "200%",
+															left: "55%"
+														}}
+													>No</Button>
+												</Box>
+											</Box>
+										</Modal>
 									</Card>
 								))}
 							</ul>
@@ -211,14 +335,21 @@ export function draftList() {
 				spacing={2}
 				justifyContent="center"
 				alignItems="center"
+				sx={{
+					height: "100vh"
+				}}
 			>
-				<Typography variant="h2" color="black">
+				<Typography variant="h1" color="black">
 					Please sign in
 				</Typography>
 				<Button
 					variant="contained"
 					color="error"
 					onClick={redirectToSignIn}
+					sx={{
+						height: "10vh",
+						width: "20vh"
+					}}
 				>
 					Sign In
 				</Button>

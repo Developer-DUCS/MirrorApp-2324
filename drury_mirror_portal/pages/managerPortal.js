@@ -104,7 +104,7 @@ export default function managerPortal() {
 			const JSONdata = JSON.stringify(data);
 			//console.log(JSONdata)
 
-			const endpoint = `api/createUser`;
+			const endpoint = `/api/createUser`;
 
 			// Form the request for sending data to the server.
 			const options = {
@@ -145,7 +145,7 @@ export default function managerPortal() {
 
 		const JSONdata = JSON.stringify(data);
 
-		const endpoint = `${process.env.API_PATH}/api/deleteUser`;
+		const endpoint = `/api/deleteUser`;
 
 		// Form the request for sending data to the server.
 		const options = {

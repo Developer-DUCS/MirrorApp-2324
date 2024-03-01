@@ -1,3 +1,5 @@
+// TO DO: implement approve thumbnail image and approve category selection when edits are saved, this will update articles table
+
 import executeQuery from "../../backend/mysqldb";
 
 // removed async

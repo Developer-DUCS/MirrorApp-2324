@@ -8,6 +8,17 @@ import {
 } from "@mui/material";
 
 import SplashHeader from "./AboutUsSplashHeader";
+import Image from "next/image";
+import CR from "../public/images/CR.jpg"
+import PP from "../public/images/PP.jpg"
+import CC from "../public/images/CC.jpg"
+import AR from "../public/images/AR.jpg"
+import DB from "../public/images/DB.jpg"
+import HS from "../public/images/HS.jpg"
+import SGM from "../public/images/SGM.jpg"
+import SR from "../public/images/SR.jpg"
+import TN from "../public/images/TN.jpg"
+import TO from "../public/images/TO.jpg"
 
 export default function about() {
 	return (
@@ -58,12 +69,11 @@ export default function about() {
 					>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/CR.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={CR.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Charlie Roder
@@ -97,12 +107,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/PP.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={PP.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Paul Pollard
@@ -136,12 +145,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/CC.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={CC.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Cole Coombs
@@ -175,12 +183,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/AR.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={AR.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Andrew Roberts
@@ -214,12 +221,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/SGM.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={SGM.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 									Sylvain Garin-Michaud
@@ -300,12 +306,11 @@ export default function about() {
 					>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/TN.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={TN.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Thomas Nield
@@ -339,12 +344,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/TO.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={TO.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Thomas O'Brien
@@ -379,12 +383,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/SR.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={SR.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Samuel Rudqvist
@@ -418,12 +421,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/HS.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={HS.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Haley Saylor
@@ -457,12 +459,11 @@ export default function about() {
 						</Grid>
 						<Grid item>
 							<Card sx={{ maxWidth: 210 }}>
-								<CardMedia
-									component="img"
-									height="250"
-									image="/images/DB.jpg"
-									alt="Paella dish"
-								/>
+								<img
+                                    src={DB.src}
+                                    height={250}
+                                    alt="Paella dish"
+                                />
 								<CardContent>
 									<Typography variant="cardLabel">
 										Daniel Brinck

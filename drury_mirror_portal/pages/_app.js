@@ -10,6 +10,7 @@ import "../styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Footer from "./Footer";
+import { useState } from "react";
 
 export default function MyApp({ Component, pageProps }) {
 	const router = useRouter();

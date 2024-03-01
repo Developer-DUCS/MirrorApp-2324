@@ -30,7 +30,7 @@
     height: 100%;
  }
 
- .clearButton{
+ .removeImageButton{
     display: flex;
     justify-content: center;
     align-items: center;

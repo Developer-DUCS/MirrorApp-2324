@@ -139,6 +139,7 @@ export function CommentViewer() {
 							email: session.user.email,
 							id: id,
 						};
+
 						let JSONdata = JSON.stringify(data);
 						let options = {
 							method: "POST",
@@ -204,7 +205,7 @@ export function CommentViewer() {
 	// loads the article into the editor
 	useEffect(() => {
 		if (getArticle != []) {
-			let myArticle = getArticle;
+			let myArticle = getArticle.body;
 
 			// Make sure the editor is loaded before putting the article in it
 			const editor = document.querySelector(".ql-editor");
@@ -217,74 +218,77 @@ export function CommentViewer() {
 
 	// loads the comments
 	useEffect(() => {
-		if (getComments != null) {
+		if (getComments != undefined && getComments != null) {
+
 			let comments = getComments;
 
 			// Set the value for the overall comments
 			setOverallComments(comments.overallComments);
 
-			comments = comments.comments.split(",");
+			if (comments.comments != ""){
 
-			let commentsArray = [];
-			let inputArray = [];
-			for (let i = 0; i < comments.length; i++) {
-				if (i % 2 == 0) {
-					commentsArray.push(comments[i]);
-				} else {
-					inputArray.push(comments[i]);
+				comments = comments.comments.split(",");
+
+				let commentsArray = [];
+				let inputArray = [];
+				for (let i = 0; i < comments.length; i++) {
+					if (i % 2 == 0) {
+						commentsArray.push(comments[i]);
+					} else {
+						inputArray.push(comments[i]);
+					}
+				}
+				for (let y = 0; y < commentsArray.length; y++) {
+					let tempid = inputArray[y];
+					let idnum = tempid.split("t");
+
+					const styledCard = () => {
+						return (
+							<Card
+								id={`card${idnum[1]}`}
+								onMouseEnter={mouseover}
+								onMouseLeave={mouseleave}
+								style={{
+									margin: 15,
+									marginTop: 30,
+									padding: 5,
+									paddingLeft: 15,
+									boxShadow: 4,
+									backgroundColor: "#82858f",
+								}}
+							>
+								<Typography
+									variant="body1"
+									color="white"
+									sx={{ m: 1 }}
+								>
+									{commentsArray[y]}
+								</Typography>{" "}
+								<Button
+									id={`button${idnum[1]}`}
+									onClick={(event) => {
+										resolve(event);
+									}}
+									variant="contained"
+									color="secondary"
+									sx={{ margin: 2, marginLeft: 0 }}
+								>
+									Resolve
+								</Button>
+							</Card>
+						);
+					};
+
+					// A card containing the comments and their
+					// resolve buttons
+					var card = React.createElement(styledCard);
+
+					// ----------------------RENDER OBJECTS-------------------------- //
+					allComments.push(card);
+
+					const rootID = document.getElementById("currentComments");
 				}
 			}
-			for (let y = 0; y < commentsArray.length; y++) {
-				let tempid = inputArray[y];
-				let idnum = tempid.split("t");
-
-				const styledCard = () => {
-					return (
-						<Card
-							id={`card${idnum[1]}`}
-							onMouseEnter={mouseover}
-							onMouseLeave={mouseleave}
-							style={{
-								margin: 15,
-								marginTop: 30,
-								padding: 5,
-								paddingLeft: 15,
-								boxShadow: 4,
-								backgroundColor: "#82858f",
-							}}
-						>
-							<Typography
-								variant="body1"
-								color="white"
-								sx={{ m: 1 }}
-							>
-								{commentsArray[y]}
-							</Typography>{" "}
-							<Button
-								id={`button${idnum[1]}`}
-								onClick={(event) => {
-									resolve(event);
-								}}
-								variant="contained"
-								color="secondary"
-								sx={{ margin: 2, marginLeft: 0 }}
-							>
-								Resolve
-							</Button>
-						</Card>
-					);
-				};
-
-				// A card containing the comments and their
-				// resolve buttons
-				var card = React.createElement(styledCard);
-
-				// ----------------------RENDER OBJECTS-------------------------- //
-				allComments.push(card);
-
-				const rootID = document.getElementById("currentComments");
-			}
-		} else {
 		}
 	}, [getComments]);
 
@@ -349,27 +353,63 @@ export function CommentViewer() {
 			"🚀 ~ file: commentEditor.js:360 ~ resolve ~ buttonId",
 			buttonId
 		);
-		//Splits the number from the id of the button
-		let num = buttonId.split("n");
 
-		//Uses the number from the button id to get the id of the div its in
-		let tempDiv = "card";
-		let tempDivId = tempDiv.concat(num[1].toString());
+		console.log(event.target);
+		
+		// Remove the comment being resolved from the comments table
+		const id = parseInt(router.query.id);
 
-		//Uses the number from the button id to get the id of the span with the related comment
-		let tempSpan = "span";
-		let tempSpanId = tempSpan.concat(num[1].toString());
-
-		//Removes the span tags around the comment
-		if (document.getElementById(tempSpanId)) {
-			document.getElementById(tempSpanId).removeAttribute("style");
+		const data = {
+			articleId:  id,
+			buttonId: buttonId
 		}
 
-		//Removes the div that the button that is clicked is in
-		document.getElementById(tempDivId).remove();
+		console.log(data);
 
-		//Prevents the page from completely reloading
-		event.preventDefault();
+		const JSONdata = JSON.stringify(data);
+
+		const endpoint = "api/resolveComment";
+
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSONdata,
+		};
+
+		const response = await fetch(endpoint, options);
+
+		const result = await response.json();
+
+		if (response.ok) {
+			// remove the comment from the page
+
+			//Splits the number from the id of the button
+			let num = buttonId.split("n");
+
+			//Uses the number from the button id to get the id of the div its in
+			let tempDiv = "card";
+			let tempDivId = tempDiv.concat(num[1].toString());
+
+			//Uses the number from the button id to get the id of the span with the related comment
+			let tempSpan = "span";
+			let tempSpanId = tempSpan.concat(num[1].toString());
+
+			//Removes the span tags around the comment
+			if (document.getElementById(tempSpanId)) {
+				document.getElementById(tempSpanId).removeAttribute("style");
+			}
+
+			//Removes the div that the button that is clicked is in
+			document.getElementById(tempDivId).remove();
+
+			//Prevents the page from completely reloading
+			event.preventDefault();
+		}
+		else {
+			console.log(result);
+		}
 	};
 
 	const mouseover = async (event) => {
@@ -549,14 +589,21 @@ export function CommentViewer() {
 				spacing={2}
 				justifyContent="center"
 				alignItems="center"
+				sx={{
+					height: "100vh"
+				}}
 			>
-				<Typography variant="h2" color="black">
+				<Typography variant="h1" color="black">
 					Please sign in
 				</Typography>
 				<Button
 					variant="contained"
 					color="error"
 					onClick={redirectToSignIn}
+					sx={{
+						height: "10vh",
+						width: "20vh"
+					}}
 				>
 					Sign In
 				</Button>

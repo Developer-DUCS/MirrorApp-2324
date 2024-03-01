@@ -22,6 +22,7 @@ import { useSession, getSession } from "next-auth/react";
 
 // Components
 import Header from "./header";
+import ImageUpload from "./ImageUpload";
 
 // we import react-quill dynamically, to avoid including it in server-side
 // and we will render a loading state while the dynamic component is being loaded.
@@ -84,18 +85,26 @@ export default function articleWriting() {
 	const [getImageType, setImageType] = useState(null);
 	const { status, data } = useSession();
 
-	const [img, setImg] = useState(null);
-	const [previewImg, setPreviewImg] = useState(null);
+	const [articleImage, setArticleImage] = useState(null);
 
-	const [noSelectedImgError, setNoSelectedImgError] = useState(false);
-	const [invalidFileTypeError, setInvalidFileTypeError] = useState(false);
-	const [uploadSuccessAlert, setUploadSuccessAlert] = useState(false);
-	const [uploadFailedAlert, setUploadFailedAlert] = useState(false);
-	const [deleteImageSuccess, setDeleteImageSuccess] = useState(false);
 	const [saveWithoutImagePopup, setSaveWithoutImagePopup] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
+	//Categories states
+	const [frontPage, setFrontPage] = useState(0);
+  	const [sports, setSports] = useState(0);
+  	const [lifestyle, setLifestyle] = useState(0);
+  	const [campusNews, setCampusNews] = useState(0);
+  	const [news, setNews] = useState(0);
+	const [weekend, setWeekend] = useState(0);
+  	const [editorial, setEditorial] = useState(0);
+
+	//toggles state of categories when clicking the button
+	const toggleCategory = (categoryState, setCategoryState) => {
+	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
+	};
+
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -128,6 +137,11 @@ export default function articleWriting() {
 		}
 	}, [getArticle]);
 
+	const data_from_upload = (data) => {
+		setImageData(data.imageData);
+		setImageType(data.imageType);
+	}
+
 	const handleSubmit = async (event) => {
 		
 		// Stop the form from submitting and refreshing the page.
@@ -146,6 +160,7 @@ export default function articleWriting() {
 				aid: router.query.id,
 				imageType: getImageType,
 				imageData: getImageData,
+				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
 
 			// Send the data to the server in JSON format.
@@ -173,6 +188,7 @@ export default function articleWriting() {
 			// If server returns the name submitted, that means the form works.
 			const result = await response.json();
 		} else {
+
 			const data = {
 				email: session.user.email,
 				author: author,
@@ -181,6 +197,7 @@ export default function articleWriting() {
 				check: document.getElementById("checkbox").checked,
 				imageData: getImageData,
 				imageType: getImageType,
+				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
 			};
 
 			// Send the data to the server in JSON format.
@@ -231,6 +248,7 @@ export default function articleWriting() {
 							email: session.user.email,
 							id: id,
 						};
+
 						let JSONdata = JSON.stringify(data);
 						let options = {
 							method: "POST",
@@ -248,6 +266,15 @@ export default function articleWriting() {
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
 
+						// set the previously saved categories 
+						setFrontPage(article.categories["Front Page"]);
+						setSports(article.categories["Sports"]);
+						setLifestyle(article.categories["Lifestyle"]);
+						setCampusNews(article.categories["Campus News"]);
+						setNews(article.categories["News"]);
+						setWeekend(article.categories["Weekend"]);
+						setEditorial(article.categories["Editorial"]);
+
 						// Make sure the response was received before setting the article information
 						if (article) {
 							if (articleBody) {
@@ -256,42 +283,8 @@ export default function articleWriting() {
 							if (articleHeadline) {
 								setHeadline(articleHeadline);
 							}
-						}
-
-						// get image from server to be displayed if a thumbnail image exists for the article
-						if (article && articleImage) {
-
-							let endpoint = "api/getImage";
-
-							const imageData = {
-								filePath: articleImage,
-							};
-
-							let JSONdata = JSON.stringify(imageData);
-							let options = {
-								method: "POST",
-								headers: {
-									"Content-Type": "application/json",
-								},
-								body: JSONdata
-							};
-
-							try {
-								let response = await fetch(endpoint, options);
-
-								if (response.ok){
-									const blob = await response.blob();
-									setPreviewImg(URL.createObjectURL(blob));
-									// set other UI conditions for uploaded image
-									setImg(URL.createObjectURL(blob));
-									setImageData(articleImage);
-								}
-								else {
-									// TO DO: error alert for image not found or image failed to load
-									console.error('Error fetching image');
-								}
-							} catch (error) {
-								console.error('Failed to fetch image or set image data:', error);
+							if (articleImage) {
+								setImageData(articleImage);
 							}
 						}
 					}
@@ -305,128 +298,9 @@ export default function articleWriting() {
 		// depend on router.isReady
 	}, [router.isReady]);
 
-	const handleUpload = async (image) => {
-
-		if (!img) return
-
-		// first get user id by the session email value to know image destination
-		let session = await getSession();
-
-		// set email data
-		const emailData = {
-			email: session.user.email,
-		}
-		// specify route and data being sent to the route
-		const JSONdata = JSON.stringify(emailData);
-		const endpoint = 'api/getUserByEmail';
-		const options = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSONdata,
-		};
-
-		// handle response and set userId to be passed into the image upload portion
-		const response = await fetch(endpoint, options);
-		const result = await response.json()
-
-		const userId = result.uid;
-		
-		// upload image call with image data and user id
-		try {
-			const data = new FormData();
-			data.set('file', image);
-			data.set('userId', userId);
-
-			const res = await fetch('/api/addImage', {
-				method: "POST",
-				body: data,
-			});
-			
-			if (res.ok){
-				const result = await res.json();
-				setImageData(result.filePath);
-				setUploadSuccessAlert(true);
-				return;
-			}
-			else {
-				console.log(`error ${res.json()}`);
-				setUploadFailedAlert(true);
-			}
-
-		} catch (err) {
-			console.log(`failed upload: ${err}`);
-			setImageData(null);
-			setImg(null);
-			setPreviewImg(null)
-		}
-	}
-
-	const handleClearSelection = async (path) => {
-
-		// no image path exists
-		if (!path) return
-
-		const fileData = {
-			aid: parseInt(router.query.id),
-			filePath: path,
-		}
-
-		const JSONdata = JSON.stringify(fileData);
-		const endpoint = 'api/deleteImage';
-		const options = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSONdata,
-		}
-
-		const response = await fetch(endpoint, options);
-
-		if (response.ok) {
-			const msg = await response.json()
-			setDeleteImageSuccess(true);
-		}
-		else if (result.status == 500) {
-			console.log("image deletion failed");
-		}
-	}
-
-	// Image Processing functions
-	const imagebase64 = (file) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-			const data = new Promise((resolve,reject) => {
-				reader.onload = () => resolve(reader.result)
-				reader.onerror = (error) => reject(error)
-			})
-			return data;
-	}
-
-	const setImage = async (e) => {
-		// reset alerts
-		setNoSelectedImgError(false);
-		setInvalidFileTypeError(false);
-
-		const file = e.target.files[0];
-		if (file){
-			const fileName = file.name;
-			const fileExtension = fileName.split('.').pop().toLowerCase();
-
-			if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg'){
-				setImageType(fileExtension);
-				setImg(file);
-
-				const preview = await imagebase64(file);
-				setPreviewImg(preview);
-			}
-			else{
-				setInvalidFileTypeError(true);
-			}
-		}
-	}
+	useEffect(() => {
+		setArticleImage(getImageData);
+	}, [getImageData])
 
 	function handleDialogClose() {
 		setSaveWithoutImagePopup(false);
@@ -467,144 +341,15 @@ export default function articleWriting() {
 						<Header />
 					</div>
 
-					{noSelectedImgError ?
-						<div>
-							<Alert severity="error">Oops. You did not select an image.</Alert>
-							<br></br>
-						</div>
-					:
-						null
-					}
-					{invalidFileTypeError ?
-						<div>
-							<Alert severity="error">This is not a valid image file. Try .png, .jpg, or .jpeg files. </Alert>
-							<br></br>
-						</div>
-					:
-						null
-					}
-
-					{uploadSuccessAlert ?
-						<div>
-							<Alert 
-							action={
-								<Button color="inherit" size="small"
-								onClick={() => {
-									setUploadSuccessAlert(false);
-								}}
-								>
-									Close
-								</Button>
-							}
-							>
-								Thumbnail image successfully uploaded
-							</Alert>
-							<br></br>
-						</div>
-					:
-						null
-					}
-
-					{uploadFailedAlert ?
 					<div>
-						<Alert 
-						severity="error"
-						action={
-							<Button color="inherit" size="small"
-							onClick={() => {
-								setUploadFailedAlert(false);
-							}}
-							>
-								Close
-							</Button>
-						}
-						>
-							Thumbnail image failed to uploaded
-						</Alert>
-						<br></br>
+						<ImageUpload 
+							articleImage = { articleImage }
+							setter = {data_from_upload}
+						/>
 					</div>
-					:
-					null
-					}
-
-					{deleteImageSuccess ?
-					<div>
-						<Alert 
-						action={
-							<Button color="inherit" size="small"
-							onClick={() => {
-								setDeleteImageSuccess(false);
-							}}
-							>
-								Close
-							</Button>
-						}
-						>
-							Thumbnail image successfully deleted
-						</Alert>
-						<br></br>
-					</div>
-					:
-					null
-					}
 					
 					<form onSubmit={handleSubmit} id="articleForm">
-						<div className={uploadStyles.imageContainer}>
-							<label htmlFor="uploadImage">
-								<div className={uploadStyles.uploadBox}>
-									<input type="file" id="uploadImage" name="theFiles" onChange={setImage} accept="image/*"/>
-									{previewImg ?
-										<img src={previewImg} />
-										:
-										<FileUploadIcon fontSize="large"/>
-									}
-								</div>
-							</label>
-						</div>
-						{getImageData ?
-						null
-						:
-						<div className={uploadStyles.uploadButton}>
-							<Button
-								sx={{ m: 2 }}
-								variant={img == null ? "outlined" : "contained"}
-								color="error"
-								onClick={() => {
-									handleUpload(img);
-								}}
-								startIcon={<DriveFolderUploadIcon />}
-								>
-								Upload Thumbnail
-							</Button>
-						</div>
-						}
-						{img ?
-						<div className={uploadStyles.clearButton}>
-							<Button
-								sx={{ m: 2 }}
-								color="error"
-								variant="outlined"
-								onClick={() => {
-									// delete image file if image has been uploaded
-									// TODO: create a route for deleting image from article_images folder
-									handleClearSelection(getImageData);
 
-									// clear all image data from frontend
-									document.getElementById('uploadImage').value = ''
-									setImg(null);
-									setPreviewImg(null);
-									setImageData(null);
-									setImageType(null);
-									setUploadFailedAlert(false);
-									setUploadSuccessAlert(false);
-								}}
-								>
-								Clear Selection
-							</Button>
-						</div>
-						:
-						null
-						}
 						<Box
 							sx={{
 								display: "flex",
@@ -652,15 +397,55 @@ export default function articleWriting() {
 							/>
 						</Box>
 						<br></br>
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "space-between",
+								marginTop: 2,
+								marginBottom: 2,
+								//bargin on the right looks better but when shrinking the page can be an issue
+								marginRight: 20,
+								//margin left same as the save as draft below
+								marginLeft: 1,
+							}}>
+							{[
+								//handling category buttons states and dynamic rendering 
+								{ label: "Front Page", state: frontPage, setState: setFrontPage },
+								{ label: "Sports", state: sports, setState: setSports },
+								{ label: "Lifestyle", state: lifestyle, setState: setLifestyle },
+								{ label: "Campus News", state: campusNews, setState: setCampusNews },
+								{ label: "News", state: news, setState: setNews },
+								{ label: "Weekend", state: weekend, setState: setWeekend },
+								{ label: "Editorial", state: editorial, setState: setEditorial },
+							].map((category, index) => (
+								<Button
+									key={index}
+									sx={{
+										//categories button styles when toggled 
+										backgroundColor: category.state === 1 ? "darkgrey" : "white",
+										color: category.state === 1 ? "white" : "black",
+										border: "1px solid darkgrey",
+										borderRadius: 1,
+										minWidth: 50,
+										margin: 1,
+										"&:hover": {
+										backgroundColor: category.state === 1 ? "darkgrey" : "lightgrey",
+										},
+									}}
+									//pass state and setSate props to category object
+									onClick={() => toggleCategory(category.state, category.setState)}
+									>
+									{category.label}
+								</Button>
+							))}
+						</Box>
 						<br></br>
 						<Grid
 							container
-							sx={{ display: "flex", flexDirection: "row" }}
-						>
+							sx={{ display: "flex", flexDirection: "row" }}>
 							<Grid item>
 								<Typography
-									sx={{ color: "black", marginLeft: 2 }}
-								>
+									sx={{ color: "black", marginLeft: 2 }}>
 									{/* Maybe explain better */}
 									Ready for Edits
 								</Typography>
@@ -673,7 +458,6 @@ export default function articleWriting() {
 									sx={{
 										color: "black",
 										marginTop: -1,
-										marginLeft: 1,
 										borderColor: "white",
 									}}
 								/>
@@ -773,25 +557,16 @@ export default function articleWriting() {
 									borderRadius: 5,
 									backgroundColor: 'Black',
 									p:1,
-									overflow: "scroll",
 							}}>
 								<Box
 									sx={{
 										borderRadius: 2.5,
 										p:1,
-										backgroundColor:'White'
+										backgroundColor:'White',
+										height: 530,
+										width: 270,
+										overflow: "scroll",
 								}}>
-									<Box
-										sx={{
-											height: 160,
-											width: 240,
-											borderRadius: 1,
-											backgroundColor: "black",
-											alignContent: "center"
-
-									}}>
-										<img src={previewImg} />
-									</Box>
 									<Box>
 										<Typography 
 											id="modal-modal-title"
@@ -805,6 +580,10 @@ export default function articleWriting() {
 										</Typography>
 										<Typography 
 											id="modal-modal-description"
+											sx={{
+												overflow: "hidden",
+												textOverflow: "ellipsis",
+											}}
 										>
 											{previewTextBody}
 										</Typography>
@@ -823,14 +602,21 @@ export default function articleWriting() {
 				spacing={2}
 				justifyContent="center"
 				alignItems="center"
+				sx={{
+					height: "100vh"
+				}}
 			>
-				<Typography variant="h2" color="black">
+				<Typography variant="h1" color="black" sx={{fontFamily:"Garamond-Regular", fontWeight: "bold", fontSize: "6rem"}}>
 					Please sign in
 				</Typography>
 				<Button
 					variant="contained"
 					color="error"
 					onClick={redirectToSignIn}
+					sx={{
+						height: "10vh",
+						width: "20vh"
+					}}
 				>
 					Sign In
 				</Button>

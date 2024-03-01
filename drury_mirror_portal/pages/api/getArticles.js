@@ -48,7 +48,7 @@ export default async (req, res) => {
 	// console.log(isDraft);
 
 	let getQuery =
-		"SELECT aid,author,headline,body,isDraft FROM articles WHERE email = ? AND isDraft = ?";
+		"SELECT aid,author,headline,body,isDraft,isRemoved FROM articles WHERE email = ? AND isDraft = ? AND isRemoved = 0";
 
 	let editQuery =
 		"SELECT aid,author,headline,body,isDraft FROM articles WHERE email != ? AND (isDraft = 1 OR isDraft =3)";
@@ -91,6 +91,13 @@ export default async (req, res) => {
 			query: query,
 			values: [email, isDraft],
 		});
+		// filter out article drafts that have been removed
+		// let availableDrafts = []
+		// result.forEach((article) => {
+		// 	if (article.isRemoved === null || article.isRemoved ===0){
+		// 		availableDrafts.push(result);
+		// 	}
+		// });
 	}
 
 	console.log("🚀 ~ file: getArticles.js:66 ~ result:", result);
