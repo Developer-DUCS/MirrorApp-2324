@@ -116,7 +116,7 @@ export default function ImageUpload (props) {
 			data.set('file', image);
 			data.set('userId', userId);
 
-			const res = await fetch('/api/addImage', {
+			const res = await fetch('api/addImage', {
 				method: "POST",
 				body: data,
 			});
