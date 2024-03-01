@@ -15,9 +15,6 @@ import { useState } from "react";
 export default function MyApp({ Component, pageProps }) {
 	const router = useRouter();
 
-	let basePathValue = null
-	const mode = process.env.MY_ENVIROMENT;
-
 	let curTheme = theme;
 
 	if (router.pathname == "/Dashboard") {
@@ -44,10 +41,6 @@ export default function MyApp({ Component, pageProps }) {
 		curTheme = editorTheme;
 	}
 
-	if (mode == "production") {
-		basePathValue = "/mirror/api/auth";
-	}
-
 	return (
 		<React.Fragment>
 			<Head>
@@ -61,7 +54,7 @@ export default function MyApp({ Component, pageProps }) {
 				<CssBaseline />
 				<SessionProvider
 					session={pageProps.session}
-					basePath={basePathValue}
+					basePath={"/mirror/api/auth"}
 				>
 					<NextUIProvider>
 						<Component {...pageProps} />
