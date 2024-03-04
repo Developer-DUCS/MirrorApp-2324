@@ -320,6 +320,8 @@ export function CommentViewer() {
 			article: value,
 			id: id,
 			page: "commentViewer",
+			thumbnailImage: getImageData,
+			imageType: getImageType,
 			checked: document.getElementById("checkbox").checked,
 		};
 
