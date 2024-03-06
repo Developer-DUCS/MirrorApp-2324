@@ -13,9 +13,6 @@ export default async (req, res) => {
 		let checked = body.checked;
 		const page = body.page;
 
-		console.log("Thumbnail image", body.thumbnailImage);
-		console.log("image type", body.imageType);
-
 		// update image and image type if needed
 		if (body.thumbnailImage != undefined && body.imageType != undefined){
 			let newImageQuery = "UPDATE articles SET thumbnailImage = ?, imageType = ? where aid = ?;";
