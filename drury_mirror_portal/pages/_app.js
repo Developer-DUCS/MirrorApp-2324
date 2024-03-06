@@ -44,10 +44,6 @@ export default function MyApp({ Component, pageProps }) {
 		curTheme = editorTheme;
 	}
 
-	if (mode == "production") {
-		basePathValue = "/mirror/api/auth";
-	}
-
 	return (
 		<React.Fragment>
 			<Head>
@@ -61,7 +57,7 @@ export default function MyApp({ Component, pageProps }) {
 				<CssBaseline />
 				<SessionProvider
 					session={pageProps.session}
-					basePath={basePathValue}
+					// basePath={"/mirror/api/auth"}
 				>
 					<NextUIProvider>
 						<Component {...pageProps} />
