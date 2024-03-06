@@ -13,6 +13,25 @@ export default async (req, res) => {
 		let checked = body.checked;
 		const page = body.page;
 
+		console.log("Thumbnail image", body.thumbnailImage);
+		console.log("image type", body.imageType);
+
+		// update image and image type if needed
+		if (body.thumbnailImage != undefined && body.imageType != undefined){
+			let newImageQuery = "UPDATE articles SET thumbnailImage = ?, imageType = ? where aid = ?;";
+
+			const result = await executeQuery({
+				query: newImageQuery,
+				values: [body.thumbnailImage, body.imageType, id]
+			})
+			if (result.error) {
+				console.log("There was an error updating the article thumbnail image.");
+				return res.status(500).json({ error: result.error });
+			} else {
+				console.log(`Successfully update thumbnail image for article ${id}`)
+			}
+		}
+
 		if (page == "commentViewer" && checked) {
 			isDraft = "3";
 			let commentsQuery = "DELETE FROM comments WHERE cid = ?";
