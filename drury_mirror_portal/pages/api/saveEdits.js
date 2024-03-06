@@ -17,7 +17,7 @@ export default async (req, res) => {
 		console.log("image type", body.imageType);
 
 		// update image and image type if needed
-		if (body.thumbnailImage && body.imageType){
+		if (body.thumbnailImage != undefined && body.imageType != undefined){
 			let newImageQuery = "UPDATE articles SET thumbnailImage = ?, imageType = ? where aid = ?;";
 
 			const result = await executeQuery({
