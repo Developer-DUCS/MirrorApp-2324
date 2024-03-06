@@ -96,6 +96,7 @@ export default function articleWriting() {
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
+
 	//Categories states
 	const [frontPage, setFrontPage] = useState(0);
   	const [sports, setSports] = useState(0);
@@ -110,6 +111,17 @@ export default function articleWriting() {
 	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
 	};
 
+	// Set times for expiration
+	const [twoWeeks, setTwoWeeks] = useState(0);
+	const [month, setMonth] = useState(0);
+	const [threeMonths, setThreeMonths] = useState(0);
+	const [sixMonths, setSixMonths] = useState(0);
+	const [year, setYear] = useState(0);
+
+	// Sets the value of the time till expiration
+	const toggleExpire = (expireTime, setExpireTime) => {
+	setExpireTime((prevState) => (prevState === 0 ? 1 : 0));
+	};
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -720,6 +732,45 @@ export default function articleWriting() {
 							))}
 						</Box>
 						<br></br>
+
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "space-evenly",
+								marginTop: 2,
+								marginBottom: 2,
+								marginRight: 20,
+								marginLeft: 1,
+							}}>
+							{[
+								{label: "2 Weeks", state: twoWeeks, setState: setTwoWeeks},
+								{label: "Month", state: month, setState: setMonth},
+								{label: "3 Months", state: threeMonths, setState: setThreeMonths},
+								{label: "6 Months", state: sixMonths, setState: setSixMonths},
+								{label: "Year", state: year, setState: setYear},
+							].map((expireTime, index) => (
+								<Button
+								key={index}
+								sx={{
+									// Time 
+									backgroundColor: expireTime.state === 1 ? "darkgrey" : "white",
+									color: expireTime.state === 1 ? "white" : "black",
+									border: "1px solid darkgrey",
+									borderRadius: 1,
+									minWidth: 50,
+									margin: 1,
+									"&:hover": {
+									backgroundColor: expireTime.state === 1 ? "darkgrey" : "lightgrey",
+									},
+								}}
+								onClick={() => toggleExpire(expireTime.state, expireTime.setState)}
+								>
+								{expireTime.label}
+							</Button>
+							))}
+						</Box>
+						
+						<br></br>
 						<Grid
 							container
 							sx={{ display: "flex", flexDirection: "row" }}>
@@ -743,7 +794,6 @@ export default function articleWriting() {
 								/>
 							</Grid>
 						</Grid>
-						{/* <input id="checkbox" type="checkbox"></input> */}
 
 						<Button
 							sx={{
