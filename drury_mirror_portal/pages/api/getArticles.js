@@ -28,12 +28,6 @@ export default async (req, res) => {
 		console.log("Article type: " + articleType);
 	}
 
-	// console.log("email", email);
-	// console.log("email.length", email.length);
-	// console.log(typeof email);
-	//console.log("session", session)
-	//const session = await getSession({req})
-
 	if (page == "draftList") {
 		isDraft = "0";
 	} else if (page == "copyEditorPortal") {

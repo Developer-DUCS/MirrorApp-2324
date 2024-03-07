@@ -26,6 +26,8 @@ import {
 	Checkbox,
 } from "@mui/material";
 
+import ImageUpload from "./ImageUpload";
+
 import { withStyles } from "@mui/styles";
 
 import dynamic from "next/dynamic";
@@ -109,6 +111,9 @@ let allComments = [];
 export function CommentViewer() {
 	let [value, setValue] = useState();
 	const [getArticle, setArticle] = useState([]);
+	const [articleImage, setArticleImage] = useState(null);
+	const [getImageData, setImageData] = useState(null);
+	const [getImageType, setImageType] = useState(null);
 	const [getComments, setComments] = useState();
 	const [isError, setIsError] = useState(null);
 	const [overallComments, setOverallComments] = useState("");
@@ -156,6 +161,9 @@ export function CommentViewer() {
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article);
+						}
+						if (article.thumbnailImage) {
+							setImageData(article.thumbnailImage);
 						}
 					}
 				} else {
@@ -292,6 +300,15 @@ export function CommentViewer() {
 		}
 	}, [getComments]);
 
+	useEffect(() => {
+		setArticleImage(getImageData);
+	}, [getImageData])
+
+	const data_from_upload = (data) => {
+		setImageData(data.imageData);
+		setImageType(data.imageType);
+	}
+
 	const submit = async (event) => {
 		event.preventDefault();
 		const id = parseInt(router.query.id);
@@ -303,6 +320,8 @@ export function CommentViewer() {
 			article: value,
 			id: id,
 			page: "commentViewer",
+			thumbnailImage: getImageData,
+			imageType: getImageType,
 			checked: document.getElementById("checkbox").checked,
 		};
 
@@ -470,6 +489,12 @@ export function CommentViewer() {
 						}}
 					>
 						<Grid item sx={{ width: "60%", marginLeft: 2 }}>
+							<div>
+								<ImageUpload
+									articleImage = { articleImage }
+									setter = {data_from_upload}
+								/>
+							</div>
 							<Box id="quillEditor">
 								<Box
 									sx={{
