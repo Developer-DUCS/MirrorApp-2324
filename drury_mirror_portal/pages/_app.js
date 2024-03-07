@@ -15,9 +15,6 @@ import { useState } from "react";
 export default function MyApp({ Component, pageProps }) {
 	const router = useRouter();
 
-	let basePathValue = null
-	const mode = process.env.MY_ENVIROMENT;
-
 	let curTheme = theme;
 
 	if (router.pathname == "/Dashboard") {
