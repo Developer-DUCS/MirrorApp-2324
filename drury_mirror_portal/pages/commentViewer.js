@@ -37,6 +37,7 @@ import { useSession, getSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 
 import Header from "./header";
+import CategorySelector from "./CategorySelector";
 
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 	ssr: false,
@@ -121,6 +122,8 @@ export function CommentViewer() {
 	const router = useRouter();
 	// var overallComments = [];
 
+	const [categories, setCategories] = useState([]);
+
 	// Redirect the user to the log in screen
 	const redirectToSignIn = (event) => {
 		event.preventDefault();
@@ -161,6 +164,18 @@ export function CommentViewer() {
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article);
+							console.log(article.categories)
+							/*
+							setCategories([
+								article.categories["Front Page"],
+								article.categories["Sports"],
+								article.categories["Lifestyle"],
+								article.categories["Campus News"],
+								article.categories["News"],
+								article.categories["Weekend"],
+								article.categories["Editorial"]
+							])
+							*/
 						}
 						if (article.thumbnailImage) {
 							setImageData(article.thumbnailImage);
@@ -307,6 +322,10 @@ export function CommentViewer() {
 	const data_from_upload = (data) => {
 		setImageData(data.imageData);
 		setImageType(data.imageType);
+	}
+
+	const data_from_category_selector = (data) => {
+		setCategories([data.frontPage, data.sports, data.lifestyle, data.campusNews, data.news, data.weekend, data.editorial]);
 	}
 
 	const submit = async (event) => {
@@ -518,6 +537,12 @@ export function CommentViewer() {
 									<text>Please highlight in the draft</text>
 								</div>
 							</Box>
+							<div>
+								<CategorySelector 
+									categories = { categories }
+									setter = { data_from_category_selector }
+								/>
+							</div>
 						</Grid>
 						<Grid item sx={{ width: "40%", marginLeft: 2 }}>
 							<form onSubmit={submit}>
