@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { 
 		Button, Box, Stack, Grid, Typography, Checkbox, Alert, 
 		Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
-		Modal, TextField} from "@mui/material";
+		Modal, TextField, InputLabel, FormControl, Select, MenuItem, FormHelperText} from "@mui/material";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -96,6 +96,7 @@ export default function articleWriting() {
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
+	const [getExpireTime, setExpireTime] = useState(14);
 
 	//Categories states
 	const [frontPage, setFrontPage] = useState(0);
@@ -109,18 +110,6 @@ export default function articleWriting() {
 	//toggles state of categories when clicking the button
 	const toggleCategory = (categoryState, setCategoryState) => {
 	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
-	};
-
-	// Set times for expiration
-	const [twoWeeks, setTwoWeeks] = useState(0);
-	const [month, setMonth] = useState(0);
-	const [threeMonths, setThreeMonths] = useState(0);
-	const [sixMonths, setSixMonths] = useState(0);
-	const [year, setYear] = useState(0);
-
-	// Sets the value of the time till expiration
-	const toggleExpire = (expireTime, setExpireTime) => {
-	setExpireTime((prevState) => (prevState === 0 ? 1 : 0));
 	};
 
 	// Used to set the text on the submit button
@@ -173,6 +162,7 @@ export default function articleWriting() {
 				imageType: getImageType,
 				imageData: getImageData,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -209,6 +199,7 @@ export default function articleWriting() {
 				imageData: getImageData,
 				imageType: getImageType,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -484,6 +475,10 @@ export default function articleWriting() {
 		setOpen(false)
 	}
 
+	const changeExpireTime = (event) => {
+		setExpireTime(event.target.value);
+	  };
+
 	if (status === "authenticated") {
 		return (
 			<Box
@@ -692,7 +687,7 @@ export default function articleWriting() {
 						<Box
 							sx={{
 								display: "flex",
-								justifyContent: "space-between",
+								justifyContent: "space-evenly",
 								marginTop: 2,
 								marginBottom: 2,
 								//bargin on the right looks better but when shrinking the page can be an issue
@@ -733,41 +728,25 @@ export default function articleWriting() {
 						</Box>
 						<br></br>
 
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-evenly",
-								marginTop: 2,
-								marginBottom: 2,
-								marginRight: 20,
-								marginLeft: 1,
-							}}>
-							{[
-								{label: "2 Weeks", state: twoWeeks, setState: setTwoWeeks},
-								{label: "Month", state: month, setState: setMonth},
-								{label: "3 Months", state: threeMonths, setState: setThreeMonths},
-								{label: "6 Months", state: sixMonths, setState: setSixMonths},
-								{label: "Year", state: year, setState: setYear},
-							].map((expireTime, index) => (
-								<Button
-								key={index}
-								sx={{
-									// Time 
-									backgroundColor: expireTime.state === 1 ? "darkgrey" : "white",
-									color: expireTime.state === 1 ? "white" : "black",
-									border: "1px solid darkgrey",
-									borderRadius: 1,
-									minWidth: 50,
-									margin: 1,
-									"&:hover": {
-									backgroundColor: expireTime.state === 1 ? "darkgrey" : "lightgrey",
-									},
-								}}
-								onClick={() => toggleExpire(expireTime.state, expireTime.setState)}
-								>
-								{expireTime.label}
-							</Button>
-							))}
+						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
+							<FormControl fullWidth>
+								<InputLabel variant="standard" htmlFor="uncontrolled-native">
+								Expire Time
+								</InputLabel>
+								<Select
+									value={getExpireTime}
+									labelId="Expire Time"
+									id="expireTime"
+									onChange={changeExpireTime}
+									>
+									<MenuItem value={14}>2 Weeks</MenuItem>
+									<MenuItem value={31}>Month</MenuItem>
+									<MenuItem value={93}>3 Months</MenuItem>
+									<MenuItem value={186}>6 Months</MenuItem>
+									<MenuItem value={365}>Year</MenuItem>
+								</Select>
+								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
+							</FormControl>
 						</Box>
 						
 						<br></br>
