@@ -92,22 +92,9 @@ export default function articleWriting() {
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
-	//Categories states
-	const [frontPage, setFrontPage] = useState(0);
-  	const [sports, setSports] = useState(0);
-  	const [lifestyle, setLifestyle] = useState(0);
-  	const [campusNews, setCampusNews] = useState(0);
-  	const [news, setNews] = useState(0);
-	const [weekend, setWeekend] = useState(0);
-  	const [editorial, setEditorial] = useState(0);
 
-	const [categories, setCategories] = useState([]);
-
-	//toggles state of categories when clicking the button
-/* 	const toggleCategory = (categoryState, setCategoryState) => {
-	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
-	}; */
-
+	// Categorie States
+	const [categories, setCategories] = useState([])
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -146,8 +133,7 @@ export default function articleWriting() {
 	}
 
 	const data_from_category_selector = (data) => {
-		setCategories([data.frontPage, data.sports, data.lifestyle, data.campusNews, data.news, data.weekend, data.editorial]);
-		console.log(data);
+		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
 	}
 
 	const handleSubmit = async (event) => {
@@ -159,8 +145,6 @@ export default function articleWriting() {
 		let author = session.user.fname + " " + session.user.lname;
 
 		if (router.query.id) {
-
-			console.log(categories);
 
 			const data = {
 				email: session.user.email,
@@ -199,8 +183,6 @@ export default function articleWriting() {
 			// If server returns the name submitted, that means the form works.
 			const result = await response.json();
 		} else {
-
-			console.log(categories);
 
 			const data = {
 				email: session.user.email,

@@ -325,7 +325,7 @@ export function CommentViewer() {
 	}
 
 	const data_from_category_selector = (data) => {
-		setCategories([data.frontPage, data.sports, data.lifestyle, data.campusNews, data.news, data.weekend, data.editorial]);
+		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
 	}
 
 	const submit = async (event) => {
@@ -341,6 +341,7 @@ export function CommentViewer() {
 			page: "commentViewer",
 			thumbnailImage: getImageData,
 			imageType: getImageType,
+			categories: categories,
 			checked: document.getElementById("checkbox").checked,
 		};
 

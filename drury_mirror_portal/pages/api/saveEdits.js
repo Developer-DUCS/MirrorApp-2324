@@ -15,7 +15,7 @@ export default async (req, res) => {
 
 		// update image and image type if needed
 		if (body.thumbnailImage != undefined && body.imageType != undefined){
-			let newImageQuery = "UPDATE articles SET thumbnailImage = ?, imageType = ? where aid = ?;";
+			let newImageQuery = "UPDATE articles SET thumbnailImage = ?, imageType = ? WHERE aid = ?;";
 
 			const result = await executeQuery({
 				query: newImageQuery,
@@ -25,7 +25,23 @@ export default async (req, res) => {
 				console.log("There was an error updating the article thumbnail image.");
 				return res.status(500).json({ error: result.error });
 			} else {
-				console.log(`Successfully update thumbnail image for article ${id}`)
+				console.log(`Successfully updated thumbnail image for article ${id}`);
+			}
+		}
+
+		// update category selection
+		if (body.categories){
+			let updateCategoriesQuery = "UPDATE categories set front_page = ?, sports = ?, lifestyle = ?, campus_life = ?, news = ?, editorial = ? WHERE aid = ?;";
+
+			const result = await executeQuery({
+				query: updateCategoriesQuery,
+				values: [body.categories[0], body.categories[1], body.categories[2], body.categories[3], body.categories[4], body.categories[5], body.categories[6], id]
+			})
+			if (result.error){
+				console.log("There was an error updating the article category selections.");
+				return res.status(500).json({ error: result.error });
+			} else {
+				console.log(`Successfully updated category selections for article ${id}`);
 			}
 		}
 

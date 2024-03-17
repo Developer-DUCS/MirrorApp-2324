@@ -10,22 +10,18 @@ import React, { useState, useEffect } from "react";
 
 export default function CategorySelector(props) {
 
-    //console.log(props.categories);
-
     //Categories states
-	const [frontPage, setFrontPage] = useState(0);
-    const [sports, setSports] = useState(0);
-    const [lifestyle, setLifestyle] = useState(0);
-    const [campusNews, setCampusNews] = useState(0);
-    const [news, setNews] = useState(0);
-    const [weekend, setWeekend] = useState(0);
-    const [editorial, setEditorial] = useState(0);
+	const [frontPage, setFrontPage] = useState(props.categories[0]);
+    const [sports, setSports] = useState(props.categories[1]);
+    const [lifestyle, setLifestyle] = useState(props.categories[2]);
+    const [campusNews, setCampusNews] = useState(props.categories[3]);
+    const [news, setNews] = useState(props.categories[4]);
+    const [weekend, setWeekend] = useState(props.categories[5]);
+    const [editorial, setEditorial] = useState(props.categories[6]);
 
     // toggles state of categories when category button is clicked
     const toggleCategory = (categoryState, setCategoryState) => {
         setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
-
-        //console.log([frontPage, sports, lifestyle, campusNews, news, weekend, editorial]);
     };
 
     useEffect(() => {
@@ -33,6 +29,16 @@ export default function CategorySelector(props) {
         props.setter([frontPage, sports, lifestyle, campusNews, news, weekend, editorial]);
 
     }, [frontPage, sports, lifestyle, campusNews, news, weekend, editorial]);
+
+    useEffect(() => {
+        setFrontPage(props.categories[0]);
+        setSports(props.categories[1]);
+        setLifestyle(props.categories[2]);
+        setCampusNews(props.categories[3]);
+        setNews(props.categories[4]);
+        setWeekend(props.categories[5]);
+        setEditorial(props.categories[6]);
+    }, [props.categories])
 
     return (
         <Box
