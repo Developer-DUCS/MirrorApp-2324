@@ -35,7 +35,7 @@ export default async (req, res) => {
 			
 			const articleResult = await executeQuery({
 				query: saveQueryArticle,
-				values: [headline, articleString, isDraft, imageType, thumbnailImage, aid, expireTime],
+				values: [headline, articleString, isDraft, imageType, thumbnailImage, expireTime, aid],
 			});
 
 			const categoryResult = await executeQuery({
@@ -49,10 +49,10 @@ export default async (req, res) => {
 
 			if (articleResult.error || categoryResult.error) {
 				console.log("There was an error saving the article");
-				res.status(500).json({ error: "Unsuccessful Insertion" });
+				return res.status(500).json({ error: "Unsuccessful Insertion" });
 			} else if (articleResult.affectedRows == 1 && categoryResult.affectedRows == 1) {
 				console.log("Successfully saved the article");
-				res.status(201).json({ msg: "Successful Insertion" });
+				return res.status(201).json({ msg: "Successful Insertion" });
 			}
 		} else {
 			// inserting the article information
@@ -80,14 +80,14 @@ export default async (req, res) => {
 			});
 
 			if (articleResult.error || categoryResult.error) {
-				res.status(500).json({ error: "Unsuccessful Insertion" });
+				return res.status(500).json({ error: "Unsuccessful Insertion" });
 			} else if (articleResult.affectedRows == 1 && categoryResult.affectedRows == 1) {
 
 				console.log("🚀 ~ file: saveArticle.js:52 ~ result:");
 				console.log("article inserted with id: ", articleResult.insertId);
 				console.log("category values inserted with id: ", categoryResult.insertId);
 
-				res.status(201).json({ msg: "Successful Insertion" });
+				return res.status(201).json({ msg: "Successful Insertion" });
 			}
 		}
 	} catch (error) {

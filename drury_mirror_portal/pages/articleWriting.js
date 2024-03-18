@@ -23,6 +23,7 @@ import { useSession, getSession } from "next-auth/react";
 // Components
 import Header from "./header";
 import ImageUpload from "./ImageUpload";
+import CategorySelector from "./CategorySelector";
 
 // we import react-quill dynamically, to avoid including it in server-side
 // and we will render a loading state while the dynamic component is being loaded.
@@ -91,21 +92,11 @@ export default function articleWriting() {
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
+
+	// Categorie States
+	const [categories, setCategories] = useState([0, 0, 0, 0, 0, 0, 0]);
+
 	const [getExpireTime, setExpireTime] = useState(14);
-
-	//Categories states
-	const [frontPage, setFrontPage] = useState(0);
-  	const [sports, setSports] = useState(0);
-  	const [lifestyle, setLifestyle] = useState(0);
-  	const [campusNews, setCampusNews] = useState(0);
-  	const [news, setNews] = useState(0);
-	const [weekend, setWeekend] = useState(0);
-  	const [editorial, setEditorial] = useState(0);
-
-	//toggles state of categories when clicking the button
-	const toggleCategory = (categoryState, setCategoryState) => {
-	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
-	};
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -143,6 +134,10 @@ export default function articleWriting() {
 		setImageType(data.imageType);
 	}
 
+	const data_from_category_selector = (data) => {
+		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
+	}
+
 	const handleSubmit = async (event) => {
 		
 		// Stop the form from submitting and refreshing the page.
@@ -152,6 +147,7 @@ export default function articleWriting() {
 		let author = session.user.fname + " " + session.user.lname;
 
 		if (router.query.id) {
+
 			const data = {
 				email: session.user.email,
 				author: author,
@@ -161,7 +157,7 @@ export default function articleWriting() {
 				aid: router.query.id,
 				imageType: getImageType,
 				imageData: getImageData,
-				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				categories: categories,
 				expireTime: getExpireTime
 			};
 
@@ -199,7 +195,7 @@ export default function articleWriting() {
 				check: document.getElementById("checkbox").checked,
 				imageData: getImageData,
 				imageType: getImageType,
-				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				categories: categories,
 				expireTime: getExpireTime
 			};
 
@@ -268,15 +264,19 @@ export default function articleWriting() {
 						let articleBody = article.body;
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
+						let articleExpireTime = article.expireTime;
 
-						// set the previously saved categories 
-						setFrontPage(article.categories["Front Page"]);
-						setSports(article.categories["Sports"]);
-						setLifestyle(article.categories["Lifestyle"]);
-						setCampusNews(article.categories["Campus News"]);
-						setNews(article.categories["News"]);
-						setWeekend(article.categories["Weekend"]);
-						setEditorial(article.categories["Editorial"]);
+						if (article.categories) {
+							setCategories([
+								article.categories["Front Page"],
+								article.categories["Sports"],
+								article.categories["Lifestyle"],
+								article.categories["Campus News"],
+								article.categories["News"],
+								article.categories["Weekend"],
+								article.categories["Editorial"]
+							])
+						}
 
 						// Make sure the response was received before setting the article information
 						if (article) {
@@ -288,6 +288,9 @@ export default function articleWriting() {
 							}
 							if (articleImage) {
 								setImageData(articleImage);
+							}
+							if (articleExpireTime) {
+								setExpireTime(articleExpireTime);
 							}
 						}
 					}
@@ -404,48 +407,10 @@ export default function articleWriting() {
 							/>
 						</Box>
 						<br></br>
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-evenly",
-								marginTop: 2,
-								marginBottom: 2,
-								//bargin on the right looks better but when shrinking the page can be an issue
-								marginRight: 20,
-								//margin left same as the save as draft below
-								marginLeft: 1,
-							}}>
-							{[
-								//handling category buttons states and dynamic rendering 
-								{ label: "Front Page", state: frontPage, setState: setFrontPage },
-								{ label: "Sports", state: sports, setState: setSports },
-								{ label: "Lifestyle", state: lifestyle, setState: setLifestyle },
-								{ label: "Campus News", state: campusNews, setState: setCampusNews },
-								{ label: "News", state: news, setState: setNews },
-								{ label: "Weekend", state: weekend, setState: setWeekend },
-								{ label: "Editorial", state: editorial, setState: setEditorial },
-							].map((category, index) => (
-								<Button
-									key={index}
-									sx={{
-										//categories button styles when toggled 
-										backgroundColor: category.state === 1 ? "darkgrey" : "white",
-										color: category.state === 1 ? "white" : "black",
-										border: "1px solid darkgrey",
-										borderRadius: 1,
-										minWidth: 50,
-										margin: 1,
-										"&:hover": {
-										backgroundColor: category.state === 1 ? "darkgrey" : "lightgrey",
-										},
-									}}
-									//pass state and setSate props to category object
-									onClick={() => toggleCategory(category.state, category.setState)}
-									>
-									{category.label}
-								</Button>
-							))}
-						</Box>
+						<CategorySelector 
+							categories = { categories }
+							setter = { data_from_category_selector }
+						/>
 						<br></br>
 
 						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
@@ -468,7 +433,7 @@ export default function articleWriting() {
 								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
 							</FormControl>
 						</Box>
-						
+					
 						<br></br>
 						<Grid
 							container

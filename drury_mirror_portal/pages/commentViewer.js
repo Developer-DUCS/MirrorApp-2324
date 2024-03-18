@@ -37,6 +37,7 @@ import { useSession, getSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
 
 import Header from "./header";
+import CategorySelector from "./CategorySelector";
 
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 	ssr: false,
@@ -121,6 +122,8 @@ export function CommentViewer() {
 	const router = useRouter();
 	// var overallComments = [];
 
+	const [categories, setCategories] = useState([]);
+
 	// Redirect the user to the log in screen
 	const redirectToSignIn = (event) => {
 		event.preventDefault();
@@ -161,6 +164,18 @@ export function CommentViewer() {
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article);
+							console.log(article.categories)
+							/*
+							setCategories([
+								article.categories["Front Page"],
+								article.categories["Sports"],
+								article.categories["Lifestyle"],
+								article.categories["Campus News"],
+								article.categories["News"],
+								article.categories["Weekend"],
+								article.categories["Editorial"]
+							])
+							*/
 						}
 						if (article.thumbnailImage) {
 							setImageData(article.thumbnailImage);
@@ -309,6 +324,10 @@ export function CommentViewer() {
 		setImageType(data.imageType);
 	}
 
+	const data_from_category_selector = (data) => {
+		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
+	}
+
 	const submit = async (event) => {
 		event.preventDefault();
 		const id = parseInt(router.query.id);
@@ -322,6 +341,7 @@ export function CommentViewer() {
 			page: "commentViewer",
 			thumbnailImage: getImageData,
 			imageType: getImageType,
+			categories: categories,
 			checked: document.getElementById("checkbox").checked,
 		};
 
@@ -517,6 +537,12 @@ export function CommentViewer() {
 									{/* make red */}
 									<text>Please highlight in the draft</text>
 								</div>
+								<div>
+								<CategorySelector 
+									categories = { categories }
+									setter = { data_from_category_selector }
+								/>
+							</div>
 							</Box>
 						</Grid>
 						<Grid item sx={{ width: "40%", marginLeft: 2 }}>
