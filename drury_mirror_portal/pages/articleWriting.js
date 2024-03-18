@@ -94,7 +94,7 @@ export default function articleWriting() {
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
 
 	// Categorie States
-	const [categories, setCategories] = useState([])
+	const [categories, setCategories] = useState([0, 0, 0, 0, 0, 0, 0]);
 
 	const [getExpireTime, setExpireTime] = useState(14);
 
@@ -264,6 +264,7 @@ export default function articleWriting() {
 						let articleBody = article.body;
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
+						let articleExpireTime = article.expireTime;
 
 						if (article.categories) {
 							setCategories([
@@ -287,6 +288,9 @@ export default function articleWriting() {
 							}
 							if (articleImage) {
 								setImageData(articleImage);
+							}
+							if (articleExpireTime) {
+								setExpireTime(articleExpireTime);
 							}
 						}
 					}

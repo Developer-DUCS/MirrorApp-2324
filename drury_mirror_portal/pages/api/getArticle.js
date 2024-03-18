@@ -19,7 +19,7 @@ export default async (req, res) => {
 	let email = req.body.email;
 	console.log("id", id);
 	console.log(email);
-	let getArticleQuery = "SELECT headline, body, thumbnailImage FROM articles WHERE articles.aid = ?;";
+	let getArticleQuery = "SELECT headline, body, thumbnailImage, expireTime FROM articles WHERE articles.aid = ?;";
 
 	const articleResult = await executeQuery({
 		query: getArticleQuery,
@@ -44,7 +44,8 @@ export default async (req, res) => {
 				body: articleResult[0].body,
 				headline: articleResult[0].headline,
 				thumbnailImage: articleResult[0].thumbnailImage,
-				categories: categoryResult[0]
+				categories: categoryResult[0],
+				expireTime: articleResult[0].expireTime
 			}
 			return res.status(200).json(article);
 		}
