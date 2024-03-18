@@ -265,16 +265,6 @@ export default function articleWriting() {
 						let articleImage = article.thumbnailImage;
 						let articleHeadline = article.headline;
 
-						console.log(article);
-
-						// set the previously saved categories 
-						/*setFrontPage(article.categories["Front Page"]);
-						setSports(article.categories["Sports"]);
-						setLifestyle(article.categories["Lifestyle"]);
-						setCampusNews(article.categories["Campus News"]);
-						setNews(article.categories["News"]);
-						setWeekend(article.categories["Weekend"]);
-						setEditorial(article.categories["Editorial"]);*/
 						if (article.categories) {
 							setCategories([
 								article.categories["Front Page"],
