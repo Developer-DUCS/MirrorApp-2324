@@ -93,7 +93,7 @@ export default function articleWriting() {
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
 
-	// Categorie States
+	// Category States
 	const [categories, setCategories] = useState([0, 0, 0, 0, 0, 0, 0]);
 
 	const [getExpireTime, setExpireTime] = useState(14);
