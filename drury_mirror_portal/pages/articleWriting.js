@@ -429,29 +429,6 @@ export default function articleWriting() {
 								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
 							</FormControl>
 						</Box>
-						
-						<br></br>
-
-						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
-							<FormControl fullWidth>
-								<InputLabel variant="standard" htmlFor="uncontrolled-native">
-								Expire Time
-								</InputLabel>
-								<Select
-									value={getExpireTime}
-									labelId="Expire Time"
-									id="expireTime"
-									onChange={changeExpireTime}
-									>
-									<MenuItem value={14}>2 Weeks</MenuItem>
-									<MenuItem value={31}>Month</MenuItem>
-									<MenuItem value={93}>3 Months</MenuItem>
-									<MenuItem value={186}>6 Months</MenuItem>
-									<MenuItem value={365}>Year</MenuItem>
-								</Select>
-								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
-							</FormControl>
-						</Box>
 					
 						<br></br>
 						<Grid
