@@ -13,6 +13,7 @@ export default async (req, res) => {
 		let thumbnailImage = body.imageData;
 		let imageType = body.imageType;
 		let categories = body.categories;
+		let expireTime = body.expireTime
 
 		if (check) {
 			check = "1";
@@ -27,14 +28,14 @@ export default async (req, res) => {
 			let aid = parseInt(body.aid);
 
 			// updating the article
-			let saveQueryArticle = `UPDATE articles SET headline = ?, body = ?, isDraft = ?, imageType = ?, thumbnailImage = ? WHERE aid = ?; `;
+			let saveQueryArticle = `UPDATE articles SET headline = ?, body = ?, isDraft = ?, imageType = ?, thumbnailImage = ?, expireTime = ? WHERE aid = ?; `;
 
 			// updating the categories associated with the article
 			let saveQueryCategory = `UPDATE categories SET front_page = ?, sports = ?, lifestyle = ?, campus_news = ?, news = ?, weekend = ?, editorial = ? WHERE categories.aid = ?;`
 			
 			const articleResult = await executeQuery({
 				query: saveQueryArticle,
-				values: [headline, articleString, isDraft, imageType, thumbnailImage, aid],
+				values: [headline, articleString, isDraft, imageType, thumbnailImage, aid, expireTime],
 			});
 
 			const categoryResult = await executeQuery({
@@ -56,8 +57,8 @@ export default async (req, res) => {
 		} else {
 			// inserting the article information
 			let articleQuery =
-				`INSERT INTO articles(email, author, headline, body, isDraft, imageType, thumbnailImage, createdDate, isRemoved) 
-				VALUES(?,?,?,?,?,?,?, NOW(), 0);`;
+				`INSERT INTO articles(email, author, headline, body, isDraft, imageType, thumbnailImage, createdDate, isRemoved, expireTime) 
+				VALUES(?,?,?,?,?,?,?,NOW(),0,?);`;
 
 			// inserting the category information associated with the article
 			let categoryQuery = 
@@ -65,7 +66,7 @@ export default async (req, res) => {
 			
 			const articleResult = await executeQuery({
 				query: articleQuery,
-				values: [email, author, headline, articleString, check, imageType, thumbnailImage],
+				values: [email, author, headline, articleString, check, imageType, thumbnailImage, expireTime],
 			});
 
 			// get the aid from the inserted article

@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { 
 		Button, Box, Stack, Grid, Typography, Checkbox, Alert, 
 		Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
-		Modal, TextField} from "@mui/material";
+		Modal, TextField, InputLabel, FormControl, Select, MenuItem, FormHelperText} from "@mui/material";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -96,6 +96,8 @@ export default function articleWriting() {
 	// Categorie States
 	const [categories, setCategories] = useState([])
 
+	const [getExpireTime, setExpireTime] = useState(14);
+
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
 
@@ -156,6 +158,7 @@ export default function articleWriting() {
 				imageType: getImageType,
 				imageData: getImageData,
 				categories: categories,
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -193,6 +196,7 @@ export default function articleWriting() {
 				imageData: getImageData,
 				imageType: getImageType,
 				categories: categories,
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -328,6 +332,10 @@ export default function articleWriting() {
 		setOpen(false)
 	}
 
+	const changeExpireTime = (event) => {
+		setExpireTime(event.target.value);
+	  };
+
 	if (status === "authenticated") {
 		return (
 			<Box
@@ -409,50 +417,52 @@ export default function articleWriting() {
 							categories = { categories }
 							setter = { data_from_category_selector }
 						/>
-						{ /* 
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-between",
-								marginTop: 2,
-								marginBottom: 2,
-								//bargin on the right looks better but when shrinking the page can be an issue
-								marginRight: 20,
-								//margin left same as the save as draft below
-								marginLeft: 1,
-							}}>
-							{[
-								//handling category buttons states and dynamic rendering 
-								{ label: "Front Page", state: frontPage, setState: setFrontPage },
-								{ label: "Sports", state: sports, setState: setSports },
-								{ label: "Lifestyle", state: lifestyle, setState: setLifestyle },
-								{ label: "Campus News", state: campusNews, setState: setCampusNews },
-								{ label: "News", state: news, setState: setNews },
-								{ label: "Weekend", state: weekend, setState: setWeekend },
-								{ label: "Editorial", state: editorial, setState: setEditorial },
-							].map((category, index) => (
-								<Button
-									key={index}
-									sx={{
-										//categories button styles when toggled 
-										backgroundColor: category.state === 1 ? "darkgrey" : "white",
-										color: category.state === 1 ? "white" : "black",
-										border: "1px solid darkgrey",
-										borderRadius: 1,
-										minWidth: 50,
-										margin: 1,
-										"&:hover": {
-										backgroundColor: category.state === 1 ? "darkgrey" : "lightgrey",
-										},
-									}}
-									//pass state and setSate props to category object
-									onClick={() => toggleCategory(category.state, category.setState)}
+						<br></br>
+
+						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
+							<FormControl fullWidth>
+								<InputLabel variant="standard" htmlFor="uncontrolled-native">
+								Expire Time
+								</InputLabel>
+								<Select
+									value={getExpireTime}
+									labelId="Expire Time"
+									id="expireTime"
+									onChange={changeExpireTime}
 									>
-									{category.label}
-								</Button>
-							))}
+									<MenuItem value={14}>2 Weeks</MenuItem>
+									<MenuItem value={31}>Month</MenuItem>
+									<MenuItem value={93}>3 Months</MenuItem>
+									<MenuItem value={186}>6 Months</MenuItem>
+									<MenuItem value={365}>Year</MenuItem>
+								</Select>
+								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
+							</FormControl>
 						</Box>
-						*/}
+						
+						<br></br>
+
+						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
+							<FormControl fullWidth>
+								<InputLabel variant="standard" htmlFor="uncontrolled-native">
+								Expire Time
+								</InputLabel>
+								<Select
+									value={getExpireTime}
+									labelId="Expire Time"
+									id="expireTime"
+									onChange={changeExpireTime}
+									>
+									<MenuItem value={14}>2 Weeks</MenuItem>
+									<MenuItem value={31}>Month</MenuItem>
+									<MenuItem value={93}>3 Months</MenuItem>
+									<MenuItem value={186}>6 Months</MenuItem>
+									<MenuItem value={365}>Year</MenuItem>
+								</Select>
+								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
+							</FormControl>
+						</Box>
+					
 						<br></br>
 						<Grid
 							container
@@ -477,7 +487,6 @@ export default function articleWriting() {
 								/>
 							</Grid>
 						</Grid>
-						{/* <input id="checkbox" type="checkbox"></input> */}
 
 						<Button
 							sx={{
