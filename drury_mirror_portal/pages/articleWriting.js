@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { 
 		Button, Box, Stack, Grid, Typography, Checkbox, Alert, 
 		Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, 
-		Modal, TextField} from "@mui/material";
+		Modal, TextField, InputLabel, FormControl, Select, MenuItem, FormHelperText} from "@mui/material";
 
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -91,6 +91,8 @@ export default function articleWriting() {
 	const [open, setOpen] = useState(false);
 	const [previewTextBody, setPreviewTextBody] = useState("");
 	const [previewTextAuthor, setpreviewTextAuthor] = useState("");
+	const [getExpireTime, setExpireTime] = useState(14);
+
 	//Categories states
 	const [frontPage, setFrontPage] = useState(0);
   	const [sports, setSports] = useState(0);
@@ -104,7 +106,6 @@ export default function articleWriting() {
 	const toggleCategory = (categoryState, setCategoryState) => {
 	setCategoryState((prevState) => (prevState === 0 ? 1 : 0));
 	};
-
 
 	// Used to set the text on the submit button
 	const [buttonText, setButtonText] = useState("Save as Draft");
@@ -161,6 +162,7 @@ export default function articleWriting() {
 				imageType: getImageType,
 				imageData: getImageData,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -198,6 +200,7 @@ export default function articleWriting() {
 				imageData: getImageData,
 				imageType: getImageType,
 				categories: [frontPage, sports, lifestyle, campusNews, news, weekend, editorial],
+				expireTime: getExpireTime
 			};
 
 			// Send the data to the server in JSON format.
@@ -320,6 +323,10 @@ export default function articleWriting() {
 		setOpen(false)
 	}
 
+	const changeExpireTime = (event) => {
+		setExpireTime(event.target.value);
+	  };
+
 	if (status === "authenticated") {
 		return (
 			<Box
@@ -400,7 +407,7 @@ export default function articleWriting() {
 						<Box
 							sx={{
 								display: "flex",
-								justifyContent: "space-between",
+								justifyContent: "space-evenly",
 								marginTop: 2,
 								marginBottom: 2,
 								//bargin on the right looks better but when shrinking the page can be an issue
@@ -440,6 +447,29 @@ export default function articleWriting() {
 							))}
 						</Box>
 						<br></br>
+
+						<Box sx={{ maxWidth: "25vh", marginLeft: "2vh" }}>
+							<FormControl fullWidth>
+								<InputLabel variant="standard" htmlFor="uncontrolled-native">
+								Expire Time
+								</InputLabel>
+								<Select
+									value={getExpireTime}
+									labelId="Expire Time"
+									id="expireTime"
+									onChange={changeExpireTime}
+									>
+									<MenuItem value={14}>2 Weeks</MenuItem>
+									<MenuItem value={31}>Month</MenuItem>
+									<MenuItem value={93}>3 Months</MenuItem>
+									<MenuItem value={186}>6 Months</MenuItem>
+									<MenuItem value={365}>Year</MenuItem>
+								</Select>
+								<FormHelperText>Choose how long the article is avalible on the app.</FormHelperText>
+							</FormControl>
+						</Box>
+						
+						<br></br>
 						<Grid
 							container
 							sx={{ display: "flex", flexDirection: "row" }}>
@@ -463,7 +493,6 @@ export default function articleWriting() {
 								/>
 							</Grid>
 						</Grid>
-						{/* <input id="checkbox" type="checkbox"></input> */}
 
 						<Button
 							sx={{
