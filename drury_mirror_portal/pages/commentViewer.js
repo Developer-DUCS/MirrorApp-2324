@@ -537,13 +537,13 @@ export function CommentViewer() {
 									{/* make red */}
 									<text>Please highlight in the draft</text>
 								</div>
-							</Box>
-							<div>
+								<div>
 								<CategorySelector 
 									categories = { categories }
 									setter = { data_from_category_selector }
 								/>
 							</div>
+							</Box>
 						</Grid>
 						<Grid item sx={{ width: "40%", marginLeft: 2 }}>
 							<form onSubmit={submit}>
