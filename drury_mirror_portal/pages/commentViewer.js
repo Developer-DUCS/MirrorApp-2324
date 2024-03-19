@@ -122,7 +122,7 @@ export function CommentViewer() {
 	const router = useRouter();
 	// var overallComments = [];
 
-	const [categories, setCategories] = useState([]);
+	const [categories, setCategories] = useState([0, 0, 0, 0, 0, 0, 0]);
 
 	// Redirect the user to the log in screen
 	const redirectToSignIn = (event) => {
@@ -164,8 +164,12 @@ export function CommentViewer() {
 						// Make sure the response was received before setting the articles
 						if (article) {
 							setArticle(article);
-							console.log(article.categories)
-							/*
+						}
+						if (article.thumbnailImage) {
+							setImageData(article.thumbnailImage);
+						}
+
+						if (article.categories) {
 							setCategories([
 								article.categories["Front Page"],
 								article.categories["Sports"],
@@ -175,10 +179,6 @@ export function CommentViewer() {
 								article.categories["Weekend"],
 								article.categories["Editorial"]
 							])
-							*/
-						}
-						if (article.thumbnailImage) {
-							setImageData(article.thumbnailImage);
 						}
 					}
 				} else {
@@ -325,6 +325,7 @@ export function CommentViewer() {
 	}
 
 	const data_from_category_selector = (data) => {
+		console.log(data);
 		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
 	}
 

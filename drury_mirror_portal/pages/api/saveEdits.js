@@ -31,8 +31,10 @@ export default async (req, res) => {
 
 		// update category selection
 		if (body.categories){
-			let updateCategoriesQuery = "UPDATE categories set front_page = ?, sports = ?, lifestyle = ?, campus_life = ?, news = ?, editorial = ? WHERE aid = ?;";
+			let updateCategoriesQuery = "UPDATE categories set front_page = ?, sports = ?, lifestyle = ?, campus_news = ?, news = ?, editorial = ? WHERE aid = ?;";
 
+			console.log(body.categories);
+			
 			const result = await executeQuery({
 				query: updateCategoriesQuery,
 				values: [body.categories[0], body.categories[1], body.categories[2], body.categories[3], body.categories[4], body.categories[5], body.categories[6], id]
