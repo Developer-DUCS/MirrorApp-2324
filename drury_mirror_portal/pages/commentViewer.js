@@ -24,6 +24,11 @@ import {
 	Stack,
 	Grid,
 	Checkbox,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions
 } from "@mui/material";
 
 import ImageUpload from "./ImageUpload";
@@ -121,6 +126,8 @@ export function CommentViewer() {
 	const { status, data } = useSession();
 	const router = useRouter();
 	// var overallComments = [];
+
+	const [submitWithComments, setSubmitWithComments] = useState(false);
 
 	const [categories, setCategories] = useState([0, 0, 0, 0, 0, 0, 0]);
 
@@ -329,12 +336,19 @@ export function CommentViewer() {
 		setCategories([data[0], data[1], data[2], data[3], data[4], data[5], data[6]]);
 	}
 
+	function handleDialogClose() {
+		setSubmitWithComments(false);
+	}
+
 	const submit = async (event) => {
 		event.preventDefault();
 		const id = parseInt(router.query.id);
 
 		event.preventDefault();
 
+		console.log(getComments);
+
+		
 		// Get data from the form.
 		const data = {
 			article: value,
@@ -385,6 +399,7 @@ export function CommentViewer() {
 
 		//reload the page after submit
 		// router.reload();
+		
 	};
 
 	const resolve = async (event) => {
@@ -580,18 +595,41 @@ export function CommentViewer() {
 										{allComments}
 									</div>
 								</Box>
-								<Grid item>
-									<Checkbox
-										id="checkbox"
-										color="error"
-										sx={{
-											color: "white",
-											marginTop: -1,
-											marginLeft: 1,
-											borderColor: "white",
-										}}
-									/>
+								<Grid
+									container
+									sx={{ display: "flex", flexDirection: "row" }}>
+									<Grid item>
+										<Typography
+											sx={{ color: "white", marginLeft: 2 }}>
+											Ready for Edits
+										</Typography>
+									</Grid>
+									<Grid item>
+										<Checkbox
+											id="checkbox"
+											color="error"
+											sx={{
+												color: "white",
+												marginTop: -1,
+												marginLeft: 1,
+												borderColor: "white",
+											}}
+										/>
+									</Grid>
 								</Grid>
+								{getComments?.comments != "" ? 
+								<Button
+									color="error"
+									varient="contained"
+									onClick={() => {
+										setSubmitWithComments(true);
+										console.log("clicked with comments")
+									}}
+									sx={{ m: 1 }}
+									>
+										Submit Edits
+								</Button>
+								:
 								<Button
 									color="error"
 									variant="contained"
@@ -600,7 +638,32 @@ export function CommentViewer() {
 								>
 									Submit Edits
 								</Button>
+								}
 							</form>
+
+							<Dialog
+								open={submitWithComments}
+								onClose={handleDialogClose}
+								>
+								<DialogTitle>
+									{"Cannot Submit with Unresolved Comments"}
+								</DialogTitle>
+								<DialogContent>
+									<DialogContentText>
+										All comments must be resolved before the article can be submitted for edits.
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button
+										color="error"
+										varient="contained"
+										onClick={handleDialogClose}
+										>
+										Close
+									</Button>
+								</DialogActions>
+							</Dialog>
+
 							{isError === true && (
 								<div>
 									<Typography
